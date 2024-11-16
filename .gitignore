@@ -447,4 +447,3 @@ gradle-app.setting
 build/
 .idea/
 .gradle/
-application.yml
