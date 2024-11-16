@@ -1,6 +1,6 @@
 package com.gagoo.thiscoding.user.infrastructure;
 
-import hexa.thiscoding.user.service.port.UserRepository;
+import com.gagoo.thiscoding.user.service.port.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,7 @@
 package com.gagoo.thiscoding.user.infrastructure;
 
-import hexa.thiscoding.user.domain.Role;
-import hexa.thiscoding.user.domain.Social;
+import com.gagoo.thiscoding.user.domain.Role;
+import com.gagoo.thiscoding.user.domain.Social;
 import jakarta.persistence.*;
 import lombok.Getter;
 
