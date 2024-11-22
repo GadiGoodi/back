@@ -17,10 +17,10 @@ public class FriendEntity {
     private boolean isFriend;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "users_id")
+    @JoinColumn(name = "sender_id")
     private UserEntity sender;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "users_id")
+    @JoinColumn(name = "receiver_id")
     private UserEntity receiver;
 }

@@ -28,10 +28,10 @@ public class ReportEntity {
     private boolean isFinished;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "users_id")
-    private UserEntity reporterId;
+    @JoinColumn(name = "reporter_id")
+    private UserEntity reporter;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "users_id")
-    private UserEntity reportedId;
+    @JoinColumn(name = "reported_id")
+    private UserEntity reported;
 }

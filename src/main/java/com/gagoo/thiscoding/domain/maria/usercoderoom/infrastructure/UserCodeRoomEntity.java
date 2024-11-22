@@ -26,7 +26,6 @@ public class UserCodeRoomEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "code_room_id")
-    @Column(name = "code_room")
     private CodeRoomEntity codeRoom;
 
 }
