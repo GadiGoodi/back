@@ -1,5 +1,6 @@
 package com.gagoo.thiscoding.domain.maria.user.infrastructure.impl;
 
+import com.gagoo.thiscoding.domain.maria.user.domain.dto.Certification;
 import com.gagoo.thiscoding.domain.maria.user.service.port.MailSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
@@ -14,7 +15,12 @@ public class MailSenderImpl implements MailSender {
 
     private final JavaMailSender javaMailSender;
 
-    public String send(String email) {
+    /**
+     * 6자리 인증 코드 전송
+     * @param email
+     * @return 요청 사용자와 인증 코드 Dto
+     */
+    public Certification send(String email) {
         String subject = ("thiscoding 회원가입 메일 인증 코드");
 
         SimpleMailMessage message = new SimpleMailMessage();
@@ -27,7 +33,7 @@ public class MailSenderImpl implements MailSender {
 
         javaMailSender.send(message);
 
-        return joinCode;
+        return new Certification(email, joinCode);
     }
 
     /**
