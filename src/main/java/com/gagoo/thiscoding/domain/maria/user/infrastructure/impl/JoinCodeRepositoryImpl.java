@@ -7,10 +7,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.concurrent.TimeUnit;
+
 @Repository
 @RequiredArgsConstructor
 public class JoinCodeRepositoryImpl implements JoinCodeRepository {
-
+    private static final String CODE = ":code";
     private final RedisTemplate<String, String> redisTemplate;
 
     /**
@@ -19,10 +21,10 @@ public class JoinCodeRepositoryImpl implements JoinCodeRepository {
      */
     @Override
     public JoinCode save(JoinCode joinCode) {
-        String key = joinCode.getEmail() + ":code";
+        String key = joinCode.getEmail() + CODE;
         String value = joinCode.getCode();
 
-        redisTemplate.opsForValue().set(key, value);
+        redisTemplate.opsForValue().set(key, value,  300, TimeUnit.SECONDS);
 
         return JoinCodeRedis.from(joinCode).toModel();
     }
