@@ -1,15 +1,18 @@
 package com.gagoo.thiscoding.domain.maria.user.domain;
 
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.Certification;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 public class JoinCode {
-    private String email;
-    private String code;
+
+    @NotBlank
+    private final String email;
+
+    @NotBlank
+    private final String code;
 
     @Builder
     public JoinCode(String email, String code) {
@@ -18,10 +21,9 @@ public class JoinCode {
     }
 
     public static JoinCode from(Certification certification) {
-        JoinCode joinCode = new JoinCode();
-        joinCode.email = certification.getEmail();
-        joinCode.code = certification.getCode();
-
-        return joinCode;
+        return JoinCode.builder()
+                .email(certification.getEmail())
+                .code(certification.getCode())
+                .build();
     }
 }
