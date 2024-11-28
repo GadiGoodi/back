@@ -9,8 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserCodeRoomJpaRepository extends JpaRepository<UserCodeRoomEntity, Long> {
-
     Page<UserCodeRoomEntity> findAllByUser_IdAndIsAcceptedFalse(Long userId, Pageable pageable);
 
-    Optional<UserCodeRoomEntity> findById(long id);
 }
