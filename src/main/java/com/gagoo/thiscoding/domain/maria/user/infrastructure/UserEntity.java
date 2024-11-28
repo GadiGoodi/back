@@ -1,7 +1,7 @@
 package com.gagoo.thiscoding.domain.maria.user.infrastructure;
 
-import com.gagoo.thiscoding.domain.maria.user.domain.Social;
-import com.gagoo.thiscoding.domain.maria.user.domain.Role;
+import com.gagoo.thiscoding.domain.maria.user.domain.contants.Social;
+import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 
