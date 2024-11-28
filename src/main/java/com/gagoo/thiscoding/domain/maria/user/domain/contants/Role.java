@@ -1,4 +1,4 @@
-package com.gagoo.thiscoding.domain.maria.user.domain;
+package com.gagoo.thiscoding.domain.maria.user.domain.contants;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
