@@ -15,9 +15,13 @@ public class UserEntity {
     @Column(name = "users_id")
     private Long id;
 
+    @Column(unique = true)
     private String email;
 
     private String password;
+
+    @Column(unique = true)
+    private String nickname;
 
     @Column(name = "is_activated")
     private boolean isActivated;
@@ -31,28 +35,31 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private Social social;
 
-    public User toModel() {
-        return User.builder()
-            .id(this.id)
-            .email(this.email)
-            .password(this.password)
-            .isActivated(this.isActivated)
-            .isBanned(this.isBanned)
-            .role(this.role)
-            .social(this.social)
-            .build();
-    }
     public static UserEntity from(User user) {
         UserEntity userEntity = new UserEntity();
         userEntity.id = user.getId();
         userEntity.email = user.getEmail();
         userEntity.password = user.getPassword();
+        userEntity.nickname = user.getNickname();
         userEntity.isActivated = user.isActivated();
         userEntity.isBanned = user.isBanned();
         userEntity.role = user.getRole();
         userEntity.social = user.getSocial();
-        return userEntity;
 
+        return userEntity;
+    }
+
+    public User toModel() {
+        return User.builder()
+                .id(this.id)
+                .email(this.email)
+                .password(this.password)
+                .nickname(this.nickname)
+                .isActivated(this.isActivated)
+                .isBanned(this.isBanned)
+                .role(this.role)
+                .social(this.social)
+                .build();
     }
 
 }
