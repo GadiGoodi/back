@@ -1,5 +1,7 @@
 package com.gagoo.thiscoding.domain.maria.user.domain;
 
+import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
+import com.gagoo.thiscoding.domain.maria.user.domain.contants.Social;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

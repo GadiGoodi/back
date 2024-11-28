@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class Certification {
-    private String email;
-    private String code;
+    private final String email;
+    private final String code;
 }
