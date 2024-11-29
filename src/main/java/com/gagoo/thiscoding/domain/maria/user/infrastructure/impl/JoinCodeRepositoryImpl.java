@@ -1,8 +1,8 @@
 package com.gagoo.thiscoding.domain.maria.user.infrastructure.impl;
 
 import com.gagoo.thiscoding.domain.maria.user.domain.JoinCode;
-import com.gagoo.thiscoding.domain.maria.user.infrastructure.exception.JoinCodeNotFoundException;
-import com.gagoo.thiscoding.domain.maria.user.infrastructure.exception.JoinCodeNotMatchException;
+import com.gagoo.thiscoding.domain.maria.user.service.exception.JoinCodeNotFoundException;
+import com.gagoo.thiscoding.domain.maria.user.service.exception.JoinCodeNotMatchException;
 import com.gagoo.thiscoding.domain.maria.user.infrastructure.JoinCodeRedis;
 import com.gagoo.thiscoding.domain.maria.user.service.port.JoinCodeRepository;
 import lombok.RequiredArgsConstructor;
