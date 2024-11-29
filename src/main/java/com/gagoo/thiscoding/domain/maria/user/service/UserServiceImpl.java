@@ -8,13 +8,11 @@ import com.gagoo.thiscoding.domain.maria.user.infrastructure.exception.ExistUser
 import com.gagoo.thiscoding.domain.maria.user.service.exception.PasswordNotEqualException;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-@Builder
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
