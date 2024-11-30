@@ -21,6 +21,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfig;
+    private final JWTUtil jwtUtil;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -42,7 +43,7 @@ public class SecurityConfig {
                 );
 
         http.addFilterAt(
-                new JwtLoginFilter(authenticationManager(authenticationConfig)),
+                new JwtLoginFilter(authenticationManager(authenticationConfig), jwtUtil),
                 UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
