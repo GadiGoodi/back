@@ -8,22 +8,29 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.util.Date;
 
 @Component
 @PropertySource("classpath:config/application-jwt.properties")
-
 public class JWTUtil {
 
-    private SecretKey secretKey;
+    private static final String JWT_HS256_ALGORITHM = Jwts.SIG.HS256.key().build().getAlgorithm();
+    private final Long accessTokenExpTime;
+    private final Long refreshTokenExpTime;
+    private final SecretKey secretKey;
 
-    public JWTUtil(@Value("{spring.jwt.key}") String secret) {
+
+    public JWTUtil(@Value("${spring.jwt.key}") String secret,
+                    @Value("${spring.jwt.atk}") Long atk,
+                    @Value("${spring.jwt.rtk}") Long rtk
+    ) {
         this.secretKey =
                 new SecretKeySpec(
                         secret.getBytes(StandardCharsets.UTF_8),
-                        Jwts.SIG.HS256.key().build().getAlgorithm()
+                        JWT_HS256_ALGORITHM
                 );
+        this.accessTokenExpTime = atk;
+        this.refreshTokenExpTime = rtk;
     }
 
     public String getUsername(String token) {
@@ -32,7 +39,7 @@ public class JWTUtil {
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
-                .get("username", String.class);
+                .get("email", String.class);
     }
 
     public String getRole(String token) {
@@ -54,13 +61,12 @@ public class JWTUtil {
                 .before(new Date());
     }
 
-    public String createJwt(String username, String role, Long expiredMs) {
-
+    public String createJwt(String email, String role) {
         return Jwts.builder()
-                .claim("username", username)
+                .claim("email", email)
                 .claim("role", role)
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expiredMs))
+                .issuedAt(new Date(System.currentTimeMillis())) // 발행시간
+                .expiration(new Date(System.currentTimeMillis() + accessTokenExpTime)) // 소멸시간
                 .signWith(secretKey)
                 .compact();
     }
