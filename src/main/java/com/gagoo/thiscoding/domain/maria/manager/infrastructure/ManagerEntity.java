@@ -1,12 +1,20 @@
 package com.gagoo.thiscoding.domain.maria.manager.infrastructure;
 
+import com.gagoo.thiscoding.domain.maria.manager.controller.response.ManagerNoticesPost;
+import com.gagoo.thiscoding.domain.maria.manager.domain.Manager;
 import com.gagoo.thiscoding.domain.maria.user.infrastructure.UserEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
 @Table(name = "manager_board")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ManagerEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,4 +34,37 @@ public class ManagerEntity {
     @JoinColumn(name = "users_id")
     private UserEntity manager;
 
+
+
+    //Domain > Entity 코드
+    public static ManagerEntity from(Manager manager) {
+        ManagerEntity managerEntity = new ManagerEntity();
+        managerEntity.title = manager.getTitle();
+        managerEntity.content = manager.getContent();
+        managerEntity.category = manager.getCategory();
+        managerEntity.viewCount = manager.getViewCount();
+
+        return managerEntity;
+    }
+
+    //Domain > Entity 코드
+    public static ManagerEntity from(ManagerNoticesPost manager) {
+        ManagerEntity managerEntity = new ManagerEntity();
+        managerEntity.title = manager.getTitle();
+        managerEntity.content = manager.getContent();
+        managerEntity.category = manager.getCategory();
+
+        return managerEntity;
+    }
+
+    //Entity > Domain 코드
+    public Manager toModel() {
+        return Manager.builder()
+                .id(id)
+                .title(title)
+                .content(content)
+                .category(category)
+                .viewCount(viewCount)
+                .build();
+    }
 }
