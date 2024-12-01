@@ -1,10 +1,8 @@
-package com.gagoo.thiscoding.global.config.security;
+package com.gagoo.thiscoding.domain.maria.user.infrastructure.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gagoo.thiscoding.domain.maria.user.domain.dto.CustomUserDetails;
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.UserLogin;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,4 +1,4 @@
-package com.gagoo.thiscoding.global.config.security;
+package com.gagoo.thiscoding.domain.maria.user.infrastructure.security;
 
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;

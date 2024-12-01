@@ -1,5 +1,7 @@
-package com.gagoo.thiscoding.global.config.security;
+package com.gagoo.thiscoding.global.config;
 
+import com.gagoo.thiscoding.domain.maria.user.infrastructure.security.JWTUtil;
+import com.gagoo.thiscoding.domain.maria.user.infrastructure.security.JwtLoginFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

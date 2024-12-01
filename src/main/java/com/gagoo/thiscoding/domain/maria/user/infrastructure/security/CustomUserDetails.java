@@ -1,4 +1,4 @@
-package com.gagoo.thiscoding.domain.maria.user.domain.dto;
+package com.gagoo.thiscoding.domain.maria.user.infrastructure.security;
 
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import lombok.RequiredArgsConstructor;
