@@ -46,6 +46,5 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public Manager getNotices(Long id) {
         return managerRepository.findById(id).orElseThrow().toModel();
-
     }
-    }
+}

@@ -1,6 +1,7 @@
 package com.gagoo.thiscoding.domain.maria.manager.controller;
 
 import com.gagoo.thiscoding.domain.maria.manager.controller.port.ManagerService;
+import com.gagoo.thiscoding.domain.maria.manager.controller.response.ManagerNoticesDetail;
 import com.gagoo.thiscoding.domain.maria.manager.controller.response.ManagerNoticesList;
 import com.gagoo.thiscoding.domain.maria.manager.controller.response.ManagerNoticesPost;
 import com.gagoo.thiscoding.domain.maria.manager.controller.response.ManagerNoticesUpdate;
@@ -50,6 +51,14 @@ public class ManagerNoticesController {
 
         managerService.updateAdminNotices(id, request);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    //공지사항 상세 조회
+    @GetMapping("/{id}")
+    public ResponseEntity<ManagerNoticesDetail> getNoticesDetail(@PathVariable Long id){
+        return ResponseEntity
+                .ok()
+                .body(ManagerNoticesDetail.from(managerService.getNotices(id)));
     }
 
 }
