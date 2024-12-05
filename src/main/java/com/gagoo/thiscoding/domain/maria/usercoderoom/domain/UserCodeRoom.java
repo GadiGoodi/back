@@ -2,6 +2,7 @@ package com.gagoo.thiscoding.domain.maria.usercoderoom.domain;
 
 import com.gagoo.thiscoding.domain.maria.coderoom.domain.CodeRoom;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
+import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.dto.UserCodeRoomCreate;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -24,15 +25,21 @@ public class UserCodeRoom {
 
     public UserCodeRoom accept() {
         return UserCodeRoom.builder()
-            .id(id)
-            .user(user)
-            .codeRoom(codeRoom)
-            .isAccepted(true)
-            .isActivated(true)
-            .build();
+                .id(id)
+                .user(user)
+                .codeRoom(codeRoom)
+                .isAccepted(true)
+                .isActivated(true)
+                .build();
     }
 
-
-
+    public static UserCodeRoom create(User user, CodeRoom codeRoom) {
+        return UserCodeRoom.builder()
+                .user(user)
+                .codeRoom(codeRoom)
+                .isActivated(false)
+                .isAccepted(true)
+                .build();
+    }
 
 }
