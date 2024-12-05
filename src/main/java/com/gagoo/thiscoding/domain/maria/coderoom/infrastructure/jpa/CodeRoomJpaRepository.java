@@ -7,4 +7,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface CodeRoomJpaRepository extends JpaRepository<CodeRoomEntity, Long> {
+    Optional<CodeRoomEntity> findByUuid(UUID uuid);
 }

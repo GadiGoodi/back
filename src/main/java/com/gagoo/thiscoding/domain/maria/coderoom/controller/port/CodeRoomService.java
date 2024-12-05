@@ -7,4 +7,5 @@ import java.util.UUID;
 
 public interface CodeRoomService {
     CodeRoom createCodeRoom(CodeRoomCreate codeRoomCreate);
+    CodeRoom enterCodeRoom(UUID uuid);
 }

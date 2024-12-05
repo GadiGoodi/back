@@ -22,8 +22,17 @@ public class CodeRoomServiceImpl implements CodeRoomService {
     @Override
     public CodeRoom createCodeRoom(CodeRoomCreate codeRoomCreate) {
         CodeRoom codeRoom = CodeRoom.create(codeRoomCreate);
-        
+
         return codeRoomRepository.save(codeRoom);
+    }
+
+    // 코드방 입장
+    // return 입장한 codeRoom 정보
+    @Override
+    public CodeRoom enterCodeRoom(UUID uuid) {
+        return codeRoomRepository.findByUuid(uuid).orElseThrow(
+                () -> new CodeRoomNotFoundException(ErrorCode.CODE_ROOM_NOT_FOUND)
+        );
     }
 
 }

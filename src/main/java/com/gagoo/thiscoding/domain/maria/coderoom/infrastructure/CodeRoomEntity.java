@@ -28,13 +28,13 @@ public class CodeRoomEntity {
 
     public CodeRoom toModel(){
         return CodeRoom.builder()
-            .id(this.id)
-            .uuid(this.uuid)
-            .title(this.title)
-            .content(this.content)
-            .language(this.language)
-            .headCount(this.headCount)
-            .build();
+                .id(this.id)
+                .uuid(this.uuid)
+                .title(this.title)
+                .content(this.content)
+                .language(this.language)
+                .headCount(this.headCount)
+                .build();
     }
     public static CodeRoomEntity from(CodeRoom codeRoom){
         CodeRoomEntity entity = new CodeRoomEntity();
