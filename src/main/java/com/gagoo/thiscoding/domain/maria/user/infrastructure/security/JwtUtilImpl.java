@@ -9,7 +9,6 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.http.Cookie;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -18,7 +17,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @Component
-@PropertySource("classpath:config/application-jwt.properties")
 public class JwtUtilImpl implements JwtUtil {
 
     private static final String JWT_HS256_ALGORITHM = Jwts.SIG.HS256.key().build().getAlgorithm();
