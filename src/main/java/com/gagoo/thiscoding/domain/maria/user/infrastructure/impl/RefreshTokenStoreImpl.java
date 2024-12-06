@@ -3,7 +3,6 @@ package com.gagoo.thiscoding.domain.maria.user.infrastructure.impl;
 import com.gagoo.thiscoding.domain.maria.user.service.port.RefreshTokenStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +10,6 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 @RequiredArgsConstructor
-@PropertySource("classpath:config/application-jwt.properties")
 public class RefreshTokenStoreImpl implements RefreshTokenStore {
 
     private final RedisTemplate<String, String> redisTemplate;
