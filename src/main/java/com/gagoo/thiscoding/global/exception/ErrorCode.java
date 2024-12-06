@@ -13,7 +13,7 @@ public enum ErrorCode {
     CLAIM_NOT_FOUND(HttpStatus.BAD_REQUEST, "토큰에 필요한 클레임이 존재하지 않습니다."),
     ALREADY_CREATE_EMAIL(HttpStatus.CONFLICT, "이미 가입된 이메일입니다."),
     EXIST_MEMBER_NICKNAME(HttpStatus.CONFLICT, "이미 존재하는 닉네임입니다."),
-    CODE_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 코드방입니다.");
+    CODE_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 코드방입니다."),
     JOIN_CODE_NOT_FOUND(HttpStatus.NOT_FOUND, "인증코드가 존재하지 않습니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 이메일입니다."),
     TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED, "토큰을 찾을 수 없거나 형식이 잘못되었습니다."),
