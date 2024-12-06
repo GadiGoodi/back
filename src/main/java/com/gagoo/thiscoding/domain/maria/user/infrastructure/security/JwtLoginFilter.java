@@ -2,7 +2,9 @@ package com.gagoo.thiscoding.domain.maria.user.infrastructure.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.UserLogin;
+import com.gagoo.thiscoding.domain.maria.user.service.port.RefreshTokenStore;
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,11 +21,13 @@ import java.util.Iterator;
 public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authManager;
-    private final JWTUtil jwtUtil;
+    private final JwtUtilImpl jwtUtilImpl;
+    private final RefreshTokenStore refreshTokenStore;
 
-    public JwtLoginFilter(AuthenticationManager authManager, JWTUtil jwtUtil) {
+    public JwtLoginFilter(AuthenticationManager authManager, JwtUtilImpl jwtUtilImpl, RefreshTokenStore refreshTokenStore) {
         this.authManager = authManager;
-        this.jwtUtil = jwtUtil;
+        this.jwtUtilImpl = jwtUtilImpl;
+        this.refreshTokenStore = refreshTokenStore;
 
         setFilterProcessesUrl("/api/auth/login");
     }
@@ -45,13 +49,17 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         }
     }
 
+    /**
+     * 로그인 성공시 엑세스 토큰과 리프레쉬 토큰 발급
+     * 엑세스 토큰 만료시 재발급을 위해 리프레쉬 토큰 redis에 저장
+     */
     @Override
     protected void successfulAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response,
                                                 FilterChain chain,
                                                 Authentication authentication) {
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-        String username = customUserDetails.getUsername();
+        String email = customUserDetails.getUsername();
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
@@ -59,9 +67,15 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String role = auth.getAuthority();
 
-        String token = jwtUtil.createJwt(username, role);
+        String atk = jwtUtilImpl.createAtk(email, role);
+        String rtk = jwtUtilImpl.createRtk(email, role);
 
-        response.addHeader("Authorization", "Bearer" + token);
+        refreshTokenStore.storeToken(email, rtk);
+
+        Cookie refreshTokenCookie = jwtUtilImpl.createRefreshTokenCookie(rtk);
+
+        response.setHeader("Authorization", "Bearer" + atk);
+        response.addCookie(refreshTokenCookie);
     }
 
     @Override

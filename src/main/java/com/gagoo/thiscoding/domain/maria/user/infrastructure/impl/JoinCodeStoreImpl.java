@@ -1,10 +1,10 @@
 package com.gagoo.thiscoding.domain.maria.user.infrastructure.impl;
 
-import com.gagoo.thiscoding.domain.maria.user.domain.JoinCode;
+import com.gagoo.thiscoding.domain.maria.user.domain.dto.JoinCode;
 import com.gagoo.thiscoding.domain.maria.user.service.exception.JoinCodeNotFoundException;
 import com.gagoo.thiscoding.domain.maria.user.service.exception.JoinCodeNotMatchException;
 import com.gagoo.thiscoding.domain.maria.user.infrastructure.JoinCodeRedis;
-import com.gagoo.thiscoding.domain.maria.user.service.port.JoinCodeRepository;
+import com.gagoo.thiscoding.domain.maria.user.service.port.JoinCodeStore;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -18,7 +18,7 @@ import static com.gagoo.thiscoding.global.exception.ErrorCode.*;
 @Repository
 @RequiredArgsConstructor
 @Log4j2
-public class JoinCodeRepositoryImpl implements JoinCodeRepository {
+public class JoinCodeStoreImpl implements JoinCodeStore {
 
     private final RedisTemplate<String, String> redisTemplate;
 
@@ -30,8 +30,9 @@ public class JoinCodeRepositoryImpl implements JoinCodeRepository {
     public JoinCode save(JoinCode joinCode) {
         String key = joinCode.getEmail() + CODE;
         String value = joinCode.getCode();
+        int ttl = 300;
 
-        redisTemplate.opsForValue().set(key, value,  300, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(key, value,  ttl, TimeUnit.SECONDS);
 
         log.info("이메일 {}에 인증코드를 전송했습니다.", joinCode.getEmail());
 

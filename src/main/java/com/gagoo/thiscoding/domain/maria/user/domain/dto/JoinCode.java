@@ -1,6 +1,5 @@
-package com.gagoo.thiscoding.domain.maria.user.domain;
+package com.gagoo.thiscoding.domain.maria.user.domain.dto;
 
-import com.gagoo.thiscoding.domain.maria.user.domain.dto.Certification;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
