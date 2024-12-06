@@ -1,9 +1,9 @@
 package com.gagoo.thiscoding.domain.maria.user.service;
 
 import com.gagoo.thiscoding.domain.maria.user.controller.port.CertificationService;
-import com.gagoo.thiscoding.domain.maria.user.domain.JoinCode;
+import com.gagoo.thiscoding.domain.maria.user.domain.dto.JoinCode;
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.Certification;
-import com.gagoo.thiscoding.domain.maria.user.service.port.JoinCodeRepository;
+import com.gagoo.thiscoding.domain.maria.user.service.port.JoinCodeStore;
 import com.gagoo.thiscoding.domain.maria.user.service.port.MailSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class CertificationServiceImpl implements CertificationService {
 
     private final MailSender mailSender;
-    private final JoinCodeRepository joinCodeRepository;
+    private final JoinCodeStore joinCodeStore;
 
     /**
      * 이메일에 인증 코드 발송
@@ -24,7 +24,7 @@ public class CertificationServiceImpl implements CertificationService {
         Certification certification = mailSender.send(email);
         JoinCode joinCode = JoinCode.from(certification);
 
-        joinCodeRepository.save(joinCode);
+        joinCodeStore.save(joinCode);
     }
 
     /**
@@ -33,7 +33,7 @@ public class CertificationServiceImpl implements CertificationService {
      */
     @Override
     public void checkJoinCode(JoinCode joinCode) {
-        joinCodeRepository.checkJoinCode(joinCode);
+        joinCodeStore.checkJoinCode(joinCode);
     }
 
 }

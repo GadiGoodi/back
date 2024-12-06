@@ -1,7 +1,7 @@
 package com.gagoo.thiscoding.domain.maria.user.controller;
 
 import com.gagoo.thiscoding.domain.maria.user.controller.port.CertificationService;
-import com.gagoo.thiscoding.domain.maria.user.domain.JoinCode;
+import com.gagoo.thiscoding.domain.maria.user.domain.dto.JoinCode;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;

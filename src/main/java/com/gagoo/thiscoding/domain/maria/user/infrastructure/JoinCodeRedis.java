@@ -1,19 +1,13 @@
 package com.gagoo.thiscoding.domain.maria.user.infrastructure;
 
-import com.gagoo.thiscoding.domain.maria.user.domain.JoinCode;
+import com.gagoo.thiscoding.domain.maria.user.domain.dto.JoinCode;
 import lombok.Getter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.redis.core.RedisHash;
-import org.springframework.data.redis.core.index.Indexed;
 
 @Getter
-@RedisHash(value = "joinCode", timeToLive = 60 * 5)
 public class JoinCodeRedis {
 
-    @Id
     private String email;
 
-    @Indexed
     private String code;
 
     public static JoinCodeRedis from(JoinCode joinCode) {
