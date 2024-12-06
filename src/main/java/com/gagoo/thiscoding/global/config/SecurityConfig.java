@@ -1,7 +1,8 @@
 package com.gagoo.thiscoding.global.config;
 
-import com.gagoo.thiscoding.domain.maria.user.infrastructure.security.JWTUtil;
+import com.gagoo.thiscoding.domain.maria.user.infrastructure.security.JwtUtilImpl;
 import com.gagoo.thiscoding.domain.maria.user.infrastructure.security.JwtLoginFilter;
+import com.gagoo.thiscoding.domain.maria.user.service.port.RefreshTokenStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +24,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfig;
-    private final JWTUtil jwtUtil;
+    private final RefreshTokenStore refreshTokenStore;
+    private final JwtUtilImpl jwtUtilImpl;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -45,7 +47,7 @@ public class SecurityConfig {
                 );
 
         http.addFilterAt(
-                new JwtLoginFilter(authenticationManager(authenticationConfig), jwtUtil),
+                new JwtLoginFilter(authenticationManager(authenticationConfig), jwtUtilImpl, refreshTokenStore),
                 UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
