@@ -35,4 +35,9 @@ public class UserRepositoryImpl implements UserRepository {
         return userJpaRepository.existsByNickname(nickname);
     }
 
+    @Override
+    public Optional<User> findById(Long userId) {
+        return userJpaRepository.findById(userId).map(UserEntity::toModel);
+    }
+
 }
