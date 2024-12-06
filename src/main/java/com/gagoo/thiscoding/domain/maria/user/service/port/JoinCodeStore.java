@@ -1,9 +1,8 @@
 package com.gagoo.thiscoding.domain.maria.user.service.port;
 
-import com.gagoo.thiscoding.domain.maria.user.domain.JoinCode;
+import com.gagoo.thiscoding.domain.maria.user.domain.dto.JoinCode;
 
-public interface JoinCodeRepository {
+public interface JoinCodeStore {
     JoinCode save(JoinCode joinCode);
-
     JoinCode checkJoinCode(JoinCode joinCode);
 }
