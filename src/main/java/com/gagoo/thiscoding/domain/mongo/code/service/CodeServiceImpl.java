@@ -20,7 +20,7 @@ public class CodeServiceImpl implements CodeService {
 
     // 코드 생성
     @Override
-    public Mono<Code> createCode(CodeCreate codeCreate) {
+    public Code createCode(CodeCreate codeCreate) {
         CodeRoom codeRoom = codeRoomRepository.findById(codeCreate.getRoomId()).orElseThrow(
                 () -> new CodeRoomNotFoundException(ErrorCode.CODE_ROOM_NOT_FOUND)
         );

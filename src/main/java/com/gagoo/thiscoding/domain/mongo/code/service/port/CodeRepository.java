@@ -4,5 +4,5 @@ import com.gagoo.thiscoding.domain.mongo.code.domain.Code;
 import reactor.core.publisher.Mono;
 
 public interface CodeRepository {
-    Mono<Code> save(Code code);
+    Code save(Code code);
 }
