@@ -8,9 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Mono;
-
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/code")
@@ -21,10 +18,10 @@ public class CodeCreateController {
     // 코드 파일 생성
     @PostMapping
     public ResponseEntity<CodeResponse> createCode(@RequestBody CodeCreate codeCreate) {
-        Mono<Code> code = codeService.createCode(codeCreate);
+        Code code = codeService.createCode(codeCreate);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(CodeResponse.from(Objects.requireNonNull(code.block())));
+                .body(CodeResponse.from(code));
     }
 }

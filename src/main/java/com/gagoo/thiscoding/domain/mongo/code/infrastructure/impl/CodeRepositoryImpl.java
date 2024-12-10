@@ -6,7 +6,6 @@ import com.gagoo.thiscoding.domain.mongo.code.infrastructure.mongo.CodeMongoRepo
 import com.gagoo.thiscoding.domain.mongo.code.service.port.CodeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import reactor.core.publisher.Mono;
 
 @Repository
 @RequiredArgsConstructor
@@ -14,7 +13,7 @@ public class CodeRepositoryImpl implements CodeRepository {
     private final CodeMongoRepository codeMongoRepository;
 
     @Override
-    public Mono<Code> save(Code code) {
-        return Mono.from(codeMongoRepository.save(CodeDocument.from(code))).map(CodeDocument::toModel);
+    public Code save(Code code) {
+        return codeMongoRepository.save(CodeDocument.from(code)).toModel();
     }
 }
