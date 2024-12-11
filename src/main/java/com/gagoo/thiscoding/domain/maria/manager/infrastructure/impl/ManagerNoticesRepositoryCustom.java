@@ -2,6 +2,8 @@ package com.gagoo.thiscoding.domain.maria.manager.infrastructure.impl;
 
 import com.gagoo.thiscoding.domain.maria.manager.domain.Manager;
 import com.gagoo.thiscoding.domain.maria.manager.service.port.ManagerRepository;
+import com.querydsl.core.Query;
+import com.querydsl.core.QueryFactory;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -30,8 +32,9 @@ public class ManagerNoticesRepositoryCustom {
                 .from(managerEntity)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(managerEntity.id.asc())
+                .orderBy(managerEntity.id.desc())
                 .fetch();
+
 
         JPAQuery<Long> countQuery = queryFactory.select(managerEntity.count()).from(managerEntity);
 
