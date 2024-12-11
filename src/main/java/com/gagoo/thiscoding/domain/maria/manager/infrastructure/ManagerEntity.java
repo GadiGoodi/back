@@ -1,5 +1,6 @@
 package com.gagoo.thiscoding.domain.maria.manager.infrastructure;
 
+import com.gagoo.thiscoding.domain.BaseTimeEntity;
 import com.gagoo.thiscoding.domain.maria.manager.controller.response.ManagerNoticesPost;
 import com.gagoo.thiscoding.domain.maria.manager.domain.Manager;
 import com.gagoo.thiscoding.domain.maria.user.infrastructure.UserEntity;
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ManagerEntity {
+public class ManagerEntity extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "manager_board_id")
@@ -27,7 +28,7 @@ public class ManagerEntity {
 
     private String category;
 
-    @Column(name = "view_count")
+    @Column(name = "view_count",columnDefinition = "integer default 0",nullable = false)
     private Long viewCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -65,6 +66,7 @@ public class ManagerEntity {
                 .content(content)
                 .category(category)
                 .viewCount(viewCount)
+                .createDate(getCreateDate())
                 .build();
     }
 }
