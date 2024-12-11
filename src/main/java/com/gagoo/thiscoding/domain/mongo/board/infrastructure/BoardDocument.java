@@ -1,14 +1,15 @@
 package com.gagoo.thiscoding.domain.mongo.board.infrastructure;
 
 import com.gagoo.thiscoding.domain.BaseTimeEntity;
-import jakarta.persistence.Id;
+import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
 import lombok.Getter;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @Getter
 @Document(collection = "qna")
-public class BoardDocument extends BaseTimeEntity {
+public class BoardDocument  {
 
     @Id
     private String id;
@@ -39,5 +40,24 @@ public class BoardDocument extends BaseTimeEntity {
 
     @Field(name = "is_selected")
     private boolean isSelected;
+
+
+
+    public Board toDomain() {
+        return Board.builder()
+                .id(id)
+                .userId(userId)
+                .title(title)
+                .content(content)
+                .language(language)
+                .parentId(parentId)
+                .likeCount(likeCount)
+                .viewCount(viewCount)
+                .answerCount(answerCount)
+                .isBlind(isBlind)
+                .isSelected(isSelected)
+                .build();
+    }
+
 
 }
