@@ -2,8 +2,10 @@ package com.gagoo.thiscoding.domain.maria.user.infrastructure.impl;
 
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.user.infrastructure.UserEntity;
+import com.gagoo.thiscoding.domain.maria.user.infrastructure.exception.UserNotFoundException;
 import com.gagoo.thiscoding.domain.maria.user.infrastructure.jpa.UserJpaRepository;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
+import com.gagoo.thiscoding.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +16,11 @@ import java.util.Optional;
 public class UserRepositoryImpl implements UserRepository {
 
     private final UserJpaRepository userJpaRepository;
+
+    @Override
+    public User getById(Long id) {
+        return findById(id).orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+    }
 
     @Override
     public User save(User user) {
