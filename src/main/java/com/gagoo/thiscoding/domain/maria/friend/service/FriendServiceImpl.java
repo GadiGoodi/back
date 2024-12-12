@@ -24,7 +24,7 @@ public class FriendServiceImpl implements FriendService {
     /**
      * 해당 회원이 존재하는지 확인
      * */
-    private void validateUserExistence(Long userId) {
+    private User validateUserExistence(Long userId) {
         userRepository.findById(userId)
             .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
     }
@@ -57,13 +57,11 @@ public class FriendServiceImpl implements FriendService {
      * @return 추가된 친구 정보
      */
     @Override
-    public Friend Create(FriendRequest friendRequest) {
-        validateUserExistence(friendRequest.getReceiverId());
-        validateUserExistence(friendRequest.getSenderId());
+    public Friend create(FriendRequest friendRequest) {
         validateFriendDoesNotExist(friendRequest.getReceiverId(), friendRequest.getSenderId());
 
-        User sender = userRepository.getById(friendRequest.getSenderId());
-        User receiver = userRepository.getById(friendRequest.getReceiverId());
+        User sender = userRepository.findById(friendRequest.getSenderId()).orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+        User receiver = userRepository.findById(friendRequest.getSenderId()).orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         Friend friend = Friend.from(sender, receiver);
         return friendRepository.save(friend);
@@ -75,7 +73,7 @@ public class FriendServiceImpl implements FriendService {
      * @return
      */
     @Override
-    public List<Friend> GetFriendList(Long userId) {
+    public List<Friend> getFriendList(Long userId) {
         validateUserExistence(userId);
         return friendRepository.findAllById(userId);
     }
@@ -86,7 +84,7 @@ public class FriendServiceImpl implements FriendService {
      * @return
      */
     @Override
-    public Long Delete(FriendRequest friendRequest) {
+    public Long delete(FriendRequest friendRequest) {
         validateUserExistence(friendRequest.getReceiverId());
         validateUserExistence(friendRequest.getSenderId());
         validateFriendExists(friendRequest.getReceiverId(), friendRequest.getSenderId());

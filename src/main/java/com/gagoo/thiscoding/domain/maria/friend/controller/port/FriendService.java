@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface FriendService {
 
-    Friend Create(FriendRequest friendRequest);
+    Friend create(FriendRequest friendRequest);
 
-    List<Friend> GetFriendList(Long userId);
+    List<Friend> getFriendList(Long userId);
 
-    Long Delete(FriendRequest friendRequest);
+    Long delete(FriendRequest friendRequest);
 }
