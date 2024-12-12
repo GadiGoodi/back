@@ -1,9 +1,9 @@
 package com.gagoo.thiscoding.domain.maria.user.controller;
 
+import com.gagoo.thiscoding.domain.maria.user.controller.port.MyPageQnaService;
 import com.gagoo.thiscoding.domain.maria.user.controller.port.MyPageService;
-import com.gagoo.thiscoding.domain.maria.usercoderoom.controller.port.UserCodeRoomService;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.UserCodeRoom;
-import com.gagoo.thiscoding.domain.maria.usercoderoom.service.port.UserCodeRoomRepository;
+import com.gagoo.thiscoding.domain.maria.user.controller.response.MyPageQnA;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -12,9 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MyPageController {
 
     private final MyPageService myPageService;
+    private final MyPageQnaService myPageQnaService;
 
     @GetMapping("/{userId}/invitations")
     public ResponseEntity<Page<UserCodeRoom>> CodeRoomInviteListView(@PathVariable Long userId, Pageable pageable) {
@@ -42,5 +41,13 @@ public class MyPageController {
     public ResponseEntity<String> cancelInvitation(@PathVariable Long userId, @PathVariable Long userCodeRoomId) {
         myPageService.cancelCodeRoom(userCodeRoomId);
         return ResponseEntity.ok("거절 완료");
+    }
+
+    @GetMapping("/{userId}/qna")
+    public ResponseEntity<Page<MyPageQnA>> getMyPageQnA(@PathVariable Long userId, Pageable pageable) {
+        return ResponseEntity
+                .ok()
+                .body(myPageQnaService.getMyPagePostQnA(userId, pageable).map(MyPageQnA::from));
+
     }
 }
