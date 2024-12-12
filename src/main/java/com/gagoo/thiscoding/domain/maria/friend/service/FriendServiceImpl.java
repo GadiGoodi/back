@@ -60,7 +60,7 @@ public class FriendServiceImpl implements FriendService {
     public Friend Create(FriendRequest friendRequest) {
         validateUserExistence(friendRequest.getReceiverId());
         validateUserExistence(friendRequest.getSenderId());
-        validateFriendExists(friendRequest.getReceiverId(), friendRequest.getSenderId());
+        validateFriendDoesNotExist(friendRequest.getReceiverId(), friendRequest.getSenderId());
 
         User sender = userRepository.getById(friendRequest.getSenderId());
         User receiver = userRepository.getById(friendRequest.getReceiverId());
