@@ -18,11 +18,6 @@ public class UserRepositoryImpl implements UserRepository {
     private final UserJpaRepository userJpaRepository;
 
     @Override
-    public User getById(Long id) {
-        return findById(id).orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
-    }
-
-    @Override
     public User save(User user) {
         return userJpaRepository.save(UserEntity.from(user)).toModel();
     }
