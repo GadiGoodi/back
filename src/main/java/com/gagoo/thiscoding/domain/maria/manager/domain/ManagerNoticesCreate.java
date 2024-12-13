@@ -1,6 +1,5 @@
-package com.gagoo.thiscoding.domain.maria.manager.controller.response;
+package com.gagoo.thiscoding.domain.maria.manager.domain;
 
-import com.gagoo.thiscoding.domain.maria.manager.domain.Manager;
 import com.gagoo.thiscoding.domain.maria.manager.infrastructure.ManagerEntity;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import lombok.AllArgsConstructor;
@@ -12,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ManagerNoticesPost {
+public class ManagerNoticesCreate {
 
     private Long id;
     private User manager;
@@ -22,8 +21,8 @@ public class ManagerNoticesPost {
 
 
     //Domain > DTO 코드
-    public static ManagerNoticesPost from(Manager manager) {
-      return ManagerNoticesPost.builder()
+    public static ManagerNoticesCreate from(Manager manager) {
+      return ManagerNoticesCreate.builder()
               .id(manager.getId())
               .manager(manager.getManager())
               .title(manager.getTitle())

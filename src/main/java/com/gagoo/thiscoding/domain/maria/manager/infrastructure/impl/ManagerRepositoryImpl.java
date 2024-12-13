@@ -18,13 +18,13 @@ public class ManagerRepositoryImpl implements ManagerRepository {
     private final ManagerNoticesJpaRepository managerNoticesJpaRepository;
 
     @Override
-    public Page<ManagerEntity> findAll(Pageable pageable) {
-        return managerNoticesJpaRepository.findAll(pageable);
+    public Page<Manager> findAll(Pageable pageable) {
+        return managerNoticesJpaRepository.findAll(pageable).map(ManagerEntity::toModel);
     }
 
     @Override
-    public ManagerEntity save(ManagerEntity request) {
-        return managerNoticesJpaRepository.save(request);
+    public Manager save(Manager request) {
+        return managerNoticesJpaRepository.save(request.toEntity()).toModel();
     }
 
     @Override
@@ -33,8 +33,8 @@ public class ManagerRepositoryImpl implements ManagerRepository {
     }
 
     @Override
-    public Optional<ManagerEntity> findById(Long id) {
-        return managerNoticesJpaRepository.findById(id);
+    public Manager findById(Long id) {
+        return managerNoticesJpaRepository.findById(id).orElseThrow().toModel();
     }
 
 }
