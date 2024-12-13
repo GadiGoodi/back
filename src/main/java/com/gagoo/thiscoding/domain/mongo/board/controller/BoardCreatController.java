@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/boards")
 @RequiredArgsConstructor
-public class BoardCreatController {
+public class BoardCreateController {
 
     private final BoardService boardService;
 
