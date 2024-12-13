@@ -1,6 +1,5 @@
 package com.gagoo.thiscoding.domain.mongo.board.infrastructure;
 
-import com.gagoo.thiscoding.domain.maria.BaseTimeEntity;
 import com.gagoo.thiscoding.domain.mongo.BaseTimeDocument;
 import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
 import lombok.Getter;

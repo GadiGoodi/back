@@ -1,5 +1,6 @@
 package com.gagoo.thiscoding.domain.mongo.board.domain;
 
+import com.gagoo.thiscoding.domain.mongo.board.domain.dto.BoardCreate;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -20,7 +21,6 @@ public class Board {
     private boolean isSelected;
     private LocalDateTime createDate;
 
-
     @Builder
     public Board(String id, Long userId,String title,String content,String language,Long parentId,Long likeCount,Long viewCount
     ,Long answerCount,Boolean isBlind,Boolean isSelected,LocalDateTime createDate) {
@@ -36,7 +36,21 @@ public class Board {
         this.isBlind = isBlind;
         this.isSelected = isSelected;
         this.createDate = createDate;
-
     }
 
- }
+    public static Board create(BoardCreate boardCreate) {
+        return Board.builder()
+                .userId(boardCreate.getUserId())
+                .title(boardCreate.getTitle())
+                .content(boardCreate.getContent())
+                .language(boardCreate.getLanguage())
+                .parentId(boardCreate.getParentId())
+                .likeCount(0L)
+                .viewCount(0L)
+                .answerCount(0L)
+                .isBlind(false)
+                .isSelected(false)
+                .build();
+    }
+
+}
