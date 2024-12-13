@@ -19,18 +19,6 @@ public class ManagerNoticesCreate {
     private String content;
     private String category;
 
-
-    //Domain > DTO 코드
-    public static ManagerNoticesCreate from(Manager manager) {
-      return ManagerNoticesCreate.builder()
-              .id(manager.getId())
-              .manager(manager.getManager())
-              .title(manager.getTitle())
-              .content(manager.getContent())
-              .category(manager.getCategory())
-              .build();
-    }
-
     public ManagerEntity toEntity() {
         return ManagerEntity.builder()
                 .title(title)
