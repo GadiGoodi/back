@@ -2,6 +2,7 @@ package com.gagoo.thiscoding.domain.maria.manager.infrastructure;
 
 import com.gagoo.thiscoding.domain.BaseTimeEntity;
 import com.gagoo.thiscoding.domain.maria.manager.domain.ManagerNoticesCreate;
+import com.gagoo.thiscoding.domain.maria.manager.controller.response.ManagerNoticesPost;
 import com.gagoo.thiscoding.domain.maria.manager.domain.Manager;
 import com.gagoo.thiscoding.domain.maria.user.infrastructure.UserEntity;
 import jakarta.persistence.*;

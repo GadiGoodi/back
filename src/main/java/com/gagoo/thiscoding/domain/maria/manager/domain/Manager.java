@@ -1,10 +1,14 @@
 package com.gagoo.thiscoding.domain.maria.manager.domain;
-
 import com.gagoo.thiscoding.domain.BaseTimeEntity;
+import com.gagoo.thiscoding.domain.maria.manager.controller.response.ManagerNoticesPost;
+import com.gagoo.thiscoding.domain.maria.manager.controller.response.ManagerNoticesUpdate;
 import com.gagoo.thiscoding.domain.maria.manager.infrastructure.ManagerEntity;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 import java.time.LocalDateTime;
 
@@ -41,7 +45,6 @@ public class Manager extends BaseTimeEntity {
         this.category = category;
         this.viewCount = viewCount;
         this.createDate = createDate;
-    }
 
     public static Manager from(ManagerNoticesCreate managerNoticesCreate) {
         return Manager.builder()
