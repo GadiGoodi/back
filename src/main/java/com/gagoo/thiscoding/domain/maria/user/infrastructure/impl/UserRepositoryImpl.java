@@ -44,6 +44,6 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public boolean existsByUserId(Long userId) {
-            throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
+            return userJpaRepository.existsById(userId);
     }
 }
