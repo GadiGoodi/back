@@ -1,4 +1,4 @@
-package com.gagoo.thiscoding.domain;
+package com.gagoo.thiscoding.domain.maria;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

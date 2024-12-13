@@ -1,6 +1,6 @@
 package com.gagoo.thiscoding.domain.maria.alarm.infrastructure;
 
-import com.gagoo.thiscoding.domain.BaseTimeEntity;
+import com.gagoo.thiscoding.domain.maria.BaseTimeEntity;
 import com.gagoo.thiscoding.domain.maria.alarm.domain.AlarmType;
 import com.gagoo.thiscoding.domain.maria.user.infrastructure.UserEntity;
 import jakarta.persistence.*;

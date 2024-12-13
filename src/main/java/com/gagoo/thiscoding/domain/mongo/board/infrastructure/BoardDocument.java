@@ -1,6 +1,7 @@
 package com.gagoo.thiscoding.domain.mongo.board.infrastructure;
 
-import com.gagoo.thiscoding.domain.BaseTimeEntity;
+import com.gagoo.thiscoding.domain.maria.BaseTimeEntity;
+import com.gagoo.thiscoding.domain.mongo.BaseTimeDocument;
 import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
@@ -9,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 @Getter
 @Document(collection = "qna")
-public class BoardDocument  {
+public class BoardDocument extends BaseTimeDocument {
 
     @Id
     private String id;
@@ -41,9 +42,24 @@ public class BoardDocument  {
     @Field(name = "is_selected")
     private boolean isSelected;
 
+    public static BoardDocument from(Board board) {
+        BoardDocument boardDocument = new BoardDocument();
+        boardDocument.id = board.getId();
+        boardDocument.userId = board.getUserId();
+        boardDocument.title = board.getTitle();
+        boardDocument.content = board.getContent();
+        boardDocument.language = board.getLanguage();
+        boardDocument.parentId = board.getParentId();
+        boardDocument.likeCount = board.getLikeCount();
+        boardDocument.viewCount = board.getViewCount();
+        boardDocument.answerCount = board.getAnswerCount();
+        boardDocument.isBlind = board.isBlind();
+        boardDocument.isSelected = board.isSelected();
 
+        return boardDocument;
+    }
 
-    public Board toDomain() {
+    public Board toModel() {
         return Board.builder()
                 .id(id)
                 .userId(userId)
@@ -58,6 +74,4 @@ public class BoardDocument  {
                 .isSelected(isSelected)
                 .build();
     }
-
-
 }

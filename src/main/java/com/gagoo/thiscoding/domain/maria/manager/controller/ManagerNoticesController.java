@@ -3,8 +3,7 @@ package com.gagoo.thiscoding.domain.maria.manager.controller;
 import com.gagoo.thiscoding.domain.maria.manager.controller.port.ManagerService;
 import com.gagoo.thiscoding.domain.maria.manager.controller.response.ManagerNoticesDetail;
 import com.gagoo.thiscoding.domain.maria.manager.controller.response.ManagerNoticesList;
-import com.gagoo.thiscoding.domain.maria.manager.controller.response.ManagerNoticesPost;
-import com.gagoo.thiscoding.domain.maria.manager.controller.response.ManagerNoticesUpdate;
+import com.gagoo.thiscoding.domain.maria.manager.domain.ManagerNoticesUpdate;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -12,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,20 +19,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class ManagerNoticesController {
     private final ManagerService managerService;
 
-
     //공지사항 목록 조회
     @GetMapping
     public ResponseEntity<Page<ManagerNoticesList>> getNoticesAll(Pageable pageable) {
         return ResponseEntity
                 .ok()
                 .body(managerService.getAllManagerNotices(pageable).map(ManagerNoticesList::from));
-    }
-
-    //공지사항 작성
-    @PostMapping
-    public ResponseEntity<ManagerNoticesPost> createNotice(@RequestBody ManagerNoticesPost request) {
-        managerService.createAdminNotices(request);
-        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     //공지사항 삭제
@@ -45,12 +35,12 @@ public class ManagerNoticesController {
     }
 
     //공지사항 수정
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<?> updateManagerNotices(@PathVariable Long id,
                                                   @RequestBody ManagerNoticesUpdate request) {
 
         managerService.updateAdminNotices(id, request);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return ResponseEntity.ok("공지사항 수정이 완료되었습니다.");
     }
 
     //공지사항 상세 조회

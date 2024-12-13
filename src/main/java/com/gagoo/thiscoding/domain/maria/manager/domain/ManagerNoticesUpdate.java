@@ -1,7 +1,8 @@
-package com.gagoo.thiscoding.domain.maria.manager.controller.response;
+package com.gagoo.thiscoding.domain.maria.manager.domain;
 
 import com.gagoo.thiscoding.domain.maria.manager.infrastructure.ManagerEntity;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -13,13 +14,5 @@ public class ManagerNoticesUpdate {
     private String content;
     @NotBlank
     private String category;
-
-    public ManagerEntity toEntity(){
-        return ManagerEntity.builder()
-                .title(title)
-                .content(content)
-                .category(category)
-                .build();
-    }
 
 }
