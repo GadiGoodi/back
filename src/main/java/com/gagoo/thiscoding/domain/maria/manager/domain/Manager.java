@@ -1,13 +1,11 @@
 package com.gagoo.thiscoding.domain.maria.manager.domain;
 
-import com.gagoo.thiscoding.domain.BaseTimeEntity;
-import com.gagoo.thiscoding.domain.maria.manager.controller.response.ManagerNoticesPost;
+import com.gagoo.thiscoding.domain.maria.BaseTimeEntity;
 import com.gagoo.thiscoding.domain.maria.manager.controller.response.ManagerNoticesUpdate;
 import com.gagoo.thiscoding.domain.maria.manager.infrastructure.ManagerEntity;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 
