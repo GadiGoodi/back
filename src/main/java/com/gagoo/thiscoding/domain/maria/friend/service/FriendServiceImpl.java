@@ -22,15 +22,21 @@ public class FriendServiceImpl implements FriendService {
 
     private final FriendRepository friendRepository;
     private final UserRepository userRepository;
-    private final UserService userService;
 
     /**
      * 해당 회원이 존재하는지 확인
      * */
-    private User validateUserExistence(Long userId) {
+    private User userGetById(Long userId) {
         return userRepository.findById(userId)
             .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
     }
+
+    private void validateUserExistence(Long userId) {
+        if (userRepository.existsByUserId(userId)) {
+            throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
+        }
+    }
+
 
     /**
      * 해당 회원이 이미 친구인 경우 예외
@@ -63,8 +69,8 @@ public class FriendServiceImpl implements FriendService {
     public Friend create(FriendRequest friendRequest) {
         validateFriendDoesNotExist(friendRequest.getReceiverId(), friendRequest.getSenderId());
 
-        User sender = userService.getById(friendRequest.getSenderId());
-        User receiver = userService.getById(friendRequest.getReceiverId());
+        User sender = userGetById(friendRequest.getSenderId());
+        User receiver = userGetById(friendRequest.getReceiverId());
 
         Friend friend = Friend.from(sender, receiver);
         return friendRepository.save(friend);

@@ -20,11 +20,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Override
-    public User getById(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
-    }
-
     /**
      * 회원가입
      * @param userCreate
@@ -76,12 +71,6 @@ public class UserServiceImpl implements UserService {
         }
 
         return false;
-    }
-
-    public void validateUserExistence(Long userId) {
-        if (userRepository.existsByUserId(userId)) {
-            throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
-        }
     }
 
     /**
