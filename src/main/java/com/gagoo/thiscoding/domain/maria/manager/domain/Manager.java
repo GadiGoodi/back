@@ -46,7 +46,7 @@ public class Manager extends BaseTimeEntity {
         this.viewCount = viewCount;
         this.createDate = createDate;
 
-    public static Manager from(ManagerNoticesCreate managerNoticesCreate) {
+    public static Manager create(ManagerNoticesCreate managerNoticesCreate) {
         return Manager.builder()
                 .id(managerNoticesCreate.getId())
                 .manager(managerNoticesCreate.getManager())
