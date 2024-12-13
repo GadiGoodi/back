@@ -1,6 +1,5 @@
 package com.gagoo.thiscoding.domain.maria.manager.domain;
-
-import com.gagoo.thiscoding.domain.maria.BaseTimeEntity;
+import com.gagoo.thiscoding.domain.maria.manager.controller.response.ManagerNoticesPost;
 import com.gagoo.thiscoding.domain.maria.manager.controller.response.ManagerNoticesUpdate;
 import com.gagoo.thiscoding.domain.maria.manager.infrastructure.ManagerEntity;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
@@ -9,9 +8,11 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Builder
-public class Manager extends BaseTimeEntity {
+public class Manager {
     //record로 변경해보기
     private Long id;
     private User manager;
@@ -42,6 +43,15 @@ public class Manager extends BaseTimeEntity {
         this.category = category;
         this.viewCount = viewCount;
         this.createDate = createDate;
+
+    public static Manager create(ManagerNoticesCreate managerNoticesCreate) {
+        return Manager.builder()
+                .id(managerNoticesCreate.getId())
+                .manager(managerNoticesCreate.getManager())
+                .title(managerNoticesCreate.getTitle())
+                .content(managerNoticesCreate.getContent())
+                .category(managerNoticesCreate.getCategory())
+                .build();
     }
 
     public ManagerEntity toEntity() {

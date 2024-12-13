@@ -1,14 +1,14 @@
 package com.gagoo.thiscoding.domain.maria.manager.infrastructure;
 
+import com.gagoo.thiscoding.domain.maria.manager.domain.ManagerNoticesCreate;
 import com.gagoo.thiscoding.domain.maria.BaseTimeEntity;
 import com.gagoo.thiscoding.domain.maria.manager.controller.response.ManagerNoticesPost;
 import com.gagoo.thiscoding.domain.maria.manager.domain.Manager;
 import com.gagoo.thiscoding.domain.maria.user.infrastructure.UserEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Getter
 @Entity
@@ -49,7 +49,7 @@ public class ManagerEntity extends BaseTimeEntity {
     }
 
     //Domain > Entity 코드
-    public static ManagerEntity from(ManagerNoticesPost manager) {
+    public static ManagerEntity from(ManagerNoticesCreate manager) {
         ManagerEntity managerEntity = new ManagerEntity();
         managerEntity.title = manager.getTitle();
         managerEntity.content = manager.getContent();

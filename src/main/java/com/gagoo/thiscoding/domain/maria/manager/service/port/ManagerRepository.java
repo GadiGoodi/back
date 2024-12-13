@@ -9,9 +9,9 @@ import java.util.Optional;
 
 public interface ManagerRepository {
 
-    Page<ManagerEntity> findAll(Pageable pageable);
-    ManagerEntity save(ManagerEntity manager);
+    Page<Manager> findAll(Pageable pageable);
+    Manager save(Manager manager);
     void deleteById(Long id);
-    Optional<ManagerEntity> findById(Long id);
+   Manager findById(Long id);
 }
 
