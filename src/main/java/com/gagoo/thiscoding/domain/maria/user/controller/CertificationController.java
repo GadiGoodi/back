@@ -18,7 +18,7 @@ public class CertificationController {
     /**
      * 인증코드 발송
      */
-    @PostMapping
+    @GetMapping
     public ResponseEntity<Void> sendJoinCode(@NotBlank @RequestParam String email) {
         certificationService.sendJoinCode(email);
 
