@@ -6,4 +6,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface BoardRepository {
     Page<Board> findByUserId(Long userId, Pageable pageable);
+
+    Board save(Board board);
 }

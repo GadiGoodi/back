@@ -14,6 +14,11 @@ private final BoardMongoRepository boardMongoRepository;
     @Override
     public Page<Board> findByUserId(Long userId, Pageable pageable) {
         return boardMongoRepository.findByUserId(userId, pageable)
-                .map(BoardDocument::toDomain);// BoardDocument를 Board로 변환
+                .map(BoardDocument::toModel);
+    }
+
+    @Override
+    public Board save(Board board) {
+        return boardMongoRepository.save(BoardDocument.from(board)).toModel();
     }
 }
