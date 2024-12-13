@@ -1,6 +1,4 @@
 package com.gagoo.thiscoding.domain.maria.manager.domain;
-import com.gagoo.thiscoding.domain.maria.manager.controller.response.ManagerNoticesPost;
-import com.gagoo.thiscoding.domain.maria.manager.controller.response.ManagerNoticesUpdate;
 import com.gagoo.thiscoding.domain.maria.manager.infrastructure.ManagerEntity;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import lombok.Builder;
@@ -24,7 +22,6 @@ public class Manager {
 
 
     //    Entity > Domain 코드를 작성
-    @Builder
     public Manager(Long id, User manager, String title, String content, String category, Long viewCount, LocalDateTime createDate) {
         this.id = id;
         this.manager = manager;
@@ -43,6 +40,7 @@ public class Manager {
         this.category = category;
         this.viewCount = viewCount;
         this.createDate = createDate;
+    }
 
     public static Manager create(ManagerNoticesCreate managerNoticesCreate) {
         return Manager.builder()

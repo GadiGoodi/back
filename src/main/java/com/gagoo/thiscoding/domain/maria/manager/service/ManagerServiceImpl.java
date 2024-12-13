@@ -28,7 +28,7 @@ public class ManagerServiceImpl implements ManagerService {
     //공지사항 작성
     @Override
     public void createAdminNotices(ManagerNoticesCreate request) {
-        Manager result = Manager.from(request);
+        Manager result = Manager.create(request);
         managerRepository.save(result);
     }
 
