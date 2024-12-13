@@ -3,6 +3,7 @@ package com.gagoo.thiscoding.domain.maria.user.service;
 import com.gagoo.thiscoding.domain.maria.user.controller.port.UserService;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.UserCreate;
+import com.gagoo.thiscoding.domain.maria.user.infrastructure.exception.UserNotFoundException;
 import com.gagoo.thiscoding.domain.maria.user.service.exception.AlreadyCreateEmail;
 import com.gagoo.thiscoding.domain.maria.user.service.exception.ExistUserNickname;
 import com.gagoo.thiscoding.domain.maria.user.service.exception.PasswordNotEqualException;
@@ -18,6 +19,11 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    @Override
+    public User getById(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+    }
 
     /**
      * 회원가입
@@ -70,6 +76,12 @@ public class UserServiceImpl implements UserService {
         }
 
         return false;
+    }
+
+    public void validateUserExistence(Long userId) {
+        if (userRepository.existsByUserId(userId)) {
+            throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
+        }
     }
 
     /**

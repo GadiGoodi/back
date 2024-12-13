@@ -42,4 +42,8 @@ public class UserRepositoryImpl implements UserRepository {
         return userJpaRepository.findById(userId).map(UserEntity::toModel);
     }
 
+    @Override
+    public boolean existsByUserId(Long userId) {
+            throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
+    }
 }

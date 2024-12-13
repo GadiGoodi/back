@@ -6,8 +6,10 @@ import com.gagoo.thiscoding.domain.maria.friend.domain.dto.FriendRequest;
 import com.gagoo.thiscoding.domain.maria.friend.service.Exception.FriendAlreadyExistsException;
 import com.gagoo.thiscoding.domain.maria.friend.service.Exception.FriendNotFoundException;
 import com.gagoo.thiscoding.domain.maria.friend.service.port.FriendRepository;
+import com.gagoo.thiscoding.domain.maria.user.controller.port.UserService;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.user.infrastructure.exception.UserNotFoundException;
+import com.gagoo.thiscoding.domain.maria.user.service.UserServiceImpl;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import java.util.List;
@@ -20,12 +22,13 @@ public class FriendServiceImpl implements FriendService {
 
     private final FriendRepository friendRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
 
     /**
      * 해당 회원이 존재하는지 확인
      * */
     private User validateUserExistence(Long userId) {
-        userRepository.findById(userId)
+        return userRepository.findById(userId)
             .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
     }
 
@@ -60,8 +63,8 @@ public class FriendServiceImpl implements FriendService {
     public Friend create(FriendRequest friendRequest) {
         validateFriendDoesNotExist(friendRequest.getReceiverId(), friendRequest.getSenderId());
 
-        User sender = userRepository.findById(friendRequest.getSenderId()).orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
-        User receiver = userRepository.findById(friendRequest.getSenderId()).orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+        User sender = userService.getById(friendRequest.getSenderId());
+        User receiver = userService.getById(friendRequest.getReceiverId());
 
         Friend friend = Friend.from(sender, receiver);
         return friendRepository.save(friend);

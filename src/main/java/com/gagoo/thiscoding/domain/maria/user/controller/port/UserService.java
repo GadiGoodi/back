@@ -9,4 +9,8 @@ public interface UserService {
     boolean checkEmailDuplicate(String email);
 
     boolean checkNicknameDuplicate(String nickname);
+
+    void validateUserExistence(Long userId);
+
+    User getById(Long userId);
 }
