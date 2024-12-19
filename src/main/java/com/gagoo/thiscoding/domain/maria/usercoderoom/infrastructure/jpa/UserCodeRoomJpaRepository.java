@@ -7,10 +7,25 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface UserCodeRoomJpaRepository extends JpaRepository<UserCodeRoomEntity, Long> {
+    Optional<UserCodeRoomEntity> findById(Long id);
 
-    Page<UserCodeRoomEntity> findAllByUser_IdAndIsAcceptedFalse(Long userId, Pageable pageable);
+    @Query("SELECT ucr FROM UserCodeRoomEntity ucr " +
+        "JOIN FETCH ucr.codeRoom " +
+        "JOIN FETCH ucr.user " +
+        "WHERE ucr.user.id = :userId AND ucr.isAccepted = false")
+    Page<UserCodeRoomEntity> findAllByUserIdAndIsAcceptedFalse(@Param("userId") Long userId, Pageable pageable);
 
-    Optional<UserCodeRoomEntity> findById(long id);
+    @Query("SELECT ucr FROM UserCodeRoomEntity ucr " +
+        "JOIN FETCH ucr.user " +
+        "JOIN FETCH ucr.codeRoom " +
+        "WHERE ucr.codeRoom.id = :codeRoomId AND ucr.user.id = :userId")
+    Optional<UserCodeRoomEntity> findByCodeRoomIdAndUserId(
+        @Param("codeRoomId") Long codeRoomId,
+        @Param("userId") Long userId
+    );
 }
+

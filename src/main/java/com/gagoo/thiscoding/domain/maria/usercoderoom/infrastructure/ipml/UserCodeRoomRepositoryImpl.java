@@ -15,12 +15,13 @@ import org.springframework.stereotype.Repository;
 public class UserCodeRoomRepositoryImpl implements UserCodeRoomRepository {
     private final UserCodeRoomJpaRepository userCodeRoomJpaRepository;
 
-
+    @Override
     public Page<UserCodeRoom> findByUserId(Long userId, Pageable pageable) {
-        return userCodeRoomJpaRepository.findAllByUser_IdAndIsAcceptedFalse(userId, pageable)
+        return userCodeRoomJpaRepository.findAllByUserIdAndIsAcceptedFalse(userId, pageable)
             .map(UserCodeRoomEntity::toModel);
     }
 
+    @Override
     public Optional<UserCodeRoom> findById(Long id) {
         return userCodeRoomJpaRepository.findById(id).map(UserCodeRoomEntity::toModel);
     }
@@ -31,13 +32,12 @@ public class UserCodeRoomRepositoryImpl implements UserCodeRoomRepository {
     }
 
     @Override
-    public void delete(Long userCodeRoomId) {
-        UserCodeRoom userCodeRoom = findById(userCodeRoomId).orElseThrow();
+    public void delete(UserCodeRoom userCodeRoom) {
         userCodeRoomJpaRepository.delete(UserCodeRoomEntity.from(userCodeRoom));
     }
 
-
-
-
-
+    @Override
+    public Optional<UserCodeRoom> findByCodeRoomIdAndUserId(Long codeRoomId, Long userId) {
+        return userCodeRoomJpaRepository.findByCodeRoomIdAndUserId(codeRoomId, userId).map(UserCodeRoomEntity::toModel);
+    }
 }
