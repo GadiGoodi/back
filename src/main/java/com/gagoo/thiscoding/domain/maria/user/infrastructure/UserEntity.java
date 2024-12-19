@@ -23,10 +23,10 @@ public class UserEntity {
     @Column(unique = true)
     private String nickname;
 
-    @Column(name = "is_activated")
+    private String imageUrl;
+
     private boolean isActivated;
 
-    @Column(name = "is_banned")
     private boolean isBanned;
 
     @Enumerated(EnumType.STRING)
@@ -41,6 +41,7 @@ public class UserEntity {
         userEntity.email = user.getEmail();
         userEntity.password = user.getPassword();
         userEntity.nickname = user.getNickname();
+        userEntity.imageUrl = user.getImageUrl();
         userEntity.isActivated = user.isActivated();
         userEntity.isBanned = user.isBanned();
         userEntity.role = user.getRole();

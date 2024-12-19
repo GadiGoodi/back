@@ -2,6 +2,9 @@ package com.gagoo.thiscoding.domain.maria.user.controller;
 
 import com.gagoo.thiscoding.domain.maria.user.controller.port.MyPageQnaService;
 import com.gagoo.thiscoding.domain.maria.user.controller.port.MyPageService;
+import com.gagoo.thiscoding.domain.maria.user.controller.port.UserService;
+import com.gagoo.thiscoding.domain.maria.user.domain.User;
+import com.gagoo.thiscoding.domain.maria.user.domain.dto.UpdateProfile;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.UserCodeRoom;
 import com.gagoo.thiscoding.domain.maria.user.controller.response.MyPageQnA;
 import lombok.Builder;
@@ -9,12 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Builder
@@ -22,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/users")
 public class MyPageController {
 
+    private final UserService userService;
     private final MyPageService myPageService;
     private final MyPageQnaService myPageQnaService;
 
@@ -35,6 +34,12 @@ public class MyPageController {
     public ResponseEntity<String> acceptInvitation(@PathVariable Long userId, @PathVariable Long userCodeRoomId) {
         myPageService.acceptCodeRoom(userCodeRoomId);
         return ResponseEntity.ok("수락 완료");
+    }
+
+    @PatchMapping("{userId}")
+    public ResponseEntity<Void> updateProfile(@RequestBody UpdateProfile updateProfile, @PathVariable Long userId) {
+        userService.updateImage(userId, updateProfile.getImageUrl());
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("{userId}/invitations/{userCodeRoomId}/cancel")
