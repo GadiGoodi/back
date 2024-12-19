@@ -52,6 +52,33 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 존재하는 회원인지 확인
+     */
+    public User getByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(
+                        () -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND)
+                );
+    }
+
+    /**
+     * 회원 프로필 이미지 수정
+     */
+    @Override
+    public User updateImage(Long id, String imageUrl) {
+        User user = getById(id);
+        User updateUser = user.updateProfile(id, imageUrl);
+
+        return userRepository.save(updateUser);
+    }
+
+    public User getById(Long id) {
+        return userRepository.findById(id).orElseThrow(
+                () -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND)
+        );
+    }
+
+    /**
      * 이메일 중복 검증
      */
     private boolean validateEmailExists(String email) {
