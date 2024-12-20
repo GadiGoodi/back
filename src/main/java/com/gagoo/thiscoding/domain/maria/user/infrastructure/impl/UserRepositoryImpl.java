@@ -2,10 +2,8 @@ package com.gagoo.thiscoding.domain.maria.user.infrastructure.impl;
 
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.user.infrastructure.UserEntity;
-import com.gagoo.thiscoding.domain.maria.user.infrastructure.exception.UserNotFoundException;
 import com.gagoo.thiscoding.domain.maria.user.infrastructure.jpa.UserJpaRepository;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
-import com.gagoo.thiscoding.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

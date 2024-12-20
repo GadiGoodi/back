@@ -1,7 +1,7 @@
 package com.gagoo.thiscoding.domain.maria.user.infrastructure.security;
 
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
-import com.gagoo.thiscoding.domain.maria.user.infrastructure.exception.UserNotFoundException;
+import com.gagoo.thiscoding.global.security.exception.UserNotFoundException;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;

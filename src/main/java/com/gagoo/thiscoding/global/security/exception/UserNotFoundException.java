@@ -1,4 +1,4 @@
-package com.gagoo.thiscoding.domain.maria.user.infrastructure.exception;
+package com.gagoo.thiscoding.global.security.exception;
 
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.global.exception.GlobalException;
