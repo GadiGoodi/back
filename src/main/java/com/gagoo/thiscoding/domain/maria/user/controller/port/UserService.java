@@ -1,6 +1,7 @@
 package com.gagoo.thiscoding.domain.maria.user.controller.port;
 
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
+import com.gagoo.thiscoding.domain.maria.user.domain.dto.UpdateProfile;
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.UserCreate;
 
 public interface UserService {
@@ -10,7 +11,7 @@ public interface UserService {
 
     User getById(Long id);
 
-    User updateImage(Long id, String imageUrl);
+    User updateImage(UpdateProfile updateProfile);
 
     boolean checkEmailDuplicate(String email);
 

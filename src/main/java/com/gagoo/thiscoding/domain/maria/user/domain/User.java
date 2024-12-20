@@ -46,9 +46,9 @@ public class User {
                 .build();
     }
 
-    public User updateProfile(Long id, String imageUrl) {
+    public User updateProfile(String imageUrl) {
         return User.builder()
-                .id(id)
+                .id(this.id)
                 .email(this.email)
                 .password(this.password)
                 .nickname(this.nickname)

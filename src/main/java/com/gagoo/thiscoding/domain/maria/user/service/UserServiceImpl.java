@@ -2,6 +2,7 @@ package com.gagoo.thiscoding.domain.maria.user.service;
 
 import com.gagoo.thiscoding.domain.maria.user.controller.port.UserService;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
+import com.gagoo.thiscoding.domain.maria.user.domain.dto.UpdateProfile;
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.UserCreate;
 import com.gagoo.thiscoding.domain.maria.user.infrastructure.exception.UserNotFoundException;
 import com.gagoo.thiscoding.domain.maria.user.service.exception.AlreadyCreateEmail;
@@ -9,6 +10,7 @@ import com.gagoo.thiscoding.domain.maria.user.service.exception.ExistUserNicknam
 import com.gagoo.thiscoding.domain.maria.user.service.exception.PasswordNotEqualException;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
+import com.gagoo.thiscoding.global.security.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -65,9 +67,9 @@ public class UserServiceImpl implements UserService {
      * 회원 프로필 이미지 수정
      */
     @Override
-    public User updateImage(Long id, String imageUrl) {
-        User user = getById(id);
-        User updateUser = user.updateProfile(id, imageUrl);
+    public User updateImage(UpdateProfile updateProfile) {
+        User currentUser = getById(SecurityUtils.getUserId());
+        User updateUser = currentUser.updateProfile(updateProfile.getImageUrl());
 
         return userRepository.save(updateUser);
     }
