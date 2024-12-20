@@ -39,7 +39,7 @@ public class MyPageController {
         return ResponseEntity.ok("수락 완료");
     }
 
-    @PatchMapping("me")
+    @PatchMapping("/me")
     @AuthorizationRequired(value = {Role.USER, Role.ADMIN}, status = OK)
     public ResponseEntity<Void> updateProfile(@RequestBody UpdateProfile updateProfile) {
         userService.updateImage(updateProfile);
