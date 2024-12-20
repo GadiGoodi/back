@@ -52,9 +52,13 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
      * 메서드에 AuthorizationRequired 어노테이션이 달려있는지 확인
      */
     private AuthorizationRequired getAnnotation(Object handler) {
-        HandlerMethod handlerMethod = (HandlerMethod) handler;
 
-        return handlerMethod.getMethodAnnotation(AuthorizationRequired.class);
+        if (handler instanceof HandlerMethod) {
+            HandlerMethod handlerMethod = (HandlerMethod) handler;
+            return handlerMethod.getMethodAnnotation(AuthorizationRequired.class);
+        }
+
+        return null;
     }
 
     /**
