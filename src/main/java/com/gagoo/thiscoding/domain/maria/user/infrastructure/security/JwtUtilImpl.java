@@ -84,7 +84,7 @@ public class JwtUtilImpl implements JwtUtil {
                 .claim(EMAIL, email)
                 .claim(ROLE, role)
                 .issuedAt(new Date(System.currentTimeMillis())) // 발행시간
-                .expiration(new Date(System.currentTimeMillis() + accessTokenExpTime)) // 소멸시간
+                .expiration(new Date(System.currentTimeMillis() + accessTokenExpTime.longValue()))
                 .signWith(secretKey)
                 .compact();
     }
@@ -97,7 +97,7 @@ public class JwtUtilImpl implements JwtUtil {
                 .claim(EMAIL, email)
                 .claim(ROLE, role)
                 .issuedAt(new Date(System.currentTimeMillis())) // 발행시간
-                .expiration(new Date(System.currentTimeMillis() + refreshTokenExpTime)) // 소멸시간
+                .expiration(new Date(System.currentTimeMillis() + refreshTokenExpTime.longValue()))
                 .signWith(secretKey)
                 .compact();
     }
