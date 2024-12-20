@@ -1,5 +1,6 @@
-package com.gagoo.thiscoding.global.config;
+package com.gagoo.thiscoding.global.security.config;
 
+import com.gagoo.thiscoding.domain.maria.user.infrastructure.security.JwtFilter;
 import com.gagoo.thiscoding.domain.maria.user.infrastructure.security.JwtUtilImpl;
 import com.gagoo.thiscoding.domain.maria.user.infrastructure.security.JwtLoginFilter;
 import com.gagoo.thiscoding.domain.maria.user.service.port.RefreshTokenStore;
@@ -26,6 +27,7 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfig;
     private final RefreshTokenStore refreshTokenStore;
     private final JwtUtilImpl jwtUtilImpl;
+    private final JwtFilter jwtFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -45,6 +47,8 @@ public class SecurityConfig {
                                         AntPathRequestMatcher.antMatcher("/**")
                                 ).permitAll()
                 );
+
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         http.addFilterAt(
                 new JwtLoginFilter(authenticationManager(authenticationConfig), jwtUtilImpl, refreshTokenStore),
