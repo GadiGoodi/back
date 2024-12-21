@@ -6,7 +6,7 @@ import com.gagoo.thiscoding.domain.maria.coderoom.service.exception.CodeRoomNotF
 import com.gagoo.thiscoding.domain.maria.coderoom.service.port.CodeRoomRepository;
 import com.gagoo.thiscoding.domain.maria.user.controller.response.InviteCodeRoom;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
-import com.gagoo.thiscoding.domain.maria.user.infrastructure.exception.UserNotFoundException;
+import com.gagoo.thiscoding.global.security.exception.UserNotFoundException;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.controller.port.UserCodeRoomService;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.UserCodeRoom;
