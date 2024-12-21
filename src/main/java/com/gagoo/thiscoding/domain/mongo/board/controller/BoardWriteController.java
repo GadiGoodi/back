@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/boards")
+@RequestMapping("/api/qna")
 @RequiredArgsConstructor
-public class BoardCreateController {
+public class BoardWriteController {
 
     private final BoardService boardService;
 
