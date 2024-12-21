@@ -25,7 +25,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOriginPatterns("http://localhost:3000")
-                .allowedMethods("GET", "POST", "PUT", "DELETE","PATCH")
+                .allowedMethods("GET", "POST", "PUT", "DELETE","PATCH", "OPTIONS", "HEAD")
                 .allowedHeaders("*")
                 .exposedHeaders("Set-Cookie")
                 .allowCredentials(true);
