@@ -8,11 +8,14 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.bson.Document;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 
+@Repository
 @RequiredArgsConstructor
 public class BoardMongoCustomRepositoryImpl implements BoardCustomRepository {
 

@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User updateImage(UpdateProfile updateProfile) {
-        User currentUser = getById(SecurityUtils.getUserId());
+        User currentUser = getByEmail(SecurityUtils.getUserEmail());
         User updateUser = currentUser.updateProfile(updateProfile.getImageUrl());
 
         return userRepository.save(updateUser);

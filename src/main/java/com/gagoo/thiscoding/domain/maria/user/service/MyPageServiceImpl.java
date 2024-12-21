@@ -22,7 +22,7 @@ public class MyPageServiceImpl implements MyPageService {
 
     @Override
     public MyInfo getMyInfo() {
-        User currentUser = getById(SecurityUtils.getUserId());
+        User currentUser = getByEmail(SecurityUtils.getUserEmail());
 
         List<Long> top10Users = boardCustomRepository.getTop10Users();
         boolean isTop10 = validateTop10(currentUser, top10Users);
@@ -46,8 +46,8 @@ public class MyPageServiceImpl implements MyPageService {
     /**
      * 존재하는 회원인지 확인
      */
-    private User getById(Long id) {
-        return userRepository.findById(id).orElseThrow(
+    private User getByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(
                 () -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND)
         );
     }
