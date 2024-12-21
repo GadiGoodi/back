@@ -4,7 +4,7 @@ import com.gagoo.thiscoding.domain.maria.user.controller.port.UserService;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.UpdateProfile;
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.UserCreate;
-import com.gagoo.thiscoding.domain.maria.user.infrastructure.exception.UserNotFoundException;
+import com.gagoo.thiscoding.global.security.exception.UserNotFoundException;
 import com.gagoo.thiscoding.domain.maria.user.service.exception.AlreadyCreateEmail;
 import com.gagoo.thiscoding.domain.maria.user.service.exception.ExistUserNickname;
 import com.gagoo.thiscoding.domain.maria.user.service.exception.PasswordNotEqualException;
