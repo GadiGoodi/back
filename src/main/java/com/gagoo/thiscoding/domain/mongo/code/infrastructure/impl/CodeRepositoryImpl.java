@@ -7,6 +7,8 @@ import com.gagoo.thiscoding.domain.mongo.code.service.port.CodeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class CodeRepositoryImpl implements CodeRepository {
@@ -16,4 +18,20 @@ public class CodeRepositoryImpl implements CodeRepository {
     public Code save(Code code) {
         return codeMongoRepository.save(CodeDocument.from(code)).toModel();
     }
+
+    @Override
+    public boolean existsByRoomIdAndFileName(Long roomId, String fileName) {
+        return codeMongoRepository.existsByRoomIdAndFileName(roomId, fileName);
+    }
+
+    @Override
+    public Optional<Code> findById(String id) {
+        return codeMongoRepository.findById(id).map(CodeDocument::toModel);
+    }
+
+    @Override
+    public Optional<Code> findByRoomIdAndFileName(Long roomId, String fileName) {
+        return codeMongoRepository.findByRoomIdAndFileName(roomId, fileName).map(CodeDocument::toModel);
+    }
+
 }
