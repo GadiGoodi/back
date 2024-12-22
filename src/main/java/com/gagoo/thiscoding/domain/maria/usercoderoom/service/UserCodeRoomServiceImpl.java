@@ -86,7 +86,7 @@ public class UserCodeRoomServiceImpl implements UserCodeRoomService {
 
     /**
      * 초대된 코드방 수락
-     *
+     */
     @Override
     @Transactional
     public void acceptCodeRoom(Long codeRoomId) {
