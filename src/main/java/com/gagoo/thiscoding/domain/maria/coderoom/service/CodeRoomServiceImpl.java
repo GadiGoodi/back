@@ -47,7 +47,7 @@ public class CodeRoomServiceImpl implements CodeRoomService {
 
         Code code = getCodeByRoomIdAndFileName(codeRoom.getId(), "main");
 
-        return CodeRoomEnter.insertCodeRoom(codeRoom.getId(), codeRoom.getLanguage(), code.getValue(), code.getId());
+        return CodeRoomEnter.enterCodeRoom(codeRoom.getId(), codeRoom.getLanguage(), code.getValue(), code.getId());
     }
 
     /**

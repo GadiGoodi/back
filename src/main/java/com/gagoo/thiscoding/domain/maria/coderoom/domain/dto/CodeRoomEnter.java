@@ -23,7 +23,7 @@ public class CodeRoomEnter {
         this.codeId = codeId;
     }
 
-    public static CodeRoomEnter insertCodeRoom(Long roomId, String language, String value, String codeId) {
+    public static CodeRoomEnter enterCodeRoom(Long roomId, String language, String value, String codeId) {
         return CodeRoomEnter.builder()
                 .roomId(roomId)
                 .language(language)
