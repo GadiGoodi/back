@@ -1,8 +1,6 @@
 package com.gagoo.thiscoding.domain.maria.usercoderoom.infrastructure.jpa;
 
-import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.UserCodeRoom;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.infrastructure.UserCodeRoomEntity;
-import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,16 +14,16 @@ public interface UserCodeRoomJpaRepository extends JpaRepository<UserCodeRoomEnt
     @Query("SELECT ucr FROM UserCodeRoomEntity ucr " +
         "JOIN FETCH ucr.codeRoom " +
         "JOIN FETCH ucr.user " +
-        "WHERE ucr.user.id = :userId AND ucr.isAccepted = false")
-    Page<UserCodeRoomEntity> findAllByUserIdAndIsAcceptedFalse(@Param("userId") Long userId, Pageable pageable);
+        "WHERE ucr.user.email = :email AND ucr.isActivated = false")
+    Page<UserCodeRoomEntity> findAllByEmailAndIsAcceptedFalse(@Param("email") String email, Pageable pageable);
 
     @Query("SELECT ucr FROM UserCodeRoomEntity ucr " +
         "JOIN FETCH ucr.user " +
         "JOIN FETCH ucr.codeRoom " +
-        "WHERE ucr.codeRoom.id = :codeRoomId AND ucr.user.id = :userId")
-    Optional<UserCodeRoomEntity> findByCodeRoomIdAndUserId(
+        "WHERE ucr.codeRoom.id = :codeRoomId AND ucr.user.email = :email")
+    Optional<UserCodeRoomEntity> findByCodeRoomIdAndUserEmail(
         @Param("codeRoomId") Long codeRoomId,
-        @Param("userId") Long userId
+        @Param("email") String email
     );
 }
 
