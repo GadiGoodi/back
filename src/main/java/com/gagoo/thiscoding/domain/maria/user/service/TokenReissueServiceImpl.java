@@ -6,6 +6,7 @@ import com.gagoo.thiscoding.domain.maria.user.service.port.JwtUtil;
 import com.gagoo.thiscoding.domain.maria.user.service.port.RefreshTokenStore;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.global.exception.GlobalException;
+import com.gagoo.thiscoding.global.security.JwtProperties;
 import com.gagoo.thiscoding.global.utils.HttpServletUtils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,6 +26,7 @@ public class TokenReissueServiceImpl implements TokenReissueService {
     private final RefreshTokenStore refreshTokenStore;
     private final JwtUtil jwtUtil;
     private final HttpServletUtils httpServletUtils;
+    private final JwtProperties jwtProperties;
 
     /**
      * 리프레쉬 토큰으로 엑세스 토큰 재발급
@@ -38,10 +40,10 @@ public class TokenReissueServiceImpl implements TokenReissueService {
         validateToken(rtk, email);
 
         String role = jwtUtil.getRole(rtk);
-        String reissueAtk = jwtUtil.createAtk(email, role, getAtkExpireTime());
+        String reissueAtk = jwtUtil.createAtk(email, role, jwtProperties.getAtkExpireTime());
 
         String reissueRtk = isReissueRtk(rtk) ?
-                jwtUtil.createRtk(email, role, getRtkExpireTime()) : rtk;
+                jwtUtil.createRtk(email, role, jwtProperties.getRtkExpireTime()) : rtk;
 
         reissueToken(response, reissueAtk, reissueRtk);
     }
@@ -61,7 +63,7 @@ public class TokenReissueServiceImpl implements TokenReissueService {
      */
     private void reissueToken(HttpServletResponse response, String reissueAtk, String reissueRtk) {
         httpServletUtils.setHeader(response, AUTHORIZATION, reissueAtk);
-        httpServletUtils.addCookie(response, AUTHORIZATION, reissueRtk, getRtkExpireTime().intValue());
+        httpServletUtils.addCookie(response, AUTHORIZATION, reissueRtk, jwtProperties.getRtkExpireTime().intValue());
     }
 
     /**

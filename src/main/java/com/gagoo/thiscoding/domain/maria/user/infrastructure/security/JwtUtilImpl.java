@@ -3,6 +3,7 @@ package com.gagoo.thiscoding.domain.maria.user.infrastructure.security;
 import com.gagoo.thiscoding.domain.maria.user.service.port.JwtUtil;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.global.exception.GlobalException;
+import com.gagoo.thiscoding.global.security.JwtProperties;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -14,7 +15,6 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
-import static com.gagoo.thiscoding.global.security.JwtProperties.*;
 import static com.gagoo.thiscoding.global.security.constants.SecurityConstants.*;
 
 @Component
@@ -22,11 +22,13 @@ public class JwtUtilImpl implements JwtUtil {
 
     private static final String JWT_HS256_ALGORITHM = Jwts.SIG.HS256.key().build().getAlgorithm();
     private final SecretKey secretKey;
+    private final JwtProperties jwtProperties;
 
-    public JwtUtilImpl() {
+    public JwtUtilImpl(JwtProperties jwtProperties) {
+        this.jwtProperties = jwtProperties;
         this.secretKey =
                 new SecretKeySpec(
-                        getSecretKey().getBytes(StandardCharsets.UTF_8),
+                        jwtProperties.getSecretKey().getBytes(StandardCharsets.UTF_8),
                         JWT_HS256_ALGORITHM
                 );
     }

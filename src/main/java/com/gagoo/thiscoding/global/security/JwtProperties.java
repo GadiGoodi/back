@@ -1,29 +1,20 @@
 package com.gagoo.thiscoding.global.security;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
+@Component
 public class JwtProperties {
 
     @Value("${spring.jwt.key")
-    private static String key;
+    private String secretKey;
     @Value("${spring.jwt.atk}")
-    private static Long accessTokenExpiration;
+    private Long atkExpireTime;
     @Value("${spring.jwt.rtk}")
-    private static Long refreshTokenExpiration;
+    private Long rtkExpireTime;
     public static final long REFRESH_TOKEN_REISSUE_TIME = 24 * 60 * 60;
 
-    public static Long getAtkExpireTime() {
-        return accessTokenExpiration;
-    }
-
-    public static Long getRtkExpireTime() {
-        return refreshTokenExpiration;
-    }
-
-    public static String getSecretKey() {
-        return key;
-    }
 }
+
