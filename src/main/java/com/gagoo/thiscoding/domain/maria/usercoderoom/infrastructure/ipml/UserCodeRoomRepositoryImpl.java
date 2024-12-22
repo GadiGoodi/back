@@ -16,8 +16,8 @@ public class UserCodeRoomRepositoryImpl implements UserCodeRoomRepository {
     private final UserCodeRoomJpaRepository userCodeRoomJpaRepository;
 
     @Override
-    public Page<UserCodeRoom> findByUserId(Long userId, Pageable pageable) {
-        return userCodeRoomJpaRepository.findAllByUserIdAndIsAcceptedFalse(userId, pageable)
+    public Page<UserCodeRoom> findByEmail(String email, Pageable pageable) {
+        return userCodeRoomJpaRepository.findAllByEmailAndIsAcceptedFalse(email, pageable)
             .map(UserCodeRoomEntity::toModel);
     }
 
@@ -37,7 +37,7 @@ public class UserCodeRoomRepositoryImpl implements UserCodeRoomRepository {
     }
 
     @Override
-    public Optional<UserCodeRoom> findByCodeRoomIdAndUserId(Long codeRoomId, Long userId) {
-        return userCodeRoomJpaRepository.findByCodeRoomIdAndUserId(codeRoomId, userId).map(UserCodeRoomEntity::toModel);
+    public Optional<UserCodeRoom> findByCodeRoomIdAndUserEmail(Long codeRoomId, String email) {
+        return userCodeRoomJpaRepository.findByCodeRoomIdAndUserEmail(codeRoomId, email).map(UserCodeRoomEntity::toModel);
     }
 }

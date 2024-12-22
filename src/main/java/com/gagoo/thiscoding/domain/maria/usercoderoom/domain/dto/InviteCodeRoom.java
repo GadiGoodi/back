@@ -1,9 +1,8 @@
-package com.gagoo.thiscoding.domain.maria.user.controller.response;
+package com.gagoo.thiscoding.domain.maria.usercoderoom.domain.dto;
 
 import com.gagoo.thiscoding.domain.maria.coderoom.domain.CodeRoom;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.UserCodeRoom;
-import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,7 +15,6 @@ public class InviteCodeRoom {
     private final String language;
     private final String nickname;
     private final int headCount;
-    private final LocalDateTime createDate;
 
     @Builder
     public static InviteCodeRoom from(UserCodeRoom userCodeRoom){
@@ -30,7 +28,6 @@ public class InviteCodeRoom {
             .language(codeRoom.getLanguage())
             .nickname(user.getNickname())
             .headCount(codeRoom.getHeadCount())
-            .createDate(userCodeRoom.getCreateDate())
             .build();
     }
 }
