@@ -2,6 +2,7 @@ package com.gagoo.thiscoding.domain.maria.user.controller;
 
 import com.gagoo.thiscoding.domain.maria.user.controller.port.TokenReissueService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,10 +17,9 @@ public class TokenReissueController {
     private final TokenReissueService tokenReissueService;
 
     @GetMapping("/reissue")
-    private ResponseEntity<Void> reissue(HttpServletRequest request) {
-        return ResponseEntity.ok()
-                .header("Authorization",
-                        tokenReissueService.create(request))
-                .build();
+    private ResponseEntity<Void> reissue(HttpServletRequest request, HttpServletResponse response) {
+        tokenReissueService.create(request, response);
+
+        return ResponseEntity.ok().build();
     }
 }
