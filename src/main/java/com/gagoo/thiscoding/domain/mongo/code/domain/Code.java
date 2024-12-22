@@ -34,4 +34,15 @@ public class Code {
                 .saveDate(LocalDateTime.now())
                 .build();
     }
+
+    public static Code save(CodeCreate codeCreate) {
+        return Code.builder()
+                .id(codeCreate.getId())
+                .roomId(codeCreate.getRoomId())
+                .writerId(codeCreate.getWriterId())
+                .fileName(codeCreate.getFileName())
+                .value(codeCreate.getValue())
+                .saveDate(LocalDateTime.now())
+                .build();
+    }
 }

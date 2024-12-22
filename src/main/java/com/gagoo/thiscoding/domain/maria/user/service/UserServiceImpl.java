@@ -4,6 +4,8 @@ import com.gagoo.thiscoding.domain.maria.user.controller.port.UserService;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.UpdateProfile;
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.UserCreate;
+import com.gagoo.thiscoding.domain.maria.user.infrastructure.impl.RefreshTokenStoreImpl;
+import com.gagoo.thiscoding.domain.maria.user.service.port.RefreshTokenStore;
 import com.gagoo.thiscoding.global.security.exception.UserNotFoundException;
 import com.gagoo.thiscoding.domain.maria.user.service.exception.AlreadyCreateEmail;
 import com.gagoo.thiscoding.domain.maria.user.service.exception.ExistUserNickname;
@@ -11,9 +13,14 @@ import com.gagoo.thiscoding.domain.maria.user.service.exception.PasswordNotEqual
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.global.security.SecurityUtils;
+import com.gagoo.thiscoding.global.utils.HttpServletUtils;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import static com.gagoo.thiscoding.global.security.constants.SecurityConstants.*;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +28,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final HttpServletUtils httpServletUtils;
+    private final RefreshTokenStore refreshTokenStore;
 
     /**
      * 회원가입
@@ -51,6 +60,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean checkNicknameDuplicate(String nickname) {
         return validateNicknameExists(nickname);
+    }
+
+    /**
+     * 로그아웃
+     * 헤더, 쿠키, 레디스에 저장된 토큰 삭제
+     */
+    @Override
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        httpServletUtils.setHeader(response, AUTHORIZATION, "");
+        httpServletUtils.removeCookie(request, response, AUTHORIZATION);
+
+        refreshTokenStore.remove(SecurityUtils.getUserEmail());
     }
 
     /**

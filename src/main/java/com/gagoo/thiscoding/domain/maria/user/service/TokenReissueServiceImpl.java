@@ -6,10 +6,17 @@ import com.gagoo.thiscoding.domain.maria.user.service.port.JwtUtil;
 import com.gagoo.thiscoding.domain.maria.user.service.port.RefreshTokenStore;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.global.exception.GlobalException;
+import com.gagoo.thiscoding.global.utils.HttpServletUtils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+import static com.gagoo.thiscoding.global.security.JwtProperties.*;
+import static com.gagoo.thiscoding.global.security.constants.SecurityConstants.*;
 
 @Service
 @RequiredArgsConstructor
@@ -17,29 +24,52 @@ public class TokenReissueServiceImpl implements TokenReissueService {
 
     private final RefreshTokenStore refreshTokenStore;
     private final JwtUtil jwtUtil;
+    private final HttpServletUtils httpServletUtils;
 
     /**
      * 리프레쉬 토큰으로 엑세스 토큰 재발급
      */
     @Override
-    public String create(HttpServletRequest request) {
-        String rtk = null;
+    public void create(HttpServletRequest request, HttpServletResponse response) {
+        String rtk = validateRtk(httpServletUtils.getCookie(request, AUTHORIZATION));
 
-        Cookie[] cookies = request.getCookies();
-
-        if (cookies != null) {
-            rtk = validateRtk(cookies);
-        }
         String email = jwtUtil.getUsername(rtk);
-        validateTokenExpired(rtk);
 
-        if (rtk != null) {
-            validateEqualsToken(rtk, email);
-        }
+        validateToken(rtk, email);
 
         String role = jwtUtil.getRole(rtk);
+        String reissueAtk = jwtUtil.createAtk(email, role, getAtkExpireTime());
 
-        return jwtUtil.createAtk(email, role);
+        String reissueRtk = isReissueRtk(rtk) ?
+                jwtUtil.createRtk(email, role, getRtkExpireTime()) : rtk;
+
+        reissueToken(response, reissueAtk, reissueRtk);
+    }
+
+    /**
+     * 리프레쉬 토큰 갱신이 필요한지 확인
+     */
+    private boolean isReissueRtk(String rtk) {
+        long expirationTime = jwtUtil.getExpirationTime(rtk);
+        long currentTime = System.currentTimeMillis() / 1000;
+
+        return (expirationTime - currentTime) < REFRESH_TOKEN_REISSUE_TIME;
+    }
+
+    /**
+     *  기존 리프레쉬 토큰 제거 및 엑세스토큰과 리프레쉬토큰 재발급
+     */
+    private void reissueToken(HttpServletResponse response, String reissueAtk, String reissueRtk) {
+        httpServletUtils.setHeader(response, AUTHORIZATION, reissueAtk);
+        httpServletUtils.addCookie(response, AUTHORIZATION, reissueRtk, getRtkExpireTime().intValue());
+    }
+
+    /**
+     * 리프레쉬 토큰 검증
+     */
+    private void validateToken(String rtk, String email) {
+        validateTokenExpired(rtk);
+        validateEqualsToken(rtk, email);
     }
 
     /**
@@ -47,7 +77,7 @@ public class TokenReissueServiceImpl implements TokenReissueService {
      */
     private void validateEqualsToken(String rtk, String key) {
         if (!rtk.equals(refreshTokenStore.getRtk(key))) {
-            throw new TokenNotEquals(ErrorCode.TOKEN_NOT_EQUALS);
+            new TokenNotEquals(ErrorCode.TOKEN_NOT_EQUALS);
         }
     }
 
@@ -56,22 +86,18 @@ public class TokenReissueServiceImpl implements TokenReissueService {
      */
     private void validateTokenExpired(String rtk) {
         if (jwtUtil.isExpired(rtk)) {
-            throw new GlobalException(ErrorCode.TOKEN_EXPIRED);
+            new GlobalException(ErrorCode.TOKEN_EXPIRED);
         }
     }
 
     /**
      * 쿠키에 리프레쉬 토큰이 존재하면 리프레쉬 토큰 반환
      */
-    private static String validateRtk(Cookie[] cookies) {
-        String rtk = null;
-
-        for (Cookie cookie : cookies) {
-            if ("rtk".equals(cookie.getName())) {
-                rtk = cookie.getValue().substring(6);
-                break;
-            }
-        }
-        return rtk;
+    private String validateRtk(Optional<Cookie> cookie) {
+        return cookie
+                .filter(c -> "rtk".equals(c.getName()))  // 쿠키 이름이 "rtk"인 경우만 필터링
+                .map(c -> c.getValue().substring(BEARER_PREFIX.length()))  // "Bearer "를 제거한 토큰 값 반환
+                .orElseThrow(() -> new GlobalException(ErrorCode.TOKEN_NOT_FOUND));
     }
+
 }
