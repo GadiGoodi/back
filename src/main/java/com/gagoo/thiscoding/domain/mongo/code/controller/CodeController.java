@@ -12,17 +12,26 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/code")
 @RequiredArgsConstructor
-public class CodeCreateController {
+public class CodeController {
     private final CodeService codeService;
 
-    // 코드 파일 생성 (저장)
-    @PostMapping("/create")
-    public ResponseEntity<CodeResponse> createCode(@RequestBody CodeCreate codeCreate) {
-        Code code = codeService.createCode(codeCreate);
+    // 코드 파일 조회
+    @GetMapping("/{codeId}")
+    public ResponseEntity<CodeResponse> getCode(@PathVariable String codeId) {
+        Code code = codeService.getById(codeId);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(CodeResponse.from(code));
     }
 
+    // 코드 파일 저장
+    @PostMapping("/save")
+    public ResponseEntity<CodeResponse> saveCode(@RequestBody CodeCreate codeCreate) {
+        Code code = codeService.saveCode(codeCreate);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(CodeResponse.from(code));
+    }
 }
