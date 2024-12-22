@@ -41,7 +41,6 @@ public class UserCodeRoomServiceImpl implements UserCodeRoomService {
     /**
      * 초대된 코드방 인원수 체크
      */
-
     public void validateCapacity(CodeRoom codeRoom) {
         final int MAX_CAPACITY = 6;
         if (codeRoom.getHeadCount() >= MAX_CAPACITY) {
@@ -55,7 +54,6 @@ public class UserCodeRoomServiceImpl implements UserCodeRoomService {
      * @param roomId
      * @return 생성한 UserCodeRoom
      */
-  
     @Override
     public boolean createUserCodeRoom(Long userId, Long roomId) {
         User user = userRepository.findById(userId).orElseThrow(
