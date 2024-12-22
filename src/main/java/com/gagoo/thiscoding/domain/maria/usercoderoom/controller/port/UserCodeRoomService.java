@@ -8,7 +8,7 @@ import com.gagoo.thiscoding.global.pageDto.CustomPageDto;
 import org.springframework.data.domain.Pageable;
 
 public interface UserCodeRoomService {
-    UserCodeRoom createUserCodeRoom(Long userId, Long roomId);
+    boolean createUserCodeRoom(Long userId, Long roomId);
 
     CustomPageDto<InviteCodeRoom> getUserCodeRooms(Long id, Pageable pageable);
 
