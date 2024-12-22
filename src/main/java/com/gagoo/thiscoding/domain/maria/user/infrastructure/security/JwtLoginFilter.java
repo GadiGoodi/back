@@ -3,6 +3,7 @@ package com.gagoo.thiscoding.domain.maria.user.infrastructure.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.UserLogin;
 import com.gagoo.thiscoding.domain.maria.user.service.port.RefreshTokenStore;
+import com.gagoo.thiscoding.global.security.JwtProperties;
 import com.gagoo.thiscoding.global.utils.HttpServletUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,7 +19,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 
-import static com.gagoo.thiscoding.global.security.JwtProperties.*;
 import static com.gagoo.thiscoding.global.security.constants.SecurityConstants.*;
 
 public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
@@ -27,12 +27,18 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
     private final JwtUtilImpl jwtUtilImpl;
     private final RefreshTokenStore refreshTokenStore;
     private final HttpServletUtils httpServletUtils;
+    private final JwtProperties jwtProperties;
 
-    public JwtLoginFilter(AuthenticationManager authManager, JwtUtilImpl jwtUtilImpl, RefreshTokenStore refreshTokenStore, HttpServletUtils httpServletUtils) {
+    public JwtLoginFilter(AuthenticationManager authManager,
+                            JwtUtilImpl jwtUtilImpl,
+                            RefreshTokenStore refreshTokenStore,
+                            HttpServletUtils httpServletUtils,
+                            JwtProperties jwtProperties) {
         this.authManager = authManager;
         this.jwtUtilImpl = jwtUtilImpl;
         this.refreshTokenStore = refreshTokenStore;
         this.httpServletUtils = httpServletUtils;
+        this.jwtProperties = jwtProperties;
 
         setFilterProcessesUrl("/api/auth/login");
     }
@@ -75,13 +81,13 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String role = auth.getAuthority();
 
-        String atk = jwtUtilImpl.createAtk(email, role, getAtkExpireTime());
-        String rtk = jwtUtilImpl.createRtk(email, role, getRtkExpireTime());
+        String atk = jwtUtilImpl.createAtk(email, role, jwtProperties.getAtkExpireTime());
+        String rtk = jwtUtilImpl.createRtk(email, role, jwtProperties.getRtkExpireTime());
 
         refreshTokenStore.storeToken(email, rtk);
 
         httpServletUtils.setHeader(response, AUTHORIZATION, BEARER_PREFIX + atk);
-        httpServletUtils.addCookie(response, AUTHORIZATION, BEARER_PREFIX + atk, getRtkExpireTime().intValue());
+        httpServletUtils.addCookie(response, AUTHORIZATION, BEARER_PREFIX + atk, jwtProperties.getRtkExpireTime().intValue());
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.gagoo.thiscoding.domain.maria.user.infrastructure.impl;
 
 import com.gagoo.thiscoding.domain.maria.user.service.port.RefreshTokenStore;
+import com.gagoo.thiscoding.global.security.JwtProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -8,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.gagoo.thiscoding.global.security.JwtProperties.*;
 
 @Component
 @RequiredArgsConstructor
@@ -16,6 +16,7 @@ import static com.gagoo.thiscoding.global.security.JwtProperties.*;
 public class RefreshTokenStoreImpl implements RefreshTokenStore {
 
     private final RedisTemplate<String, String> redisTemplate;
+    private final JwtProperties jwtProperties;
 
     /**
      * 로그인할 때 리프레쉬 토큰 레디스에 저장
@@ -25,7 +26,7 @@ public class RefreshTokenStoreImpl implements RefreshTokenStore {
         redisTemplate.opsForValue().set(
                 username,
                 rtk,
-                getRtkExpireTime(),
+                jwtProperties.getRtkExpireTime(),
                 TimeUnit.MILLISECONDS
         );
     }
