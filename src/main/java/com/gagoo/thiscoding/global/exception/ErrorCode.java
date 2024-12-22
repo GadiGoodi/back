@@ -11,6 +11,8 @@ public enum ErrorCode {
     JOIN_CODE_NOT_MATCH(HttpStatus.BAD_REQUEST, "인증코드가 일치하지 않습니다"),
     PASSWORD_NOT_EQUAL(HttpStatus.BAD_REQUEST, "패스워드가 일치하지 않습니다."),
     CLAIM_NOT_FOUND(HttpStatus.BAD_REQUEST, "토큰에 필요한 클레임이 존재하지 않습니다."),
+    INVALID_PAGE_INDEX(HttpStatus.BAD_REQUEST, "페이지가 유효하지 않습니다."),
+    INVALID_PAGE_SIZE(HttpStatus.BAD_REQUEST, "페이지가 유효하지 않습니다."),
     ALREADY_CREATE_EMAIL(HttpStatus.CONFLICT, "이미 가입된 이메일입니다."),
     ALREADY_FRIEND(HttpStatus.CONFLICT, "이미 친구목록에 존재하는 회원입니다."),
     ALREADY_USER_CODE_ROOM(HttpStatus.CONFLICT, "이미 참여중인 코드방입니다."),
