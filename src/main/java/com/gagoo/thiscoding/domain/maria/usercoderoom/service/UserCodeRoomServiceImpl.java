@@ -30,9 +30,14 @@ public class UserCodeRoomServiceImpl implements UserCodeRoomService {
     private final UserRepository userRepository;
     private final CodeRoomRepository codeRoomRepository;
 
-    // 코드방 참여 생성
+    /**
+     * 코드방 참여 생성
+     * @param userId
+     * @param roomId
+     * @return 생성한 UserCodeRoom
+     */
     @Override
-    public UserCodeRoom createUserCodeRoom(Long userId, Long roomId) {
+    public UserCodeRoomResponse createUserCodeRoom(Long userId, Long roomId) {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND)
         );
@@ -42,7 +47,9 @@ public class UserCodeRoomServiceImpl implements UserCodeRoomService {
         );
 
         UserCodeRoom userCodeRoom = UserCodeRoom.create(user, codeRoom);
-        return userCodeRoomRepository.save(userCodeRoom);
+        userCodeRoomRepository.save(userCodeRoom);
+
+        return new UserCodeRoomResponse(userCodeRoom.getId(), "생성 완료");
     }
 
     public UserCodeRoom getUserCodeRoomByCodeRoomAndUser(Long codeRoomId, Long userId) {

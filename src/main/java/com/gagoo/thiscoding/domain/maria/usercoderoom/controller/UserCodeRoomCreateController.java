@@ -1,6 +1,7 @@
 package com.gagoo.thiscoding.domain.maria.usercoderoom.controller;
 
 import com.gagoo.thiscoding.domain.maria.usercoderoom.controller.port.UserCodeRoomService;
+import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.dto.UserCodeRoomResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +18,9 @@ public class UserCodeRoomCreateController {
 
     // 코드방 참여 생성
     @PostMapping("/{userId}/{roomId}")
-    public ResponseEntity<?> createUserCodeRoom(@PathVariable Long userId, @PathVariable Long roomId) {
-        userCodeRoomService.createUserCodeRoom(userId, roomId);
-
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<UserCodeRoomResponse> createUserCodeRoom(@PathVariable Long userId, @PathVariable Long roomId) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(userCodeRoomService.createUserCodeRoom(userId, roomId));
     }
 }
