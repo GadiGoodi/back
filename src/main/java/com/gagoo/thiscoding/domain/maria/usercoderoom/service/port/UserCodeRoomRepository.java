@@ -6,11 +6,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface UserCodeRoomRepository {
-    Page<UserCodeRoom> findByUserId(Long userId, Pageable pageable);
+    Page<UserCodeRoom> findByEmail(String email, Pageable pageable);
 
     Optional<UserCodeRoom> findById(Long codeRoomId);
 
-    Optional<UserCodeRoom> findByCodeRoomIdAndUserId(Long codeRoomId, Long userId);
+    Optional<UserCodeRoom> findByCodeRoomIdAndUserEmail(Long codeRoomId, String email);
 
     UserCodeRoom save(UserCodeRoom userCodeRoom);
 

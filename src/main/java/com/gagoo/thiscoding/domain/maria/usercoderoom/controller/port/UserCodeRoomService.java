@@ -1,18 +1,16 @@
 package com.gagoo.thiscoding.domain.maria.usercoderoom.controller.port;
 
 
-import com.gagoo.thiscoding.domain.maria.user.controller.response.InviteCodeRoom;
+import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.dto.InviteCodeRoom;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.UserCodeRoom;
-import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.dto.UserCodeRoomResponse;
-import com.gagoo.thiscoding.global.pageDto.CustomPageDto;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 
 public interface UserCodeRoomService {
     boolean createUserCodeRoom(Long userId, Long roomId);
 
-    CustomPageDto<InviteCodeRoom> getUserCodeRooms(Long id, Pageable pageable);
+    Page<InviteCodeRoom> getUserCodeRooms(int page);
 
-    UserCodeRoomResponse acceptCodeRoom(Long codeRoomId, Long userId);
+    void acceptCodeRoom(Long codeRoomId);
 
-    UserCodeRoomResponse cancelCodeRoom(Long codeRoomId, Long userId);
+    void cancelCodeRoom(Long codeRoomId);
 }

@@ -1,13 +1,12 @@
 package com.gagoo.thiscoding.domain.maria.usercoderoom.domain;
 
-import com.gagoo.thiscoding.domain.maria.BaseTimeEntity;
 import com.gagoo.thiscoding.domain.maria.coderoom.domain.CodeRoom;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class UserCodeRoom extends BaseTimeEntity {
+public class UserCodeRoom {
     private final Long id;
     private final User user;
     private final CodeRoom codeRoom;
