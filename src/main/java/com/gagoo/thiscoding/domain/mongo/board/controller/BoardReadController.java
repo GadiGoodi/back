@@ -17,7 +17,7 @@ public class BoardReadController {
     private final BoardService boardService;
 
     @GetMapping("/search")
-    public ResponseEntity<?> search(@RequestParam String query, @RequestParam(defaultValue = "1") int page) {
+    public ResponseEntity<PageResponse<SearchDto>> search(@RequestParam String query, @RequestParam(defaultValue = "1") int page) {
         return ResponseEntity.ok(
             PageResponseFactory.create(
                 boardService.search(query, page).map(SearchDto::from)
