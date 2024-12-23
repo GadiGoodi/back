@@ -34,7 +34,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (authorization == null || !authorization.startsWith("Bearer ")) {
             log.info("token not found");
-            throw new GlobalException(ErrorCode.TOKEN_NOT_FOUND);
+            filterChain.doFilter(request, response);
         }
 
         String token = authorization.split(" ")[1];
