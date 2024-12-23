@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtProperties {
 
-    @Value("${spring.jwt.key")
+    @Value("${spring.jwt.key}")
     private String secretKey;
     @Value("${spring.jwt.atk}")
     private Long atkExpireTime;

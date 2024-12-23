@@ -87,7 +87,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         refreshTokenStore.storeToken(email, rtk);
 
         httpServletUtils.setHeader(response, AUTHORIZATION, BEARER_PREFIX + atk);
-        httpServletUtils.addCookie(response, AUTHORIZATION, BEARER_PREFIX + atk, jwtProperties.getRtkExpireTime().intValue());
+        httpServletUtils.addCookie(response, AUTHORIZATION, rtk, jwtProperties.getRtkExpireTime().intValue());
     }
 
     @Override
