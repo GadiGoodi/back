@@ -34,4 +34,5 @@ public class CodeController {
                 .status(HttpStatus.CREATED)
                 .body(CodeResponse.from(code));
     }
+
 }
