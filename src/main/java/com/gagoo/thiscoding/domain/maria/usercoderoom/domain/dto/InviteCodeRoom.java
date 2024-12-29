@@ -9,6 +9,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class InviteCodeRoom {
+    private final Long userCodeRoomId;
     private final Long codeRoomId;
     private final String title;
     private final String content;
@@ -22,6 +23,7 @@ public class InviteCodeRoom {
         User user = userCodeRoom.getUser();
 
         return InviteCodeRoom.builder()
+            .userCodeRoomId(userCodeRoom.getId())
             .codeRoomId(codeRoom.getId())
             .title(codeRoom.getTitle())
             .content(codeRoom.getContent())
