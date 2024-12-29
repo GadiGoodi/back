@@ -24,6 +24,7 @@ public enum ErrorCode {
     CODE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 파일입니다."),
     CHAT_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 채팅방입니다."),
     JOIN_CODE_NOT_FOUND(HttpStatus.NOT_FOUND, "인증코드가 존재하지 않습니다."),
+    REPLY_NOT_FOUND(HttpStatus.NOT_FOUND, "댓글이 존재하지 않습니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 이메일입니다."),
     FRIEND_NOT_FOUND(HttpStatus.NOT_FOUND,"친구를 찾을 수 없습니다."),
     TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED, "토큰을 찾을 수 없거나 형식이 잘못되었습니다."),
