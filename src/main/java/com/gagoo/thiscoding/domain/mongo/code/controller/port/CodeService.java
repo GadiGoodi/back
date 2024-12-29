@@ -7,5 +7,5 @@ public interface CodeService {
     Code createCode(CodeCreate codeCreate);
     Code saveCode(CodeCreate codeCreate);
     Code getById(String codeId);
-    void validateRoomIAndFileNameExists(Long roomId, String fileName);
+    void validateRoomIdAndFileNameExists(Long roomId, String fileName);
 }

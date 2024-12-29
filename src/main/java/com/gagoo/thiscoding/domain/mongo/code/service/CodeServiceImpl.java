@@ -39,7 +39,7 @@ public class CodeServiceImpl implements CodeService {
         // 한 번도 저장되지 않은 코드일 경우
         if(code == null) {
             // 파일명 중복 검사
-            validateRoomIAndFileNameExists(codeCreate.getRoomId(), codeCreate.getFileName());
+            validateRoomIdAndFileNameExists(codeCreate.getRoomId(), codeCreate.getFileName());
             return createCode(codeCreate);
         } else {
             code = Code.save(codeCreate);
@@ -65,7 +65,7 @@ public class CodeServiceImpl implements CodeService {
      * @param fileName
      */
     @Override
-    public void validateRoomIAndFileNameExists(Long roomId, String fileName) {
+    public void validateRoomIdAndFileNameExists(Long roomId, String fileName) {
         if(codeRepository.existsByRoomIdAndFileName(roomId, fileName)) {
             throw new ExistCodeFileName(ErrorCode.EXIST_CODE_FILENAME);
         }
