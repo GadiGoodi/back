@@ -2,6 +2,7 @@ package com.gagoo.thiscoding.domain.mongo.board.controller;
 
 import com.gagoo.thiscoding.domain.mongo.board.controller.port.BoardService;
 import com.gagoo.thiscoding.domain.mongo.board.domain.dto.SearchDto;
+import com.gagoo.thiscoding.global.paging.dto.PageResponse;
 import com.gagoo.thiscoding.global.paging.dto.PageResponseFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
