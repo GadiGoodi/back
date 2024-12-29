@@ -6,7 +6,7 @@ import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.UserCodeRoom;
 import org.springframework.data.domain.Page;
 
 public interface UserCodeRoomService {
-    UserCodeRoom createUserCodeRoom(Long userId, Long roomId);
+    boolean createUserCodeRoom(Long userId, Long roomId);
 
     Page<InviteCodeRoom> getUserCodeRooms(int page);
 

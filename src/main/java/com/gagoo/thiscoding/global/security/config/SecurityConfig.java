@@ -1,9 +1,11 @@
 package com.gagoo.thiscoding.global.security.config;
 
 import com.gagoo.thiscoding.domain.maria.user.infrastructure.security.JwtFilter;
-import com.gagoo.thiscoding.domain.maria.user.infrastructure.security.JwtUtilImpl;
 import com.gagoo.thiscoding.domain.maria.user.infrastructure.security.JwtLoginFilter;
+import com.gagoo.thiscoding.domain.maria.user.infrastructure.security.JwtUtilImpl;
 import com.gagoo.thiscoding.domain.maria.user.service.port.RefreshTokenStore;
+import com.gagoo.thiscoding.global.security.JwtProperties;
+import com.gagoo.thiscoding.global.utils.HttpServletUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,8 +14,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -24,10 +24,12 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final JwtFilter jwtFilter;
     private final AuthenticationConfiguration authenticationConfig;
     private final RefreshTokenStore refreshTokenStore;
     private final JwtUtilImpl jwtUtilImpl;
-    private final JwtFilter jwtFilter;
+    private final JwtProperties jwtProperties;
+    private final HttpServletUtils httpServletUtils;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -50,16 +52,11 @@ public class SecurityConfig {
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
-        http.addFilterAt(
-                new JwtLoginFilter(authenticationManager(authenticationConfig), jwtUtilImpl, refreshTokenStore),
+        http.addFilterAt(new JwtLoginFilter(
+                authenticationManager(authenticationConfig), jwtUtilImpl, refreshTokenStore, httpServletUtils, jwtProperties),
                 UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
     @Bean

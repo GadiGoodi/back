@@ -3,8 +3,9 @@ package com.gagoo.thiscoding.domain.maria.user.infrastructure.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.UserLogin;
 import com.gagoo.thiscoding.domain.maria.user.service.port.RefreshTokenStore;
+import com.gagoo.thiscoding.global.security.JwtProperties;
+import com.gagoo.thiscoding.global.utils.HttpServletUtils;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,20 +19,33 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 
+import static com.gagoo.thiscoding.global.security.constants.SecurityConstants.*;
+
 public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authManager;
     private final JwtUtilImpl jwtUtilImpl;
     private final RefreshTokenStore refreshTokenStore;
+    private final HttpServletUtils httpServletUtils;
+    private final JwtProperties jwtProperties;
 
-    public JwtLoginFilter(AuthenticationManager authManager, JwtUtilImpl jwtUtilImpl, RefreshTokenStore refreshTokenStore) {
+    public JwtLoginFilter(AuthenticationManager authManager,
+                            JwtUtilImpl jwtUtilImpl,
+                            RefreshTokenStore refreshTokenStore,
+                            HttpServletUtils httpServletUtils,
+                            JwtProperties jwtProperties) {
         this.authManager = authManager;
         this.jwtUtilImpl = jwtUtilImpl;
         this.refreshTokenStore = refreshTokenStore;
+        this.httpServletUtils = httpServletUtils;
+        this.jwtProperties = jwtProperties;
 
         setFilterProcessesUrl("/api/auth/login");
     }
 
+    /**
+     * json 객체로 넘어온 데이터를 역직렬화하여 로그인 검증
+     */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
@@ -51,13 +65,13 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     /**
      * 로그인 성공시 엑세스 토큰과 리프레쉬 토큰 발급
-     * 엑세스 토큰 만료시 재발급을 위해 리프레쉬 토큰 redis에 저장
+     * 엑세스 토큰 만료시 재발급을 위해 리프레쉬 토큰 레디스에 저장
      */
     @Override
     protected void successfulAuthentication(HttpServletRequest request,
-                                                HttpServletResponse response,
-                                                FilterChain chain,
-                                                Authentication authentication) {
+                                            HttpServletResponse response,
+                                            FilterChain chain,
+                                            Authentication authentication) {
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
         String email = customUserDetails.getUsername();
 
@@ -67,15 +81,13 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String role = auth.getAuthority();
 
-        String atk = jwtUtilImpl.createAtk(email, role);
-        String rtk = jwtUtilImpl.createRtk(email, role);
+        String atk = jwtUtilImpl.createAtk(email, role, jwtProperties.getAtkExpireTime());
+        String rtk = jwtUtilImpl.createRtk(email, role, jwtProperties.getRtkExpireTime());
 
         refreshTokenStore.storeToken(email, rtk);
 
-        Cookie refreshTokenCookie = jwtUtilImpl.createRefreshTokenCookie(rtk);
-
-        response.setHeader("Authorization", "Bearer " + atk);
-        response.addCookie(refreshTokenCookie);
+        httpServletUtils.setHeader(response, AUTHORIZATION, BEARER_PREFIX + atk);
+        httpServletUtils.addCookie(response, AUTHORIZATION, rtk, jwtProperties.getRtkExpireTime().intValue());
     }
 
     @Override

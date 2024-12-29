@@ -1,6 +1,7 @@
 package com.gagoo.thiscoding.domain.mongo.board.domain;
 
 import com.gagoo.thiscoding.domain.mongo.board.domain.dto.BoardCreate;
+import com.gagoo.thiscoding.domain.mongo.board.infrastructure.BoardDocument;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -53,4 +54,7 @@ public class Board {
                 .build();
     }
 
+    public static Board from(BoardDocument boardDocument) {
+        return Board.builder().build();
+    }
 }
