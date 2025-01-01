@@ -5,7 +5,6 @@ import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
 @Getter
 @Document(collection = "qna")
@@ -14,7 +13,6 @@ public class BoardDocument extends BaseTimeDocument {
     @Id
     private String id;
 
-    @Field(name = "user_id")
     private Long userId;
 
     private String title;
@@ -23,23 +21,11 @@ public class BoardDocument extends BaseTimeDocument {
 
     private String language;
 
-    @Field(name = "parent_id")
-    private Long parentId;
-
-    @Field(name = "like_count")
-    private Long likeCount;
-
-    @Field(name = "view_count")
     private Long viewCount;
 
-    @Field(name = "answer_count")
     private Long answerCount;
 
-    @Field(name = "is_blind")
     private boolean isBlind;
-
-    @Field(name = "is_selected")
-    private boolean isSelected;
 
     public static BoardDocument from(Board board) {
         BoardDocument boardDocument = new BoardDocument();
@@ -48,12 +34,9 @@ public class BoardDocument extends BaseTimeDocument {
         boardDocument.title = board.getTitle();
         boardDocument.content = board.getContent();
         boardDocument.language = board.getLanguage();
-        boardDocument.parentId = board.getParentId();
-        boardDocument.likeCount = board.getLikeCount();
         boardDocument.viewCount = board.getViewCount();
         boardDocument.answerCount = board.getAnswerCount();
         boardDocument.isBlind = board.isBlind();
-        boardDocument.isSelected = board.isSelected();
 
         return boardDocument;
     }
@@ -65,12 +48,9 @@ public class BoardDocument extends BaseTimeDocument {
                 .title(title)
                 .content(content)
                 .language(language)
-                .parentId(parentId)
-                .likeCount(likeCount)
                 .viewCount(viewCount)
                 .answerCount(answerCount)
                 .isBlind(isBlind)
-                .isSelected(isSelected)
                 .build();
     }
 }
