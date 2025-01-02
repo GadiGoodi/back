@@ -17,14 +17,12 @@ public class ChatDocument {
     @Field(name = "room_id")
     private Long roomId;
 
-    @Field(name = "user_id")
+    @Field(name = "users_id")
     private Long userId;
 
     private String content;
 
-    @Field(name = "is_read")
     private boolean isRead;
 
-    @Field(name = "send_date")
     private LocalDateTime sendDate;
 }

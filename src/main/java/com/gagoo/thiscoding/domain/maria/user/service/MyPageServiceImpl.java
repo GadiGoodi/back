@@ -2,7 +2,7 @@ package com.gagoo.thiscoding.domain.maria.user.service;
 
 import com.gagoo.thiscoding.domain.maria.user.controller.port.MyPageService;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
-import com.gagoo.thiscoding.domain.mongo.answer.service.port.AnswerCustomRepository;
+import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardCustomRepository;
 import com.gagoo.thiscoding.global.security.SecurityUtils;
 import com.gagoo.thiscoding.global.security.exception.UserNotFoundException;
 import com.gagoo.thiscoding.domain.maria.user.service.dto.MyInfo;
@@ -18,13 +18,13 @@ import java.util.List;
 public class MyPageServiceImpl implements MyPageService {
 
     private final UserRepository userRepository;
-    private final AnswerCustomRepository answerCustomRepository;
+    private final BoardCustomRepository boardCustomRepository;
 
     @Override
     public MyInfo getMyInfo() {
         User currentUser = getByEmail(SecurityUtils.getUserEmail());
 
-        List<Long> top10Users = answerCustomRepository.getTop10Users();
+        List<Long> top10Users = boardCustomRepository.getTop10Users();
         boolean isTop10 = validateTop10(currentUser, top10Users);
 
         return MyInfo.from(currentUser, isTop10);
