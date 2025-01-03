@@ -2,11 +2,11 @@ package com.gagoo.thiscoding.domain.maria.user.service;
 
 import com.gagoo.thiscoding.domain.maria.user.controller.port.MyPageService;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
+import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardCustomRepository;
 import com.gagoo.thiscoding.global.security.SecurityUtils;
 import com.gagoo.thiscoding.global.security.exception.UserNotFoundException;
 import com.gagoo.thiscoding.domain.maria.user.service.dto.MyInfo;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
-import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardCustomRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

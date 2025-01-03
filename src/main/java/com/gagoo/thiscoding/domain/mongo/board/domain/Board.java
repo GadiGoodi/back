@@ -20,11 +20,10 @@ public class Board {
     private Long answerCount;
     private boolean isBlind;
     private boolean isSelected;
-    private LocalDateTime createDate;
 
     @Builder
     public Board(String id, Long userId,String title,String content,String language,Long parentId,Long likeCount,Long viewCount
-    ,Long answerCount,Boolean isBlind,Boolean isSelected,LocalDateTime createDate) {
+            ,Long answerCount,Boolean isBlind,Boolean isSelected,LocalDateTime createDate) {
         this.id = id;
         this.userId = userId;
         this.title = title;
@@ -36,7 +35,6 @@ public class Board {
         this.answerCount = answerCount;
         this.isBlind = isBlind;
         this.isSelected = isSelected;
-        this.createDate = createDate;
     }
 
     public static Board create(BoardCreate boardCreate) {

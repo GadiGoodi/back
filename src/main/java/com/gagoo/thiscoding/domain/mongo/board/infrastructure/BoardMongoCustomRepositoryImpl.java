@@ -66,8 +66,8 @@ public class BoardMongoCustomRepositoryImpl implements BoardCustomRepository {
         Query query = new Query();
 
         query.addCriteria(new Criteria().orOperator(
-            Criteria.where("title").regex(keyword, "i"),
-            Criteria.where("content").regex(keyword, "i")
+                Criteria.where("title").regex(keyword, "i"),
+                Criteria.where("content").regex(keyword, "i")
         ));
 
         long total = mongoTemplate.count(query, "qna");

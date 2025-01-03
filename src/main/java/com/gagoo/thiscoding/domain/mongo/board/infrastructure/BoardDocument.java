@@ -14,7 +14,7 @@ public class BoardDocument extends BaseTimeDocument {
     @Id
     private String id;
 
-    @Field(name = "user_id")
+    @Field(name = "users_id")
     private Long userId;
 
     private String title;
@@ -23,22 +23,16 @@ public class BoardDocument extends BaseTimeDocument {
 
     private String language;
 
-    @Field(name = "parent_id")
     private Long parentId;
 
-    @Field(name = "like_count")
     private Long likeCount;
 
-    @Field(name = "view_count")
     private Long viewCount;
 
-    @Field(name = "answer_count")
     private Long answerCount;
 
-    @Field(name = "is_blind")
     private boolean isBlind;
 
-    @Field(name = "is_selected")
     private boolean isSelected;
 
     public static BoardDocument from(Board board) {

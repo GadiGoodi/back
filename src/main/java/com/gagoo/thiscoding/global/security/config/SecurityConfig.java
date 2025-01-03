@@ -35,6 +35,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
+                .cors(auth -> auth.disable())
                 .csrf(auth -> auth.disable())
                 .formLogin(auth -> auth.disable())
                 .httpBasic(auth -> auth.disable())
