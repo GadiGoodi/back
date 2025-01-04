@@ -6,7 +6,6 @@ import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.dto.InviteCodeRoom;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.controller.port.UserCodeRoomService;
 import com.gagoo.thiscoding.global.paging.dto.PageResponse;
-import com.gagoo.thiscoding.global.paging.dto.PageResponseFactory;
 import com.gagoo.thiscoding.global.security.aop.AuthorizationRequired;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,7 +31,7 @@ public class UserCodeRoomController {
         Page<InviteCodeRoom> codeRooms = userCodeRoomService.getUserCodeRooms(page);
         return ResponseEntity
             .ok()
-            .body(PageResponseFactory.create(codeRooms));
+            .body(PageResponse.create(codeRooms));
     }
 
     @PutMapping("/{codeRoomId}/accept")

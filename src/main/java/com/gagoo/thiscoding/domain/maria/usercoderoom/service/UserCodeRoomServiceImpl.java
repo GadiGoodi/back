@@ -6,6 +6,7 @@ import com.gagoo.thiscoding.domain.maria.coderoom.service.exception.CodeRoomNotF
 import com.gagoo.thiscoding.domain.maria.coderoom.service.port.CodeRoomRepository;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.dto.InviteCodeRoom;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
+import com.gagoo.thiscoding.global.paging.PageSize;
 import com.gagoo.thiscoding.global.security.SecurityUtils;
 import com.gagoo.thiscoding.global.security.exception.UserNotFoundException;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
@@ -78,7 +79,7 @@ public class UserCodeRoomServiceImpl implements UserCodeRoomService {
      */
     @Override
     public Page<InviteCodeRoom> getUserCodeRooms(int page) {
-        Pageable pageable = PagingProcessor.getPageable(page, 12);
+        Pageable pageable = PagingProcessor.toPageable(page, PageSize.CODEROOM);
         return userCodeRoomRepository
             .findByEmail(SecurityUtils.getUserEmail(), pageable)
             .map(InviteCodeRoom::from);
