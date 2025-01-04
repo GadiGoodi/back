@@ -23,7 +23,6 @@ public class MyPageQnA {
     private Long viewCount;
     private Long parentId;
     private boolean isSelected;
-    private LocalDateTime createDate;
 
 
     public static MyPageQnA from(Board board){
@@ -37,7 +36,6 @@ public class MyPageQnA {
                 .viewCount(board.getViewCount())
                 .parentId(board.getParentId())
                 .isSelected(board.isSelected())
-                .createDate(board.getCreateDate())
                 .build();
     }
 }
