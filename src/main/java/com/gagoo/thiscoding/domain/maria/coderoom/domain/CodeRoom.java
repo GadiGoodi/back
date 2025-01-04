@@ -36,4 +36,16 @@ public class CodeRoom {
                 .headCount(1)
                 .build();
     }
+
+    public CodeRoom exit() {
+        return CodeRoom.builder()
+                .id(id)
+                .uuid(uuid)
+                .title(title)
+                .content(content)
+                .language(language)
+                .headCount(--headCount)
+                .build();
+    }
+
 }

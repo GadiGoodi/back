@@ -17,29 +17,12 @@ public class ParticipationsResponse {
     private String title;
     private String content;
     private String language;
-    private List<User> user;
+    private List<User> userList;
     private int headCount;
-
-//    @Builder
-//    public static class ProfileResponse {
-//        private Long userId;
-//        private String imageUrl;
-//
-//        public static ProfileResponse from(User user) {
-//            return ProfileResponse.builder()
-//                    .userId(user.getId())
-//                    .imageUrl(user.getImageUrl())
-//                    .build();
-//        }
-//    }
 
     @Builder
     public static ParticipationsResponse from(UserCodeRoom userCodeRoom, List<User> userList) {
         CodeRoom codeRoom = userCodeRoom.getCodeRoom();
-
-//        List<ProfileResponse> profileList = userList.stream()
-//                .map(ProfileResponse::from)
-//                .toList();
 
         return ParticipationsResponse.builder()
                 .userCodeRoomId(userCodeRoom.getId())
@@ -47,7 +30,7 @@ public class ParticipationsResponse {
                 .title(codeRoom.getTitle())
                 .content(codeRoom.getContent())
                 .language(codeRoom.getLanguage())
-                .user(userList)
+                .userList(userList)
                 .headCount(codeRoom.getHeadCount())
                 .build();
     }

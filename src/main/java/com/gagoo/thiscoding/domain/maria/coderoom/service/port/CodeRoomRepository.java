@@ -8,5 +8,6 @@ import java.util.UUID;
 public interface CodeRoomRepository {
     CodeRoom save(CodeRoom codeRoom);
     Optional<CodeRoom> findByUuid(UUID uuid);
-    Optional<CodeRoom> findById(Long roomId);
+    Optional<CodeRoom> findById(Long id);
+    void deleteById(Long id);
 }

@@ -17,5 +17,7 @@ public interface UserCodeRoomService {
 
     Page<ParticipationsResponse> getParticipations(int page);
 
-    void enterUserCodeRoom(Long id);
+    void accessUserCodeRoom(Long id);
+
+    void leaveUserCodeRoom(Long id);
 }

@@ -41,9 +41,13 @@ public class UserCodeRoom {
                 .build();
     }
 
-    public static UserCodeRoom enter(UserCodeRoom userCodeRoom) {
+    public UserCodeRoom access() {
         return UserCodeRoom.builder()
-                .isActivated(true)
+                .id(id)
+                .user(user)
+                .codeRoom(codeRoom)
+                .isActivated(!isActivated)
+                .isAccepted(isAccepted)
                 .build();
     }
 }

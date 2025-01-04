@@ -8,6 +8,7 @@ import com.gagoo.thiscoding.domain.maria.usercoderoom.controller.response.Partic
 import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.dto.InviteCodeRoom;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.infrastructure.ipml.ParticipationsRepositoryCustom;
+import com.gagoo.thiscoding.domain.mongo.code.service.exception.CodeNotFoundException;
 import com.gagoo.thiscoding.global.security.SecurityUtils;
 import com.gagoo.thiscoding.global.security.exception.UserNotFoundException;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
@@ -136,14 +137,33 @@ public class UserCodeRoomServiceImpl implements UserCodeRoomService {
     }
 
     /**
-     * (참여 중인) 코드방 입장
+     * (참여 중인) 코드방 입/퇴장
      * @param id
      */
     @Override
-    public void enterUserCodeRoom(Long id) {
+    public void accessUserCodeRoom(Long id) {
         UserCodeRoom userCodeRoom = getUserCodeRoom(id);
-        UserCodeRoom updateUserCodeRoom = userCodeRoom.enter(userCodeRoom);
-        userCodeRoomRepository.save(updateUserCodeRoom);
+        userCodeRoomRepository.save(userCodeRoom.access());
+    }
+
+    /**
+     * (참여 중인) 코드방 탈퇴
+     * @param id
+     */
+    @Override
+    public void leaveUserCodeRoom(Long id) {
+        UserCodeRoom userCodeRoom = getUserCodeRoom(id);
+        userCodeRoomRepository.delete(userCodeRoom);
+
+        CodeRoom codeRoom = codeRoomRepository.findById(userCodeRoom.getCodeRoom().getId()).orElseThrow(
+                () -> new CodeNotFoundException(ErrorCode.CODE_NOT_FOUND)
+        );
+
+        if(codeRoom.getHeadCount() > 1) {
+            codeRoomRepository.save(codeRoom.exit());
+        } else {
+            codeRoomRepository.deleteById(codeRoom.getId());
+        }
     }
 
 }

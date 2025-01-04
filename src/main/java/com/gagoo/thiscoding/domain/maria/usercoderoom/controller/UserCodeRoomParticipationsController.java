@@ -22,20 +22,30 @@ public class UserCodeRoomParticipationsController {
     // 참여 중인 코드방 목록 조회
     @GetMapping
     @AuthorizationRequired(value = Role.USER, status = OK)
-    public ResponseEntity<PageResponse<ParticipationsResponse>> getUserCodeRoomParticipations(@RequestParam(defaultValue = "1") int page) {
+    public ResponseEntity<PageResponse<ParticipationsResponse>> getParticipationList(@RequestParam(defaultValue = "1") int page) {
         Page<ParticipationsResponse> userCodeRooms = userCodeRoomService.getParticipations(page);
         return ResponseEntity
                 .ok()
                 .body(PageResponseFactory.create(userCodeRooms));
     }
 
-    // 참여 중인 코드방 입장
-    @PatchMapping
+    // 참여 중인 코드방 입/퇴장
+    @PatchMapping("/access")
     @AuthorizationRequired(value = Role.USER, status = OK)
-    public ResponseEntity<?> patchUserCodeRoomParticipations(@RequestParam Long id) {
-        userCodeRoomService.enterUserCodeRoom(id);
+    public ResponseEntity<?> accessParticipation(@RequestParam Long id) {
+        userCodeRoomService.accessUserCodeRoom(id);
         return ResponseEntity
                 .ok()
-                .body("코드방 입장 성공");
+                .body("코드방 입/퇴장 성공");
+    }
+
+    // 참여 중인 코드방 탈퇴
+    @DeleteMapping("/leave")
+    @AuthorizationRequired(value = Role.USER, status = OK)
+    public ResponseEntity<?> leaveParticipation(@RequestParam Long id) {
+        userCodeRoomService.leaveUserCodeRoom(id);
+        return ResponseEntity
+                .ok()
+                .body("코드방 탈퇴 성공");
     }
 }
