@@ -24,11 +24,7 @@ public class ParticipationsRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     public List<User> findUserListByUserCodeRoom(UserCodeRoom userCodeRoom) {
-//        if (userCodeRoom == null || userCodeRoom.getUser() == null || userCodeRoom.getCodeRoom() == null) {
-//            throw new IllegalArgumentException("UserCodeRoom, User, or CodeRoom cannot be null");
-//        }
 
-        // Query 실행
         return queryFactory.select(Projections.constructor(User.class,
                         userEntity.id,
                         userEntity.email,

@@ -37,9 +37,9 @@ public class UserCodeRoomServiceImpl implements UserCodeRoomService {
 
     public UserCodeRoom getUserCodeRoomByCodeRoomAndUserEmail(Long codeRoomId, String userEmail) {
         return userCodeRoomRepository.findByCodeRoomIdAndUserEmail(codeRoomId, userEmail)
-                .orElseThrow(() -> new UserCodeRoomNotFoundException(
-                        ErrorCode.USER_CODE_ROOM_NOT_FOUND
-                ));
+            .orElseThrow(() -> new UserCodeRoomNotFoundException(
+                ErrorCode.USER_CODE_ROOM_NOT_FOUND
+            ));
     }
 
     /**
@@ -61,15 +61,19 @@ public class UserCodeRoomServiceImpl implements UserCodeRoomService {
     @Override
     public boolean createUserCodeRoom(Long userId, Long roomId) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND)
+            () -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND)
         );
+
         CodeRoom codeRoom = codeRoomRepository.findById(roomId).orElseThrow(
-                () -> new CodeRoomNotFoundException(ErrorCode.CODE_ROOM_NOT_FOUND)
+            () -> new CodeRoomNotFoundException(ErrorCode.CODE_ROOM_NOT_FOUND)
         );
+
         UserCodeRoom userCodeRoom = UserCodeRoom.create(user, codeRoom);
+
         if(userCodeRoomRepository.save(userCodeRoom) != null) {
             return true;
         }
+
         return false;
     }
 
@@ -80,8 +84,8 @@ public class UserCodeRoomServiceImpl implements UserCodeRoomService {
     public Page<InviteCodeRoom> getUserCodeRooms(int page) {
         Pageable pageable = PagingProcessor.toPageable(page, PageSize.CODEROOM);
         return userCodeRoomRepository
-                .findByEmail(SecurityUtils.getUserEmail(), pageable)
-                .map(InviteCodeRoom::from);
+            .findByEmail(SecurityUtils.getUserEmail(), pageable)
+            .map(InviteCodeRoom::from);
     }
 
     /**
@@ -112,7 +116,7 @@ public class UserCodeRoomServiceImpl implements UserCodeRoomService {
      */
     public UserCodeRoom getUserCodeRoom(Long id) {
         return userCodeRoomRepository.findById(id)
-                .orElseThrow(() ->new UserCodeRoomNotFoundException(ErrorCode.USER_CODE_ROOM_NOT_FOUND));
+            .orElseThrow(() ->new UserCodeRoomNotFoundException(ErrorCode.USER_CODE_ROOM_NOT_FOUND));
     };
 
     /**
@@ -125,7 +129,7 @@ public class UserCodeRoomServiceImpl implements UserCodeRoomService {
         Pageable pageable = PagingProcessor.toPageable(page, PageSize.CODEROOM);
 
         Page<UserCodeRoom> userCodeRoomPage = participationsRepositoryCustom
-                .findAllByEmailAndIsActivatedTrue(SecurityUtils.getUserEmail(), pageable);
+            .findAllByEmailAndIsActivatedTrue(SecurityUtils.getUserEmail(), pageable);
 
         return userCodeRoomPage.map(userCodeRoom -> ParticipationsResponse.from(userCodeRoom, participationsRepositoryCustom.findUserListByUserCodeRoom(userCodeRoom)));
     }
@@ -150,7 +154,7 @@ public class UserCodeRoomServiceImpl implements UserCodeRoomService {
         userCodeRoomRepository.delete(userCodeRoom);
 
         CodeRoom codeRoom = codeRoomRepository.findById(userCodeRoom.getCodeRoom().getId()).orElseThrow(
-                () -> new CodeNotFoundException(ErrorCode.CODE_NOT_FOUND)
+            () -> new CodeNotFoundException(ErrorCode.CODE_NOT_FOUND)
         );
 
         if(codeRoom.getHeadCount() > 1) {
