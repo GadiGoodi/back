@@ -61,13 +61,6 @@ public class ParticipationsRepositoryCustom {
                 .map(UserCodeRoomEntity::toModel)
                 .toList();
 
-//        long total = queryFactory
-//                .selectFrom(userCodeRoomEntity)
-//                .join(userCodeRoomEntity.codeRoom, codeRoomEntity)
-//                .join(userCodeRoomEntity.user, userEntity)
-//                .where(emailCondition.and(isActivatedCondition))
-//                .fetchCount();
-
         JPAQuery<Long> countQuery = queryFactory
                 .select(userCodeRoomEntity.count())
                 .from(userCodeRoomEntity)
