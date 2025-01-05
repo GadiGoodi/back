@@ -4,7 +4,6 @@ import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.controller.port.UserCodeRoomService;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.controller.response.ParticipationsResponse;
 import com.gagoo.thiscoding.global.paging.dto.PageResponse;
-import com.gagoo.thiscoding.global.paging.dto.PageResponseFactory;
 import com.gagoo.thiscoding.global.security.aop.AuthorizationRequired;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,7 +25,7 @@ public class UserCodeRoomParticipationsController {
         Page<ParticipationsResponse> userCodeRooms = userCodeRoomService.getParticipations(page);
         return ResponseEntity
                 .ok()
-                .body(PageResponseFactory.create(userCodeRooms));
+                .body(PageResponse.create(userCodeRooms));
     }
 
     // 참여 중인 코드방 입/퇴장
