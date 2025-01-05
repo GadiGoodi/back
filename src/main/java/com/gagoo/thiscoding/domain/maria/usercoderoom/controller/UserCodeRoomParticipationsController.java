@@ -24,8 +24,8 @@ public class UserCodeRoomParticipationsController {
     public ResponseEntity<PageResponse<ParticipationsResponse>> getParticipationList(@RequestParam(defaultValue = "1") int page) {
         Page<ParticipationsResponse> userCodeRooms = userCodeRoomService.getParticipations(page);
         return ResponseEntity
-                .ok()
-                .body(PageResponse.create(userCodeRooms));
+            .ok()
+            .body(PageResponse.create(userCodeRooms));
     }
 
     // 참여 중인 코드방 입/퇴장
@@ -34,8 +34,8 @@ public class UserCodeRoomParticipationsController {
     public ResponseEntity<?> accessParticipation(@PathVariable Long id) {
         userCodeRoomService.accessUserCodeRoom(id);
         return ResponseEntity
-                .ok()
-                .body("코드방 입/퇴장 성공");
+            .ok()
+            .body("코드방 입/퇴장 성공");
     }
 
     // 참여 중인 코드방 탈퇴
@@ -44,7 +44,7 @@ public class UserCodeRoomParticipationsController {
     public ResponseEntity<?> leaveParticipation(@PathVariable Long id) {
         userCodeRoomService.leaveUserCodeRoom(id);
         return ResponseEntity
-                .ok()
-                .body("코드방 탈퇴 성공");
+            .ok()
+            .body("코드방 탈퇴 성공");
     }
 }
