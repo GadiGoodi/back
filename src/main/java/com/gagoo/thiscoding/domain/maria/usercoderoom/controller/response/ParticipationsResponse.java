@@ -25,14 +25,14 @@ public class ParticipationsResponse {
         CodeRoom codeRoom = userCodeRoom.getCodeRoom();
 
         return ParticipationsResponse.builder()
-                .userCodeRoomId(userCodeRoom.getId())
-                .codeRoomId(codeRoom.getId())
-                .title(codeRoom.getTitle())
-                .content(codeRoom.getContent())
-                .language(codeRoom.getLanguage())
-                .userList(userList)
-                .headCount(codeRoom.getHeadCount())
-                .build();
+            .userCodeRoomId(userCodeRoom.getId())
+            .codeRoomId(codeRoom.getId())
+            .title(codeRoom.getTitle())
+            .content(codeRoom.getContent())
+            .language(codeRoom.getLanguage())
+            .userList(userList)
+            .headCount(codeRoom.getHeadCount())
+            .build();
     }
 
 }

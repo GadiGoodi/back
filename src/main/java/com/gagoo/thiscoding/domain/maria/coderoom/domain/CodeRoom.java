@@ -29,23 +29,23 @@ public class CodeRoom {
 
     public static CodeRoom create(CodeRoomCreate codeRoomCreate) {
         return CodeRoom.builder()
-                .uuid(UUID.randomUUID())
-                .title(codeRoomCreate.getTitle())
-                .content(codeRoomCreate.getContent())
-                .language(codeRoomCreate.getLanguage())
-                .headCount(1)
-                .build();
+            .uuid(UUID.randomUUID())
+            .title(codeRoomCreate.getTitle())
+            .content(codeRoomCreate.getContent())
+            .language(codeRoomCreate.getLanguage())
+            .headCount(1)
+            .build();
     }
 
     public CodeRoom exit() {
         return CodeRoom.builder()
-                .id(id)
-                .uuid(uuid)
-                .title(title)
-                .content(content)
-                .language(language)
-                .headCount(--headCount)
-                .build();
+            .id(id)
+            .uuid(uuid)
+            .title(title)
+            .content(content)
+            .language(language)
+            .headCount(--headCount)
+            .build();
     }
 
 }
