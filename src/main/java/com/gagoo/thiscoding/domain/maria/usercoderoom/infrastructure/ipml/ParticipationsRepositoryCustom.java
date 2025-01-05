@@ -5,11 +5,13 @@ import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.UserCodeRoom;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.infrastructure.UserCodeRoomEntity;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -59,13 +61,20 @@ public class ParticipationsRepositoryCustom {
                 .map(UserCodeRoomEntity::toModel)
                 .toList();
 
-        long total = queryFactory
-                .selectFrom(userCodeRoomEntity)
+//        long total = queryFactory
+//                .selectFrom(userCodeRoomEntity)
+//                .join(userCodeRoomEntity.codeRoom, codeRoomEntity)
+//                .join(userCodeRoomEntity.user, userEntity)
+//                .where(emailCondition.and(isActivatedCondition))
+//                .fetchCount();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(userCodeRoomEntity.count())
+                .from(userCodeRoomEntity)
                 .join(userCodeRoomEntity.codeRoom, codeRoomEntity)
                 .join(userCodeRoomEntity.user, userEntity)
-                .where(emailCondition.and(isActivatedCondition))
-                .fetchCount();
+                .where(emailCondition.and(isActivatedCondition));
 
-        return new PageImpl<>(result, pageable, total);
+        return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
     }
 }
