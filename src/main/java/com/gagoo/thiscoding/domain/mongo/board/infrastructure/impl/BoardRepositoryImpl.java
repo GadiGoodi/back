@@ -1,6 +1,9 @@
-package com.gagoo.thiscoding.domain.mongo.board.infrastructure;
+package com.gagoo.thiscoding.domain.mongo.board.infrastructure.impl;
 
 import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
+import com.gagoo.thiscoding.domain.mongo.board.domain.dto.Search;
+import com.gagoo.thiscoding.domain.mongo.board.infrastructure.BoardDocument;
+import com.gagoo.thiscoding.domain.mongo.board.infrastructure.mongo.BoardMongoRepository;
 import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,5 +23,11 @@ private final BoardMongoRepository boardMongoRepository;
     @Override
     public Board save(Board board) {
         return boardMongoRepository.save(BoardDocument.from(board)).toModel();
+    }
+
+    @Override
+    public Page<Search> findByTitleOrContent(String title, String content, Pageable pageable) {
+        return boardMongoRepository.findByTitleContainingOrContentContaining(title, content, pageable).map(
+            Search::from);
     }
 }

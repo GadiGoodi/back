@@ -30,9 +30,9 @@ public class UserCodeRoomParticipationsController {
     }
 
     // 참여 중인 코드방 입/퇴장
-    @PatchMapping("/access")
+    @PatchMapping("/{id}/access")
     @AuthorizationRequired(value = Role.USER, status = OK)
-    public ResponseEntity<?> accessParticipation(@RequestParam Long id) {
+    public ResponseEntity<?> accessParticipation(@PathVariable Long id) {
         userCodeRoomService.accessUserCodeRoom(id);
         return ResponseEntity
                 .ok()
@@ -40,9 +40,9 @@ public class UserCodeRoomParticipationsController {
     }
 
     // 참여 중인 코드방 탈퇴
-    @DeleteMapping("/leave")
+    @DeleteMapping("/{id}/leave")
     @AuthorizationRequired(value = Role.USER, status = OK)
-    public ResponseEntity<?> leaveParticipation(@RequestParam Long id) {
+    public ResponseEntity<?> leaveParticipation(@PathVariable Long id) {
         userCodeRoomService.leaveUserCodeRoom(id);
         return ResponseEntity
                 .ok()
