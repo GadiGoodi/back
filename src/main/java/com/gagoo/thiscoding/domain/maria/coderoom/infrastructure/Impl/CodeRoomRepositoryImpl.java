@@ -27,7 +27,12 @@ public class CodeRoomRepositoryImpl implements CodeRoomRepository {
     }
 
     @Override
-    public Optional<CodeRoom> findById(Long roomId) {
-        return codeRoomJpaRepository.findById(roomId).map(CodeRoomEntity::toModel);
+    public Optional<CodeRoom> findById(Long id) {
+        return codeRoomJpaRepository.findById(id).map(CodeRoomEntity::toModel);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        codeRoomJpaRepository.deleteById(id);
     }
 }

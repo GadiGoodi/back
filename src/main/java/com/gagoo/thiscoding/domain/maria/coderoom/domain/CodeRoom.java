@@ -17,8 +17,7 @@ public class CodeRoom {
     private int headCount;
 
     @Builder
-    public CodeRoom(Long id, UUID uuid, String title, String content, String language,
-                    int headCount) {
+    public CodeRoom(Long id, UUID uuid, String title, String content, String language, int headCount) {
         this.id = id;
         this.uuid = uuid;
         this.title = title;
@@ -36,4 +35,16 @@ public class CodeRoom {
                 .headCount(1)
                 .build();
     }
+
+    public CodeRoom exit() {
+        return CodeRoom.builder()
+                .id(id)
+                .uuid(uuid)
+                .title(title)
+                .content(content)
+                .language(language)
+                .headCount(--headCount)
+                .build();
+    }
+
 }
