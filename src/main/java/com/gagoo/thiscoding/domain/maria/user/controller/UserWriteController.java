@@ -21,7 +21,7 @@ public class UserWriteController {
     private final UserService userService;
 
     @PostMapping("sign-up")
-    public ResponseEntity<UserResponse> checkEmail(@RequestBody UserCreate userCreate) {
+    public ResponseEntity<UserResponse> create(@RequestBody UserCreate userCreate) {
         User user = userService.create(userCreate);
 
         return ResponseEntity

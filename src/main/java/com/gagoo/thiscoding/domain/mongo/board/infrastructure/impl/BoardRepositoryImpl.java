@@ -30,4 +30,9 @@ private final BoardMongoRepository boardMongoRepository;
         return boardMongoRepository.findByTitleContainingOrContentContaining(title, content, pageable).map(
             Search::from);
     }
+
+    @Override
+    public boolean existsById(String qnaId) {
+        return boardMongoRepository.existsById(qnaId);
+    }
 }
