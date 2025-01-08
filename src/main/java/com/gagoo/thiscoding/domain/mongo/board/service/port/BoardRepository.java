@@ -9,4 +9,5 @@ public interface BoardRepository {
     Page<Board> findByUserId(Long userId, Pageable pageable);
     Page<Search> findByTitleOrContent(String title, String content, Pageable pageable);
     Board save(Board board);
+    boolean existsById(String qnaId);
 }

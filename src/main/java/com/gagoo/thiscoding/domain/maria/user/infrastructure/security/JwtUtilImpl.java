@@ -22,10 +22,8 @@ public class JwtUtilImpl implements JwtUtil {
 
     private static final String JWT_HS256_ALGORITHM = Jwts.SIG.HS256.key().build().getAlgorithm();
     private final SecretKey secretKey;
-    private final JwtProperties jwtProperties;
 
     public JwtUtilImpl(JwtProperties jwtProperties) {
-        this.jwtProperties = jwtProperties;
         this.secretKey =
                 new SecretKeySpec(
                         jwtProperties.getSecretKey().getBytes(StandardCharsets.UTF_8),

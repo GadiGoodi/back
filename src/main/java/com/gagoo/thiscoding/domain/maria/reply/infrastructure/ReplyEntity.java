@@ -1,5 +1,6 @@
 package com.gagoo.thiscoding.domain.maria.reply.infrastructure;
 
+import com.gagoo.thiscoding.domain.maria.BaseTimeEntity;
 import com.gagoo.thiscoding.domain.maria.reply.domain.Reply;
 import com.gagoo.thiscoding.domain.maria.user.infrastructure.UserEntity;
 import jakarta.persistence.*;
@@ -8,7 +9,7 @@ import lombok.Getter;
 @Getter
 @Entity
 @Table(name = "reply")
-public class ReplyEntity {
+public class ReplyEntity extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reply_id")
     private Long id;
@@ -26,7 +27,7 @@ public class ReplyEntity {
     private UserEntity user;
 
     @Column(name = "qna_id")
-    private Long qnaId;
+    private String qnaId;
 
     public static ReplyEntity from(Reply reply) {
         ReplyEntity replyEntity = new ReplyEntity();
@@ -36,6 +37,7 @@ public class ReplyEntity {
         replyEntity.isBlinded = reply.isBlinded();
         replyEntity.user = UserEntity.from(reply.getUser());
         replyEntity.qnaId = reply.getQnaId();
+        replyEntity.createDate = reply.getCreateDate();
         return replyEntity;
     }
 
