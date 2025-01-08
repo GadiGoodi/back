@@ -1,4 +1,4 @@
-package com.gagoo.thiscoding.domain.maria.user.controller.response;
+package com.gagoo.thiscoding.domain.mongo.board.controller.response;
 
 import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
 import lombok.AllArgsConstructor;
