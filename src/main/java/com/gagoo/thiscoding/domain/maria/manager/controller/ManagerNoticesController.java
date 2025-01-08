@@ -25,7 +25,7 @@ public class ManagerNoticesController {
 
     //공지사항 목록 조회
     @GetMapping
-//    @AuthorizationRequired(value = {Role.ADMIN,Role.USER}, status = OK)
+    @AuthorizationRequired(value = {Role.ADMIN,Role.USER}, status = OK)
     public ResponseEntity<Page<ManagerNoticesList>> getNoticesAll(Pageable pageable) {
         return ResponseEntity
                 .ok()
@@ -34,7 +34,7 @@ public class ManagerNoticesController {
 
     //공지사항 삭제
     @DeleteMapping("/{id}")
-//    @AuthorizationRequired(value = {Role.ADMIN}, status = OK)
+    @AuthorizationRequired(value = {Role.ADMIN}, status = OK)
     public ResponseEntity<?> deleteManagerNotices(@PathVariable Long id) {
         managerService.deleteManagerNotices(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -42,7 +42,7 @@ public class ManagerNoticesController {
 
     //공지사항 수정
     @PatchMapping("/{id}")
-//    @AuthorizationRequired(value = {Role.ADMIN}, status = OK)
+    @AuthorizationRequired(value = {Role.ADMIN}, status = OK)
     public ResponseEntity<?> updateManagerNotices(@PathVariable Long id,
                                                   @RequestBody ManagerNoticesUpdate request) {
 
@@ -52,7 +52,7 @@ public class ManagerNoticesController {
 
     //공지사항 상세 조회
     @GetMapping("/{id}")
-//    @AuthorizationRequired(value = {Role.ADMIN,Role.USER}, status = OK)
+    @AuthorizationRequired(value = {Role.ADMIN,Role.USER}, status = OK)
     public ResponseEntity<ManagerNoticesDetail> getNoticesDetail(@PathVariable Long id){
         return ResponseEntity
                 .ok()
