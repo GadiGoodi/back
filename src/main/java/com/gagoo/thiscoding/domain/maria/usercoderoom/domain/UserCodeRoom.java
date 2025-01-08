@@ -40,4 +40,14 @@ public class UserCodeRoom {
                 .isAccepted(true)
                 .build();
     }
+
+    public UserCodeRoom access() {
+        return UserCodeRoom.builder()
+                .id(id)
+                .user(user)
+                .codeRoom(codeRoom)
+                .isActivated(!isActivated)
+                .isAccepted(isAccepted)
+                .build();
+    }
 }

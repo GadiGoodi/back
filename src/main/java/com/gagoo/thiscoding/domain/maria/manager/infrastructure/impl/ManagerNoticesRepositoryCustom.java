@@ -1,5 +1,7 @@
 package com.gagoo.thiscoding.domain.maria.manager.infrastructure.impl;
 
+import static com.gagoo.thiscoding.domain.maria.manager.infrastructure.QManagerEntity.managerEntity;
+
 import com.gagoo.thiscoding.domain.maria.manager.domain.Manager;
 import com.gagoo.thiscoding.domain.maria.manager.service.port.ManagerRepository;
 import com.querydsl.core.Query;
@@ -14,7 +16,6 @@ import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 
-import static com.gagoo.thiscoding.domain.maria.manager.infrastructure.QManagerEntity.*;
 
 @RequiredArgsConstructor
 public class ManagerNoticesRepositoryCustom {
