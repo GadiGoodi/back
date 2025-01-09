@@ -4,6 +4,7 @@ import com.gagoo.thiscoding.domain.maria.reply.controller.port.ReplyService;
 import com.gagoo.thiscoding.domain.maria.reply.domain.Reply;
 import com.gagoo.thiscoding.domain.maria.reply.domain.dto.ReplyCreate;
 import com.gagoo.thiscoding.domain.maria.reply.infrastructure.exception.ReplyNotFoundException;
+import com.gagoo.thiscoding.domain.maria.reply.service.dto.ReplyList;
 import com.gagoo.thiscoding.domain.maria.reply.service.port.ReplyRepository;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
@@ -40,8 +41,8 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public CustomPageDto getQnAReply(String qnaId, Pageable pageable) {
-        Page<Reply> qnaReply = replyRepository.findByQnaId(qnaId, pageable);
+    public CustomPageDto<Page<ReplyList>> getQnAReply(String qnaId, Pageable pageable) {
+        Page<ReplyList> qnaReply = replyRepository.findByQnaId(qnaId, pageable);
 
         return new CustomPageDto(qnaReply);
     }
