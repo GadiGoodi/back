@@ -1,10 +1,10 @@
 package com.gagoo.thiscoding.global.s3.service;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.gagoo.thiscoding.global.s3.infrastructure.SystemUuidHolder;
 import com.gagoo.thiscoding.global.s3.controller.port.S3Service;
 import com.gagoo.thiscoding.global.s3.domain.Images;
 import com.gagoo.thiscoding.global.s3.service.port.S3Bucket;
+import com.gagoo.thiscoding.global.utils.infrastructure.SystemUuidHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,7 +40,7 @@ public class S3ServiceImpl implements S3Service {
         String originalFileName = image.getOriginalFilename();
         String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
 
-        return imagePath + "/" + UUID.random() + extension;
+        return imagePath + "/" + UUID.random().toString() + extension;
     }
 
 }
