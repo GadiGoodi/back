@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface BoardService {
     Board create(BoardCreate boardCreate);
+    Board get(String qnaId);
     Page<Search> searchByKeyword(String keyword, int page);
     Page<Board> getMyPagePostQnA(Pageable pageable);
     CustomPageDto<Page<QnaList>> findAll(Pageable pageable);

@@ -4,14 +4,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Getter
-@ToString
+@Builder
 public class QnaList {
 
+    @JsonProperty
+    private final String qnaId;
     @JsonProperty
     private final String language;
     @JsonProperty
@@ -27,19 +28,9 @@ public class QnaList {
     @JsonProperty
     private final LocalDateTime createDate;
 
-    @Builder
-    public QnaList(String language, String title, String content, String nickname, Long viewCount, Long answerCount, LocalDateTime createDate) {
-        this.language = language;
-        this.title = title;
-        this.content = content;
-        this.nickname = nickname;
-        this.viewCount = viewCount;
-        this.answerCount = answerCount;
-        this.createDate = createDate;
-    }
-
     public static QnaList from(Board board) {
         return QnaList.builder()
+                .qnaId(board.getId())
                 .language(board.getLanguage())
                 .title(board.getTitle())
                 .content(board.getContent())
