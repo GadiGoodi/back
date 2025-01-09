@@ -7,7 +7,6 @@ import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
 import com.gagoo.thiscoding.domain.mongo.board.service.dto.QnaList;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
 import com.gagoo.thiscoding.global.paging.dto.PageResponse;
-import com.gagoo.thiscoding.global.security.aop.AuthorizationRequired;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +27,6 @@ public class BoardReadController {
     private final BoardService boardService;
 
     @GetMapping
-    @AuthorizationRequired(value = {Role.USER, Role.ADMIN}, status = OK)
     public ResponseEntity<CustomPageDto<Page<QnaList>>> getAll(Pageable pageable) {
         return ResponseEntity.ok(boardService.findAll(pageable));
     }
