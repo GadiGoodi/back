@@ -1,5 +1,6 @@
 package com.gagoo.thiscoding.domain.mongo.board.domain;
 
+import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.mongo.board.domain.dto.BoardCreate;
 import com.gagoo.thiscoding.domain.mongo.board.infrastructure.BoardDocument;
 import lombok.Builder;
@@ -8,9 +9,12 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
+@Builder
 public class Board {
     private String id;
     private Long userId;
+    private String nickname;
+    private String profileImg;
     private String title;
     private String content;
     private String language;
@@ -20,26 +24,13 @@ public class Board {
     private Long answerCount;
     private boolean isBlind;
     private boolean isSelected;
+    private LocalDateTime createDate;
 
-    @Builder
-    public Board(String id, Long userId,String title,String content,String language,Long parentId,Long likeCount,Long viewCount
-            ,Long answerCount,Boolean isBlind,Boolean isSelected,LocalDateTime createDate) {
-        this.id = id;
-        this.userId = userId;
-        this.title = title;
-        this.content = content;
-        this.language = language;
-        this.parentId = parentId;
-        this.likeCount = likeCount;
-        this.viewCount = viewCount;
-        this.answerCount = answerCount;
-        this.isBlind = isBlind;
-        this.isSelected = isSelected;
-    }
-
-    public static Board create(BoardCreate boardCreate) {
+    public static Board create(User user, BoardCreate boardCreate) {
         return Board.builder()
-                .userId(boardCreate.getUserId())
+                .userId(user.getId())
+                .nickname(user.getNickname())
+                .profileImg(user.getImageUrl())
                 .title(boardCreate.getTitle())
                 .content(boardCreate.getContent())
                 .language(boardCreate.getLanguage())
