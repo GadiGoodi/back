@@ -15,5 +15,5 @@ public class BaseTimeDocument {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @CreatedDate
     @Field
-    private LocalDateTime createDate;
+    public LocalDateTime createDate;
 }

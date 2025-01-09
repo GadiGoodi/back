@@ -1,6 +1,7 @@
 package com.gagoo.thiscoding.domain.maria.reply.service.port;
 
 import com.gagoo.thiscoding.domain.maria.reply.domain.Reply;
+import com.gagoo.thiscoding.domain.maria.reply.service.dto.ReplyList;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -12,5 +13,5 @@ public interface ReplyRepository {
     Optional<Reply> findById(Long id);
     void delete(Reply reply);
     boolean existsById(Long parentId);
-    Page findByQnaId(String qnaId, Pageable pageable);
+    Page<ReplyList> findByQnaId(String qnaId, Pageable pageable);
 }

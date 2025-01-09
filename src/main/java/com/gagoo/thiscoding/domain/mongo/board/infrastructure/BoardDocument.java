@@ -3,11 +3,13 @@ package com.gagoo.thiscoding.domain.mongo.board.infrastructure;
 import com.gagoo.thiscoding.domain.mongo.BaseTimeDocument;
 import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @Getter
+@ToString
 @Document(collection = "qna")
 public class BoardDocument extends BaseTimeDocument {
 
@@ -17,6 +19,10 @@ public class BoardDocument extends BaseTimeDocument {
     @Field(name = "users_id")
     private Long userId;
 
+    private String nickname;
+
+    private String profileImg;
+
     private String title;
 
     private String content;
@@ -25,10 +31,13 @@ public class BoardDocument extends BaseTimeDocument {
 
     private Long parentId;
 
+    @Field(name = "like_count")
     private Long likeCount;
 
+    @Field(name = "view_count")
     private Long viewCount;
 
+    @Field(name = "answer_count")
     private Long answerCount;
 
     private boolean isBlind;
@@ -39,6 +48,8 @@ public class BoardDocument extends BaseTimeDocument {
         BoardDocument boardDocument = new BoardDocument();
         boardDocument.id = board.getId();
         boardDocument.userId = board.getUserId();
+        boardDocument.nickname = board.getNickname();
+        boardDocument.profileImg = board.getProfileImg();
         boardDocument.title = board.getTitle();
         boardDocument.content = board.getContent();
         boardDocument.language = board.getLanguage();
@@ -56,6 +67,8 @@ public class BoardDocument extends BaseTimeDocument {
         return Board.builder()
                 .id(id)
                 .userId(userId)
+                .nickname(nickname)
+                .profileImg(profileImg)
                 .title(title)
                 .content(content)
                 .language(language)
@@ -65,6 +78,7 @@ public class BoardDocument extends BaseTimeDocument {
                 .answerCount(answerCount)
                 .isBlind(isBlind)
                 .isSelected(isSelected)
+                .createDate(createDate)
                 .build();
     }
 }
