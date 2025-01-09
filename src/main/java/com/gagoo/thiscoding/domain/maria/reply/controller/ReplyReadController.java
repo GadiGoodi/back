@@ -2,6 +2,7 @@ package com.gagoo.thiscoding.domain.maria.reply.controller;
 
 import com.gagoo.thiscoding.domain.maria.reply.controller.port.ReplyService;
 import com.gagoo.thiscoding.domain.maria.reply.domain.Reply;
+import com.gagoo.thiscoding.domain.maria.reply.service.dto.ReplyList;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
 import com.gagoo.thiscoding.global.paging.dto.PageResponse;
@@ -24,7 +25,7 @@ public class ReplyReadController {
 
     @GetMapping("/{qnaId}/reply")
     @AuthorizationRequired(value = {Role.USER, Role.ADMIN}, status = OK)
-    public ResponseEntity<CustomPageDto> getQnAReply(@PathVariable String qnaId, Pageable pageable) {
+    public ResponseEntity<CustomPageDto<Page<ReplyList>>> getQnAReply(@PathVariable String qnaId, Pageable pageable) {
 
         return ResponseEntity.ok(replyService.getQnAReply(qnaId, pageable));
     }

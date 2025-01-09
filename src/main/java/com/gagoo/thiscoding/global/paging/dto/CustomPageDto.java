@@ -6,11 +6,11 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 @Getter
-public class CustomPageDto {
-    private List<?> content;
+public class CustomPageDto<T> {
+    private List<T> content;
     private Long totalElements;
 
-    public CustomPageDto(Page<?> page) {
+    public CustomPageDto(Page<T> page) {
         this.content = page.getContent();
         this.totalElements = page.getTotalElements();
     }
