@@ -5,4 +5,5 @@ import com.gagoo.thiscoding.domain.maria.reply.infrastructure.impl.ReplyCustomRe
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ReplyJpaRepository extends JpaRepository<ReplyEntity, Long> {
+    Long countByQnaId(String qnaId);
 }
