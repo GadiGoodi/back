@@ -32,6 +32,11 @@ private final BoardMongoRepository boardMongoRepository;
     }
 
     @Override
+    public Page<Board> findByParentIdIsNull(Pageable pageable) {
+        return boardMongoRepository.findByParentIdIsNullOrderByCreateDateDesc(pageable).map(BoardDocument::toModel);
+    }
+
+    @Override
     public boolean existsById(String qnaId) {
         return boardMongoRepository.existsById(qnaId);
     }
