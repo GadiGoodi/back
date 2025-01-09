@@ -26,7 +26,7 @@ public class CodeController {
         Code code = codeService.getById(codeId);
 
         return ResponseEntity
-                .status(HttpStatus.CREATED)
+                .ok()
                 .body(CodeResponse.from(code));
     }
 

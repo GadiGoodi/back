@@ -24,7 +24,7 @@ public class CodeRoomCreateController {
     private final CodeRoomService codeRoomService;
 
     // 코드방 생성
-    @PostMapping
+    @PostMapping("/create")
     @AuthorizationRequired(value = Role.USER, status = OK)
     public ResponseEntity<CodeRoomCreateResponse> createCodeRoom(@RequestBody CodeRoomCreate codeRoomCreate) {
         CodeRoom codeRoom = codeRoomService.createCodeRoom(codeRoomCreate);
