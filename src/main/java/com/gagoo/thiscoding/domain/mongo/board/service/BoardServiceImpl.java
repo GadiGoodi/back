@@ -1,6 +1,5 @@
 package com.gagoo.thiscoding.domain.mongo.board.service;
 
-import com.gagoo.thiscoding.domain.maria.user.controller.port.UserService;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.domain.mongo.board.controller.port.BoardService;
@@ -20,6 +19,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService {
@@ -37,6 +38,14 @@ public class BoardServiceImpl implements BoardService {
         Board board = Board.create(currentUser, boardCreate);
 
         return boardRepository.save(board);
+    }
+
+    @Override
+    public Board get(String qnaId) {
+//        boardRepository.findById(qnaId).orElseThrow(() -> {
+//            new BoardNotFound();
+//        });
+        return null;
     }
 
     /**

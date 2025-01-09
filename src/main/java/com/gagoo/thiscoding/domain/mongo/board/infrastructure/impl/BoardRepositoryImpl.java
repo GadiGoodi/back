@@ -10,14 +10,31 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class BoardRepositoryImpl implements BoardRepository {
-private final BoardMongoRepository boardMongoRepository;
+
+    private final BoardMongoRepository boardMongoRepository;
+
+    /**
+     * qna 전체조회
+     */
+    @Override
+    public Page<Board> findByParentIdIsNull(Pageable pageable) {
+        return boardMongoRepository.findByParentIdIsNullOrderByCreateDateDesc(pageable).map(BoardDocument::toModel);
+    }
+
     @Override
     public Page<Board> findByUserId(Long userId, Pageable pageable) {
         return boardMongoRepository.findByUserId(userId, pageable)
                 .map(BoardDocument::toModel);
+    }
+
+    @Override
+    public Optional<Board> findById(String qnaId) {
+        return boardMongoRepository.findById(qnaId).map(BoardDocument::toModel);
     }
 
     @Override
@@ -29,11 +46,6 @@ private final BoardMongoRepository boardMongoRepository;
     public Page<Search> findByTitleOrContent(String title, String content, Pageable pageable) {
         return boardMongoRepository.findByTitleContainingOrContentContaining(title, content, pageable).map(
             Search::from);
-    }
-
-    @Override
-    public Page<Board> findByParentIdIsNull(Pageable pageable) {
-        return boardMongoRepository.findByParentIdIsNullOrderByCreateDateDesc(pageable).map(BoardDocument::toModel);
     }
 
     @Override

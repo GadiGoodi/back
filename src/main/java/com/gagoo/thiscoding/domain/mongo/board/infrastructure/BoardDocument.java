@@ -3,13 +3,11 @@ package com.gagoo.thiscoding.domain.mongo.board.infrastructure;
 import com.gagoo.thiscoding.domain.mongo.BaseTimeDocument;
 import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
 import lombok.Getter;
-import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @Getter
-@ToString
 @Document(collection = "qna")
 public class BoardDocument extends BaseTimeDocument {
 
