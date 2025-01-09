@@ -10,6 +10,7 @@ import com.gagoo.thiscoding.domain.mongo.code.domain.Code;
 import com.gagoo.thiscoding.domain.mongo.code.service.exception.CodeNotFoundException;
 import com.gagoo.thiscoding.domain.mongo.code.service.port.CodeRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
+import com.gagoo.thiscoding.global.utils.infrastructure.SystemUuidHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ public class CodeRoomServiceImpl implements CodeRoomService {
 
     private final CodeRoomRepository codeRoomRepository;
     private final CodeRepository codeRepository;
+    private final SystemUuidHolder systemUuidHolder;
 
     /**
      * 코드방 생성
@@ -29,7 +31,7 @@ public class CodeRoomServiceImpl implements CodeRoomService {
      */
     @Override
     public CodeRoom createCodeRoom(CodeRoomCreate codeRoomCreate) {
-        CodeRoom codeRoom = CodeRoom.create(codeRoomCreate);
+        CodeRoom codeRoom = CodeRoom.create(codeRoomCreate, systemUuidHolder);
 
         return codeRoomRepository.save(codeRoom);
     }
