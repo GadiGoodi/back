@@ -43,4 +43,9 @@ public class ReplyRepositoryImpl implements ReplyRepository {
     public Page<ReplyList> findByQnaId(String qnaId, Pageable pageable) {
         return replyCustomRepository.findByQnaId(qnaId, pageable);
     }
+
+    @Override
+    public Long countByQnaId(String qnaId) {
+        return replyJpaRepository.countByQnaId(qnaId);
+    }
 }

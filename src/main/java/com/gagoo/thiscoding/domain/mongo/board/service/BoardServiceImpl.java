@@ -1,11 +1,13 @@
 package com.gagoo.thiscoding.domain.mongo.board.service;
 
+import com.gagoo.thiscoding.domain.maria.reply.service.port.ReplyRepository;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.domain.mongo.board.controller.port.BoardService;
 import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
 import com.gagoo.thiscoding.domain.mongo.board.domain.dto.BoardCreate;
 import com.gagoo.thiscoding.domain.mongo.board.domain.dto.Search;
+import com.gagoo.thiscoding.domain.mongo.board.service.dto.QnaDetail;
 import com.gagoo.thiscoding.domain.mongo.board.service.dto.QnaList;
 import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
@@ -27,6 +29,7 @@ public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
+    private final ReplyRepository replyRepository;
 
     /**
      * qna 등록
@@ -41,11 +44,11 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Board get(String qnaId) {
-//        boardRepository.findById(qnaId).orElseThrow(() -> {
-//            new BoardNotFound();
-//        });
-        return null;
+    public QnaDetail get(String qnaId) {
+        Board qnaDetail = boardRepository.getById(qnaId);
+        Long replyCount = replyRepository.countByQnaId(qnaId);
+
+        return QnaDetail.from(qnaDetail, replyCount);
     }
 
     /**

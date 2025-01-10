@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface BoardRepository {
     Board save(Board board);
-    Optional<Board> findById(String qnaId);
+    Board getById(String qnaId);
     boolean existsById(String qnaId);
     Page<Board> findByUserId(Long userId, Pageable pageable);
     Page<Search> findByTitleOrContent(String title, String content, Pageable pageable);

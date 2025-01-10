@@ -1,6 +1,7 @@
 package com.gagoo.thiscoding.domain.mongo.board.controller;
 
 import com.gagoo.thiscoding.domain.mongo.board.controller.port.BoardService;
+import com.gagoo.thiscoding.domain.mongo.board.controller.response.QnaResponse;
 import com.gagoo.thiscoding.domain.mongo.board.controller.response.SearchResponse;
 import com.gagoo.thiscoding.domain.mongo.board.service.dto.QnaList;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
@@ -23,9 +24,10 @@ public class BoardReadController {
     private final BoardService boardService;
 
     @GetMapping("/{qnaId}")
-    public ResponseEntity<?> get(@PathVariable String qnaId) {
-//        boardService.get(qnaId);
-        return null;
+    public ResponseEntity<QnaResponse> get(@PathVariable String qnaId) {
+        return ResponseEntity
+                .ok()
+                .body(QnaResponse.from(boardService.get(qnaId)));
     }
 
     @GetMapping

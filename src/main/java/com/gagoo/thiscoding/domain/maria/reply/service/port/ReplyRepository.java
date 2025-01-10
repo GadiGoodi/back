@@ -8,10 +8,10 @@ import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
 public interface ReplyRepository {
-
     Reply save(Reply reply);
     Optional<Reply> findById(Long id);
-    void delete(Reply reply);
-    boolean existsById(Long parentId);
     Page<ReplyList> findByQnaId(String qnaId, Pageable pageable);
+    Long countByQnaId(String qnaId);
+    boolean existsById(Long parentId);
+    void delete(Reply reply);
 }
