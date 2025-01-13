@@ -1,5 +1,6 @@
 package com.gagoo.thiscoding.domain.maria.reply.infrastructure.impl;
 
+import com.gagoo.thiscoding.domain.maria.reply.domain.Reply;
 import com.gagoo.thiscoding.domain.maria.reply.service.dto.ReplyList;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -44,6 +45,13 @@ public class ReplyCustomRepository {
                 .where(qnaIdEq(qnaId));
 
         return PageableExecutionUtils.getPage(results, pageable, countQuery::fetchOne);
+    }
+
+    public void deleteRepliesAndParent(Reply reply) {
+        query.delete(replyEntity)
+            .where(replyEntity.parentId.eq(reply.getId())
+                .or(replyEntity.id.eq(reply.getId())))
+            .execute();
     }
 
     private BooleanExpression qnaIdEq(String qnaId) {

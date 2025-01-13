@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface ReplyService {
 
-    void delete(Long replyId);
+    void delete(String qnaId, Long replyId);
 
     Reply create(String qnaId, ReplyCreate replyCreate);
 

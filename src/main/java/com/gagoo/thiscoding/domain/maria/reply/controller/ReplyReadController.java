@@ -30,12 +30,4 @@ public class ReplyReadController {
         return ResponseEntity.ok(replyService.getQnAReply(qnaId, pageable));
     }
 
-
-    @DeleteMapping("/{replyId}")
-    public ResponseEntity<String> delete(@PathVariable Long replyId) {
-        replyService.delete(replyId);
-        return ResponseEntity
-                .ok()
-                .body("댓글이 삭제되었습니다.");
-    }
 }
