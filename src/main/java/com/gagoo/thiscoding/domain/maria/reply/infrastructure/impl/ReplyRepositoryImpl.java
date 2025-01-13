@@ -31,7 +31,7 @@ public class ReplyRepositoryImpl implements ReplyRepository {
 
     @Override
     public void delete(Reply reply){
-        replyJpaRepository.delete(ReplyEntity.from(reply));
+        replyCustomRepository.deleteRepliesAndParent(reply);
     }
 
     @Override

@@ -25,4 +25,12 @@ public class ReplyWriteController {
 
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/{qnaId}/reply/{replyId}")
+    public ResponseEntity<String> delete(@PathVariable String qnaId, @PathVariable Long replyId) {
+        replyService.delete(qnaId, replyId);
+        return ResponseEntity
+            .ok()
+            .body("댓글이 삭제되었습니다.");
+    }
 }

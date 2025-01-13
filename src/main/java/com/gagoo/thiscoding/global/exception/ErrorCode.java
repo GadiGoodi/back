@@ -29,6 +29,7 @@ public enum ErrorCode {
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 이메일입니다."),
     FRIEND_NOT_FOUND(HttpStatus.NOT_FOUND,"친구를 찾을 수 없습니다."),
     QNA_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 게시물입니다."),
+    NOT_REPLY_AUTHOR(HttpStatus.UNAUTHORIZED, "댓글 작성자가 아닙니다."),
     TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED, "토큰을 찾을 수 없거나 형식이 잘못되었습니다."),
     INVALID_SIGNATURE(HttpStatus.UNAUTHORIZED, "잘못된 JWT 서명입니다."),
     TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다."),

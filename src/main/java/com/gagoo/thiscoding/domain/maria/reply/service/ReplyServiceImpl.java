@@ -3,6 +3,7 @@ package com.gagoo.thiscoding.domain.maria.reply.service;
 import com.gagoo.thiscoding.domain.maria.reply.controller.port.ReplyService;
 import com.gagoo.thiscoding.domain.maria.reply.domain.Reply;
 import com.gagoo.thiscoding.domain.maria.reply.domain.dto.ReplyCreate;
+import com.gagoo.thiscoding.domain.maria.reply.infrastructure.exception.NotReplyAuthorException;
 import com.gagoo.thiscoding.domain.maria.reply.infrastructure.exception.ReplyNotFoundException;
 import com.gagoo.thiscoding.domain.maria.reply.service.dto.ReplyList;
 import com.gagoo.thiscoding.domain.maria.reply.service.port.ReplyRepository;
@@ -14,6 +15,7 @@ import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
 import com.gagoo.thiscoding.global.security.SecurityUtils;
 import com.gagoo.thiscoding.global.security.exception.UserNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -48,8 +50,12 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public void delete(Long replyId) {
+    @Transactional
+    public void delete(String qnaId, Long replyId) {
         Reply reply = getById(replyId);
+
+        validateDeleteReply(qnaId, reply);
+
         replyRepository.delete(reply);
     }
 
@@ -62,6 +68,14 @@ public class ReplyServiceImpl implements ReplyService {
         if(replyCreate.getParentId() != null) {
             validateReplyId(replyCreate.getParentId());
         }
+    }
+
+    /**
+     * 댓글 삭제 검증 로직
+     * */
+    private void validateDeleteReply(String qnaId, Reply reply) {
+        validateQnAId(qnaId);
+        validateUser(reply);
     }
 
     /**
@@ -88,6 +102,17 @@ public class ReplyServiceImpl implements ReplyService {
         if (!boardRepository.existsById(qnaId)) {
             throw new QnaNotFoundException(ErrorCode.QNA_NOT_FOUND);
         }
+    }
+
+    /**
+     * 댓글 작성자가 맞는지 확인
+     * */
+    private void validateUser(Reply reply) {
+        String currentUser = SecurityUtils.getUserEmail();
+        String writerUser = reply.getUser().getEmail();
+
+        if(!writerUser.equals(currentUser))
+            throw new NotReplyAuthorException(ErrorCode.NOT_REPLY_AUTHOR);
     }
 
     private User getByEmail(String email) {
