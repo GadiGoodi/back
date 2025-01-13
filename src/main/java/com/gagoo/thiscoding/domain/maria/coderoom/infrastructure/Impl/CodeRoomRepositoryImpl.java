@@ -1,4 +1,4 @@
-package com.gagoo.thiscoding.domain.maria.coderoom.infrastructure.impl;
+package com.gagoo.thiscoding.domain.maria.coderoom.infrastructure.Impl;
 
 import com.gagoo.thiscoding.domain.maria.coderoom.domain.CodeRoom;
 import com.gagoo.thiscoding.domain.maria.coderoom.infrastructure.CodeRoomEntity;
