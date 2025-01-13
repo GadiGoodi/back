@@ -37,6 +37,17 @@ public class CodeRoom {
                 .build();
     }
 
+    public CodeRoom join() {
+        return CodeRoom.builder()
+            .id(id)
+            .uuid(uuid)
+            .title(title)
+            .content(content)
+            .language(language)
+            .headCount(++headCount)
+            .build();
+    }
+
     public CodeRoom exit() {
         return CodeRoom.builder()
                 .id(id)

@@ -1,10 +1,11 @@
-package com.gagoo.thiscoding.domain.maria.usercoderoom.controller;
+package com.gagoo.thiscoding.domain.maria.coderoom.controller;
+
 
 import static org.springframework.http.HttpStatus.OK;
 
-import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.dto.InviteCodeRoom;
+import com.gagoo.thiscoding.domain.maria.coderoom.controller.port.InvitationService;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
-import com.gagoo.thiscoding.domain.maria.usercoderoom.controller.port.UserCodeRoomService;
+import com.gagoo.thiscoding.domain.maria.coderoom.controller.response.InvitedCodeRoomResponse;
 import com.gagoo.thiscoding.global.paging.dto.PageResponse;
 import com.gagoo.thiscoding.global.security.aop.AuthorizationRequired;
 import lombok.RequiredArgsConstructor;
@@ -21,32 +22,33 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/invitations")
 @RequiredArgsConstructor
-public class UserCodeRoomController {
-    private final UserCodeRoomService userCodeRoomService;
+public class InvitationController {
+
+    private final InvitationService invitationService;
 
     @GetMapping
     @AuthorizationRequired(value = Role.USER, status = OK)
-    public ResponseEntity<PageResponse<InviteCodeRoom>> CodeRoomInviteListView(
+    public ResponseEntity<PageResponse<InvitedCodeRoomResponse>> CodeRoomInviteListView(
         @RequestParam(defaultValue = "1") int page) {
-        Page<InviteCodeRoom> codeRooms = userCodeRoomService.getUserCodeRooms(page);
+        Page<InvitedCodeRoomResponse> codeRooms = invitationService.findInvitedCodeRoomsByUser(page).map(InvitedCodeRoomResponse::from);
         return ResponseEntity
             .ok()
             .body(PageResponse.create(codeRooms));
     }
 
-    @PutMapping("/{codeRoomId}/accept")
+    @PutMapping("/alarms/{alarmId}/codeRooms/{codeRoomId}")
     @AuthorizationRequired(value = Role.USER, status = OK)
-    public ResponseEntity<?> acceptInvitation(@PathVariable Long codeRoomId) {
-        userCodeRoomService.acceptCodeRoom(codeRoomId);
+    public ResponseEntity<?> acceptInvitation(@PathVariable Long codeRoomId, @PathVariable Long alarmId) {
+        invitationService.acceptCodeRoom(codeRoomId,alarmId);
         return ResponseEntity
             .ok()
             .body("수락 완료");
     }
 
-    @DeleteMapping("/{codeRoomId}/cancel")
+    @DeleteMapping("/alarms/{alarmId}/codeRooms/{codeRoomId}")
     @AuthorizationRequired(value = Role.USER, status = OK)
-    public ResponseEntity<?> cancelInvitation(@PathVariable Long codeRoomId) {
-        userCodeRoomService.cancelCodeRoom(codeRoomId);
+    public ResponseEntity<?> cancelInvitation(@PathVariable Long codeRoomId, @PathVariable Long alarmId) {
+        invitationService.cancelCodeRoom(codeRoomId, alarmId);
         return ResponseEntity
             .ok()
             .body("거절 완료");

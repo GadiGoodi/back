@@ -6,20 +6,12 @@ import com.gagoo.thiscoding.domain.maria.usercoderoom.infrastructure.jpa.UserCod
 import com.gagoo.thiscoding.domain.maria.usercoderoom.service.port.UserCodeRoomRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
 public class UserCodeRoomRepositoryImpl implements UserCodeRoomRepository {
     private final UserCodeRoomJpaRepository userCodeRoomJpaRepository;
-
-    @Override
-    public Page<UserCodeRoom> findByEmail(String email, Pageable pageable) {
-        return userCodeRoomJpaRepository.findAllByEmailAndIsAcceptedFalse(email, pageable)
-            .map(UserCodeRoomEntity::toModel);
-    }
 
     @Override
     public Optional<UserCodeRoom> findById(Long id) {
@@ -34,10 +26,5 @@ public class UserCodeRoomRepositoryImpl implements UserCodeRoomRepository {
     @Override
     public void delete(UserCodeRoom userCodeRoom) {
         userCodeRoomJpaRepository.delete(UserCodeRoomEntity.from(userCodeRoom));
-    }
-
-    @Override
-    public Optional<UserCodeRoom> findByCodeRoomIdAndUserEmail(Long codeRoomId, String email) {
-        return userCodeRoomJpaRepository.findByCodeRoomIdAndUserEmail(codeRoomId, email).map(UserCodeRoomEntity::toModel);
     }
 }
