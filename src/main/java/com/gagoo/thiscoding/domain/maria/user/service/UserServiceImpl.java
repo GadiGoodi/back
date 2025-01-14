@@ -4,9 +4,7 @@ import com.gagoo.thiscoding.domain.maria.user.controller.port.UserService;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.UpdateProfile;
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.UserCreate;
-import com.gagoo.thiscoding.domain.maria.user.infrastructure.impl.RefreshTokenStoreImpl;
 import com.gagoo.thiscoding.domain.maria.user.service.port.RefreshTokenStore;
-import com.gagoo.thiscoding.global.security.exception.UserNotFoundException;
 import com.gagoo.thiscoding.domain.maria.user.service.exception.AlreadyCreateEmail;
 import com.gagoo.thiscoding.domain.maria.user.service.exception.ExistUserNickname;
 import com.gagoo.thiscoding.domain.maria.user.service.exception.PasswordNotEqualException;
@@ -63,6 +61,17 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 회원 프로필 이미지 수정
+     */
+    @Override
+    public User updateImage(UpdateProfile updateProfile) {
+        User currentUser = userRepository.getByEmail(SecurityUtils.getUserEmail());
+        User updateUser = currentUser.updateProfile(updateProfile.getImageUrl());
+
+        return userRepository.save(updateUser);
+    }
+
+    /**
      * 로그아웃
      * 헤더, 쿠키, 레디스에 저장된 토큰 삭제
      */
@@ -72,33 +81,6 @@ public class UserServiceImpl implements UserService {
         httpServletUtils.removeCookie(request, response, AUTHORIZATION);
 
         refreshTokenStore.remove(SecurityUtils.getUserEmail());
-    }
-
-    /**
-     * 존재하는 회원인지 확인
-     */
-    public User getByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(
-                        () -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND)
-                );
-    }
-
-    /**
-     * 회원 프로필 이미지 수정
-     */
-    @Override
-    public User updateImage(UpdateProfile updateProfile) {
-        User currentUser = getByEmail(SecurityUtils.getUserEmail());
-        User updateUser = currentUser.updateProfile(updateProfile.getImageUrl());
-
-        return userRepository.save(updateUser);
-    }
-
-    public User getById(Long id) {
-        return userRepository.findById(id).orElseThrow(
-                () -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND)
-        );
     }
 
     /**

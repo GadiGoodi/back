@@ -4,7 +4,6 @@ import static com.gagoo.thiscoding.domain.maria.coderoom.domain.contants.Capacit
 import static com.gagoo.thiscoding.domain.maria.coderoom.domain.contants.Capacity.MIN_CAPACITY;
 import static com.gagoo.thiscoding.global.paging.PageSize.CODEROOM;
 import static com.gagoo.thiscoding.global.paging.PagingProcessor.toPageable;
-import static com.gagoo.thiscoding.global.security.SecurityUtils.getUserEmail;
 
 import com.gagoo.thiscoding.domain.maria.alarm.domain.Alarm;
 import com.gagoo.thiscoding.domain.maria.alarm.service.exception.AlarmNotFoundException;
@@ -21,7 +20,7 @@ import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.UserCodeRoom;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.service.port.UserCodeRoomRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
-import com.gagoo.thiscoding.global.security.exception.UserNotFoundException;
+import com.gagoo.thiscoding.global.security.SecurityUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -37,28 +36,16 @@ public class InvitationServiceImpl implements InvitationService {
     private final CodeRoomCustomRepository codeRoomCustomRepository;
     private final UserCodeRoomRepository userCodeRoomRepository;
 
-    public CodeRoom getByCodeRoomId(Long codeRoomId) {
-        return codeRoomRepository.findById(codeRoomId)
-            .orElseThrow(() -> new CodeRoomNotFoundException(ErrorCode.CODE_ROOM_NOT_FOUND));
-    }
-
-    public Alarm getByAlarmId(Long alarmId) {
-        return alarmRepository.findById(alarmId)
-            .orElseThrow(() -> new AlarmNotFoundException(ErrorCode.ALARM_NOT_FOUND));
-    }
-
-    public User getByEmail() {
-        return userRepository.findByEmail(getUserEmail())
-            .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
-    }
-
     /**
      * 초대된 코드방 조회
      */
     @Override
     public Page<InvitedCodeRoom> findInvitedCodeRoomsByUser(int page) {
+
+        User currentUser = userRepository.getByEmail(SecurityUtils.getUserEmail());
+
         return codeRoomCustomRepository.findInvitedCodeRoomsByUser(
-            getByEmail(),
+                currentUser,
             toPageable(page, CODEROOM));
     }
 
@@ -75,8 +62,9 @@ public class InvitationServiceImpl implements InvitationService {
         CodeRoom codeRoom = getByCodeRoomId(codeRoomId);
         codeRoom.join();
 
-        UserCodeRoom userCodeRoom = UserCodeRoom.create(getByEmail(),
-            codeRoom);
+        User currentUser = userRepository.getByEmail(SecurityUtils.getUserEmail());
+
+        UserCodeRoom userCodeRoom = UserCodeRoom.create(currentUser, codeRoom);
 
         codeRoomRepository.save(codeRoom);
         userCodeRoomRepository.save(userCodeRoom);
@@ -102,5 +90,15 @@ public class InvitationServiceImpl implements InvitationService {
     public boolean validateCapacity(Long codeRoomId) {
         int currentHeadCount = getByCodeRoomId(codeRoomId).getHeadCount();
         return currentHeadCount >= MIN_CAPACITY && currentHeadCount <= MAX_CAPACITY;
+    }
+
+    public CodeRoom getByCodeRoomId(Long codeRoomId) {
+        return codeRoomRepository.findById(codeRoomId)
+                .orElseThrow(() -> new CodeRoomNotFoundException(ErrorCode.CODE_ROOM_NOT_FOUND));
+    }
+
+    public Alarm getByAlarmId(Long alarmId) {
+        return alarmRepository.findById(alarmId)
+                .orElseThrow(() -> new AlarmNotFoundException(ErrorCode.ALARM_NOT_FOUND));
     }
 }
