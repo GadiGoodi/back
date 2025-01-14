@@ -5,8 +5,9 @@ import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import java.util.Optional;
 
 public interface UserRepository {
+    Optional<User> findById(Long id);
 
-    Optional<User> findByEmail(String email);
+    User getByEmail(String email);
 
     User save(User user);
 
@@ -16,5 +17,4 @@ public interface UserRepository {
 
     boolean existsByUserId(Long userId);
 
-    Optional<User> findById(Long userId);
 }

@@ -14,7 +14,6 @@ import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
 import com.gagoo.thiscoding.global.security.SecurityUtils;
-import com.gagoo.thiscoding.global.security.exception.UserNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,7 +33,7 @@ public class ReplyServiceImpl implements ReplyService {
      */
     @Override
     public Reply create(String qnaId, ReplyCreate replyCreate) {
-        User currentUser = getByEmail(SecurityUtils.getUserEmail());
+        User currentUser = userRepository.getByEmail(SecurityUtils.getUserEmail());
 
         validateCreateReply(qnaId, replyCreate);
         Reply reply = Reply.create(currentUser, qnaId, replyCreate);
@@ -113,11 +112,5 @@ public class ReplyServiceImpl implements ReplyService {
 
         if(!writerUser.equals(currentUser))
             throw new NotReplyAuthorException(ErrorCode.NOT_REPLY_AUTHOR);
-    }
-
-    private User getByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(
-                () -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND)
-        );
     }
 }

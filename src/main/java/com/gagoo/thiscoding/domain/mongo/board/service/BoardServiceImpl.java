@@ -36,7 +36,7 @@ public class BoardServiceImpl implements BoardService {
      */
     @Override
     public Board create(BoardCreate boardCreate) {
-        User currentUser = getByEmail(SecurityUtils.getUserEmail());
+        User currentUser = userRepository.getByEmail(SecurityUtils.getUserEmail());
 
         Board board = Board.create(currentUser, boardCreate);
 
@@ -65,7 +65,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public Page<Board> getMyPagePostQnA(Pageable pageable) {
-        User currentUser = getByEmail(SecurityUtils.getUserEmail());
+        User currentUser = userRepository.getByEmail(SecurityUtils.getUserEmail());
         return boardRepository.findByUserId(currentUser.getId(), pageable);
     }
 
@@ -76,11 +76,5 @@ public class BoardServiceImpl implements BoardService {
         );
 
         return new CustomPageDto(qnaListPage);
-    }
-
-    public User getByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(
-                () -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND)
-        );
     }
 }
