@@ -17,6 +17,14 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.springframework.http.HttpHeaders.*;
 
 
 @Configuration
@@ -35,10 +43,10 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-                .cors(auth -> auth.disable())
                 .csrf(auth -> auth.disable())
                 .formLogin(auth -> auth.disable())
                 .httpBasic(auth -> auth.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(
                         session ->
                                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
@@ -54,7 +62,7 @@ public class SecurityConfig {
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         http.addFilterAt(new JwtLoginFilter(
-                authenticationManager(authenticationConfig), jwtUtilImpl, refreshTokenStore, httpServletUtils, jwtProperties),
+                        authenticationManager(authenticationConfig), jwtUtilImpl, refreshTokenStore, httpServletUtils, jwtProperties),
                 UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -63,5 +71,31 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("*");
+        configuration.setAllowCredentials(true);
+        configuration.addExposedHeader("Set-Cookie");
+        configuration.setExposedHeaders(getExposedHeaders());
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+    private List<String> getExposedHeaders() {
+        return Arrays.asList(
+                "Content-Type",
+                AUTHORIZATION, SET_COOKIE,
+                ACCESS_CONTROL_ALLOW_HEADERS,
+                ACCESS_CONTROL_ALLOW_ORIGIN,
+                ACCESS_CONTROL_ALLOW_METHODS,
+                ACCESS_CONTROL_EXPOSE_HEADERS
+        );
     }
 }
