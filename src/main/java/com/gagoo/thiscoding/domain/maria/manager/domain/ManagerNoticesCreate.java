@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class ManagerNoticesCreate {
 
     private Long id;
@@ -18,12 +16,4 @@ public class ManagerNoticesCreate {
     private String title;
     private String content;
     private String category;
-
-    public ManagerEntity toEntity() {
-        return ManagerEntity.builder()
-                .title(title)
-                .content(content)
-                .category(category)
-                .build();
-    }
 }

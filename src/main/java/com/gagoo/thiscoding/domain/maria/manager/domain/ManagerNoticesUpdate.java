@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 public class ManagerNoticesUpdate {
 
     @NotBlank

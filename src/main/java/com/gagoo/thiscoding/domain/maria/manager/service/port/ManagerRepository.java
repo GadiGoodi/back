@@ -1,7 +1,6 @@
 package com.gagoo.thiscoding.domain.maria.manager.service.port;
 
 import com.gagoo.thiscoding.domain.maria.manager.domain.Manager;
-import com.gagoo.thiscoding.domain.maria.manager.infrastructure.ManagerEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
