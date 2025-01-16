@@ -2,11 +2,11 @@ package com.gagoo.thiscoding.domain.maria.user.domain;
 
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Social;
-import com.gagoo.thiscoding.domain.maria.user.domain.dto.UpdateProfile;
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.UserCreate;
+import com.gagoo.thiscoding.global.security.infrastructure.SystemPasswordEncoder;
+import com.gagoo.thiscoding.global.security.service.port.PasswordEncoderHolder;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
 public class User {
@@ -34,7 +34,7 @@ public class User {
         this.social = social;
     }
 
-    public static User create(UserCreate userCreate, PasswordEncoder passwordEncoder) {
+    public static User create(UserCreate userCreate, PasswordEncoderHolder passwordEncoder) {
         return User.builder()
                 .email(userCreate.getEmail())
                 .password(passwordEncoder.encode(userCreate.getPassword()))

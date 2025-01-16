@@ -11,6 +11,8 @@ import com.gagoo.thiscoding.domain.maria.user.service.exception.PasswordNotEqual
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.global.security.SecurityUtils;
+import com.gagoo.thiscoding.global.security.infrastructure.SystemPasswordEncoder;
+import com.gagoo.thiscoding.global.security.service.port.PasswordEncoderHolder;
 import com.gagoo.thiscoding.global.utils.HttpServletUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,7 +27,7 @@ import static com.gagoo.thiscoding.global.security.constants.SecurityConstants.*
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoderHolder passwordEncoder;
     private final HttpServletUtils httpServletUtils;
     private final RefreshTokenStore refreshTokenStore;
 
