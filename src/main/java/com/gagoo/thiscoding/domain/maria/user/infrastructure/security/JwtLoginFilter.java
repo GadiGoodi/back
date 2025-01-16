@@ -71,7 +71,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain chain,
-                                            Authentication authentication) {
+                                            Authentication authentication) throws IOException {
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
         String email = customUserDetails.getUsername();
 
@@ -88,6 +88,10 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
         httpServletUtils.setHeader(response, AUTHORIZATION, BEARER_PREFIX + atk);
         httpServletUtils.addCookie(response, AUTHORIZATION, rtk, jwtProperties.getRtkExpireTime().intValue());
+
+        response.setContentType("application/json");
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.writeValue(response.getOutputStream(), customUserDetails.getUser());
     }
 
     @Override
