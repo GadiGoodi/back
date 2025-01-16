@@ -3,8 +3,6 @@ package com.gagoo.thiscoding.domain.maria.coderoom.service;
 import static com.gagoo.thiscoding.domain.maria.coderoom.domain.contants.Capacity.MAX_CAPACITY;
 import static com.gagoo.thiscoding.domain.maria.coderoom.domain.contants.Capacity.MIN_CAPACITY;
 import static com.gagoo.thiscoding.global.paging.PageSize.CODEROOM;
-import static com.gagoo.thiscoding.global.paging.PagingProcessor.toPageable;
-
 import com.gagoo.thiscoding.domain.maria.alarm.domain.Alarm;
 import com.gagoo.thiscoding.domain.maria.alarm.service.exception.AlarmNotFoundException;
 import com.gagoo.thiscoding.domain.maria.alarm.service.port.AlarmRepository;
@@ -24,6 +22,8 @@ import com.gagoo.thiscoding.global.security.SecurityUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -40,13 +40,14 @@ public class InvitationServiceImpl implements InvitationService {
      * 초대된 코드방 조회
      */
     @Override
-    public Page<InvitedCodeRoom> findInvitedCodeRoomsByUser(int page) {
-
+    public Page<InvitedCodeRoom> findInvitedCodeRoomsByUser(Pageable pageable) {
+        Pageable customPageable = PageRequest.of(pageable.getPageNumber(), CODEROOM);
         User currentUser = userRepository.getByEmail(SecurityUtils.getUserEmail());
 
         return codeRoomCustomRepository.findInvitedCodeRoomsByUser(
                 currentUser,
-            toPageable(page, CODEROOM));
+                customPageable
+            );
     }
 
     /**

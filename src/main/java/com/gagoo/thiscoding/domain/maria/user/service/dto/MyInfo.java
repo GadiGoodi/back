@@ -14,6 +14,7 @@ public class MyInfo {
     private final String email;
     private final String nickname;
     private final Social social;
+    private final String profileImg;
     private final boolean isTop10;
 
     public static MyInfo from(User user, boolean isTop10) {
@@ -21,6 +22,7 @@ public class MyInfo {
                 .email(user.getEmail())
                 .nickname(user.getNickname())
                 .social(user.getSocial())
+                .profileImg(user.getImageUrl())
                 .isTop10(isTop10)
                 .build();
     }
