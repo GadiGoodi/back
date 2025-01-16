@@ -42,10 +42,10 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public CustomPageDto<Page<ReplyList>> getQnAReply(String qnaId, Pageable pageable) {
+    public CustomPageDto<ReplyList> getQnAReply(String qnaId, Pageable pageable) {
         Page<ReplyList> qnaReply = replyRepository.findByQnaId(qnaId, pageable);
 
-        return new CustomPageDto(qnaReply);
+        return CustomPageDto.of(qnaReply);
     }
 
     @Override

@@ -10,18 +10,14 @@ import com.gagoo.thiscoding.domain.mongo.board.domain.dto.Search;
 import com.gagoo.thiscoding.domain.mongo.board.service.dto.QnaDetail;
 import com.gagoo.thiscoding.domain.mongo.board.service.dto.QnaList;
 import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardRepository;
-import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.global.paging.PageSize;
-import com.gagoo.thiscoding.global.paging.PagingProcessor;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
 import com.gagoo.thiscoding.global.security.SecurityUtils;
-import com.gagoo.thiscoding.global.security.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -55,8 +51,9 @@ public class BoardServiceImpl implements BoardService {
      * QnA 제목 + 내용 검색
      */
     @Override
-    public Page<Search> searchByKeyword(String keyword, int page) {
-        return boardRepository.findByTitleOrContent(keyword, keyword, PagingProcessor.toPageable(page, PageSize.QNA));
+    public Page<Search> searchByKeyword(String keyword, Pageable pageable) {
+        Pageable customPageable = PageRequest.of(pageable.getPageNumber(), PageSize.QNA);
+        return boardRepository.findByTitleOrContent(keyword, keyword, customPageable);
     }
 
     /**
@@ -70,11 +67,11 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public CustomPageDto<Page<QnaList>> findAll(Pageable pageable) {
+    public CustomPageDto<QnaList> findAll(Pageable pageable) {
         Page<QnaList> qnaListPage = boardRepository.findByParentIdIsNull(pageable).map(
                 qna -> QnaList.from(qna)
         );
 
-        return new CustomPageDto(qnaListPage);
+        return CustomPageDto.of(qnaListPage);
     }
 }

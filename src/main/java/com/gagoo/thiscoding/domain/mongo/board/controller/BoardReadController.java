@@ -4,8 +4,8 @@ import com.gagoo.thiscoding.domain.mongo.board.controller.port.BoardService;
 import com.gagoo.thiscoding.domain.mongo.board.controller.response.QnaResponse;
 import com.gagoo.thiscoding.domain.mongo.board.controller.response.SearchResponse;
 import com.gagoo.thiscoding.domain.mongo.board.service.dto.QnaList;
+import com.gagoo.thiscoding.global.paging.aop.ConvertToOneBase;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
-import com.gagoo.thiscoding.global.paging.dto.PageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,14 +31,16 @@ public class BoardReadController {
     }
 
     @GetMapping
-    public ResponseEntity<CustomPageDto<Page<QnaList>>> getAll(Pageable pageable) {
+    @ConvertToOneBase
+    public ResponseEntity<CustomPageDto<QnaList>> getAll(Pageable pageable) {
         return ResponseEntity.ok(boardService.findAll(pageable));
     }
 
     @GetMapping("/search")
-    public ResponseEntity<PageResponse<SearchResponse>> search(@RequestParam String keyword, @RequestParam(defaultValue = "1") int page) {
-        Page<SearchResponse> searchResult = boardService.searchByKeyword(keyword, page).map(SearchResponse::from);
-        return ResponseEntity.ok(PageResponse.create(searchResult));
+    @ConvertToOneBase
+    public ResponseEntity<CustomPageDto<SearchResponse>> search(@RequestParam String keyword, Pageable pageable) {
+        Page<SearchResponse> searchResult = boardService.searchByKeyword(keyword, pageable).map(SearchResponse::from);
+        return ResponseEntity.ok(CustomPageDto.of(searchResult));
     }
 }
 

@@ -10,10 +10,10 @@ import com.gagoo.thiscoding.domain.maria.usercoderoom.service.port.UserCodeRoomR
 import com.gagoo.thiscoding.domain.mongo.code.service.exception.CodeNotFoundException;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.global.paging.PageSize;
-import com.gagoo.thiscoding.global.paging.PagingProcessor;
 import com.gagoo.thiscoding.global.security.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -29,15 +29,14 @@ public class ParticipationServiceImpl implements ParticipationService {
 
     /**
      * 참여 중인 코드방 전체 조회
-     * @param page
      * @return 참여 중인 ParticipationsResponse 페이지
      */
     @Override
-    public Page<ParticipatingCodeRoomResponse> getParticipations(int page) {
-        Pageable pageable = PagingProcessor.toPageable(page, PageSize.CODEROOM);
+    public Page<ParticipatingCodeRoomResponse> getParticipations(Pageable pageable) {
+        Pageable customPageable = PageRequest.of(pageable.getPageNumber(), PageSize.CODEROOM);
 
         Page<UserCodeRoom> userCodeRoomPage = codeRoomCustomRepository
-                .findAllByEmailAndIsActivatedTrue(SecurityUtils.getUserEmail(), pageable);
+                .findAllByEmailAndIsActivatedTrue(SecurityUtils.getUserEmail(), customPageable);
 
         return userCodeRoomPage.map(userCodeRoom -> ParticipatingCodeRoomResponse.from(userCodeRoom, codeRoomCustomRepository.findUserListByUserCodeRoom(userCodeRoom)));
     }
