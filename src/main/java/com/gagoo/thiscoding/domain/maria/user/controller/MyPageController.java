@@ -2,10 +2,9 @@ package com.gagoo.thiscoding.domain.maria.user.controller;
 
 import com.gagoo.thiscoding.domain.maria.user.controller.port.MyPageService;
 import com.gagoo.thiscoding.domain.maria.user.controller.port.UserService;
-import com.gagoo.thiscoding.domain.maria.user.controller.response.MyInfoResponse;
+import com.gagoo.thiscoding.domain.maria.user.controller.response.Top10StatusResponse;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.UpdateProfile;
-import com.gagoo.thiscoding.domain.maria.user.service.dto.MyInfo;
 import com.gagoo.thiscoding.global.security.aop.AuthorizationRequired;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +20,11 @@ public class MyPageController {
     private final UserService userService;
     private final MyPageService myPageService;
 
-    @GetMapping("/me")
+    @GetMapping("/me/top10")
     @AuthorizationRequired(value = Role.USER, status = OK)
-    public ResponseEntity<MyInfoResponse> get() {
-        MyInfo myInfo = myPageService.getMyInfo();
-
+    public ResponseEntity<Top10StatusResponse> get() {
         return ResponseEntity
-                .ok(MyInfoResponse.from(myInfo));
+                .ok(Top10StatusResponse.from(myPageService.isTop10()));
     }
 
     @PatchMapping("/me")
