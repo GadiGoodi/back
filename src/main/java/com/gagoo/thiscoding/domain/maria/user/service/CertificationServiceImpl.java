@@ -5,10 +5,12 @@ import com.gagoo.thiscoding.domain.maria.user.domain.dto.JoinCode;
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.Certification;
 import com.gagoo.thiscoding.domain.maria.user.service.port.JoinCodeStore;
 import com.gagoo.thiscoding.domain.maria.user.service.port.MailSender;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@Builder
 @RequiredArgsConstructor
 public class CertificationServiceImpl implements CertificationService {
 
@@ -20,11 +22,11 @@ public class CertificationServiceImpl implements CertificationService {
      * @param email 회원가입할 이메일
      */
     @Override
-    public void sendJoinCode(String email) {
+    public JoinCode sendJoinCode(String email) {
         Certification certification = mailSender.send(email);
         JoinCode joinCode = JoinCode.from(certification);
 
-        joinCodeStore.save(joinCode);
+        return joinCodeStore.save(joinCode);
     }
 
     /**
@@ -32,8 +34,8 @@ public class CertificationServiceImpl implements CertificationService {
      * @param joinCode email, code 매핑 클래스
      */
     @Override
-    public void checkJoinCode(JoinCode joinCode) {
-        joinCodeStore.checkJoinCode(joinCode);
+    public JoinCode checkJoinCode(JoinCode joinCode) {
+        return joinCodeStore.checkJoinCode(joinCode);
     }
 
 }
