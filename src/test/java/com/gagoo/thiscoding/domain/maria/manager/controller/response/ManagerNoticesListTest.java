@@ -15,6 +15,7 @@ class ManagerNoticesListTest {
     @Test
     public void ManagerNoticesList로_Response반환() {
 
+        //given
         User user = User.builder()
                 .id(1L)
                 .email("test02@test.com")
@@ -31,13 +32,13 @@ class ManagerNoticesListTest {
                 .category("TestCategory")
                 .build();
 
+        //when
         ManagerNoticesList list = ManagerNoticesList.from(manager);
 
+        //then
         assertThat(list.getTitle()).isEqualTo("testTitle");
         assertThat(list.getCategory()).isEqualTo("TestCategory");
 
-        //실패
-//        assertThat(list.getTitle()).isEqualTo("Title1");
     }
 
 }
