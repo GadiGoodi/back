@@ -3,10 +3,11 @@ package com.gagoo.thiscoding.domain.maria.manager.service;
 import com.gagoo.thiscoding.domain.maria.manager.domain.Manager;
 import com.gagoo.thiscoding.domain.maria.manager.domain.ManagerNoticesCreate;
 import com.gagoo.thiscoding.domain.maria.manager.domain.ManagerNoticesUpdate;
-import com.gagoo.thiscoding.domain.maria.manager.mock.FakeManagerRepository;
+import com.gagoo.thiscoding.domain.mock.FakeManagerRepository;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Social;
+import com.gagoo.thiscoding.domain.mock.TestContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
@@ -23,10 +24,9 @@ class ManagerServiceTest {
 
     @BeforeEach
     void init() {
-        FakeManagerRepository fakeManagerRepository = new FakeManagerRepository();
-
+        TestContainer testContainer = TestContainer.builder().build();
         this.managerService = ManagerServiceImpl.builder()
-                .managerRepository(fakeManagerRepository)
+                .managerRepository(testContainer.fakeManagerRepository)
                 .build();
 
         User user = User.builder()
@@ -39,14 +39,14 @@ class ManagerServiceTest {
                 .social(Social.THIS_CODING)
                 .build();
 
-        fakeManagerRepository.save(Manager.builder()
+        testContainer.fakeManagerRepository.save(Manager.builder()
                 .id(1L)
                 .content("testContent1")
                 .manager(user)
                 .title("testTitle1")
                 .category("FAQ1")
                 .build());
-        fakeManagerRepository.save(Manager.builder()
+        testContainer.fakeManagerRepository.save(Manager.builder()
                 .id(2L)
                 .content("testContent2")
                 .manager(user)
@@ -57,37 +57,38 @@ class ManagerServiceTest {
 
     @Test
     public void getAllManagerNotice로_공지사항_조회() {
+
+        //given
         Pageable pageable = PageRequest.of(0, 2);
 
+        //when
         Page<Manager> result = managerService.getAllManagerNotices(pageable);
 
+        //then
         assertThat(result.getContent().size()).isEqualTo(2);
         assertThat(result.getTotalElements()).isEqualTo(2);
-        //성공
         assertThat(result.getContent().get(0).getContent()).isEqualTo("testContent1");
         assertThat(result.getContent().get(1).getContent()).isEqualTo("testContent2");
 
-        //실패 - 0번째 인덱스 데이터에서 1번째 데이터의 Content를 검증
-//        assertThat(result.getContent().get(0).getContent()).isEqualTo("testContent2");
     }
 
     @Test
     public void getNoties로_아이디에_해당하는_공지사항_조회() {
+
+        //when
         Manager result = managerService.getNotices(1L);
 
-        //성공
+
+        //then
         assertThat(result.getTitle()).isEqualTo("testTitle1");
         assertThat(result.getCategory()).isEqualTo("FAQ1");
-
-        //실패
-//        assertThat(result.getTitle()).isEqualTo("testTitle2");
-//        assertThat(result.getContent()).isEqualTo("testContent2");
 
     }
 
     @Test
     public void createAdminNotices로_공지사항_작성() {
 
+        //given
         User user = User.builder()
                 .id(1L)
                 .email("test02@test.com")
@@ -105,22 +106,20 @@ class ManagerServiceTest {
                 .category("FAQ3")
                 .build();
 
+        //when
         Manager manager = managerService.createAdminNotices(create);
 
-        //성공
+        //then
         assertThat(manager.getTitle()).isEqualTo("testTitle3");
         assertThat(manager.getCategory()).isEqualTo("FAQ3");
         assertThat(manager.getContent()).isEqualTo("testContent3");
 
-        //실패
-//        assertThat(result.getTitle()).isEqualTo("testTitle1");
-//        assertThat(result.getCategory()).isEqualTo("FAQ1");
-//        assertThat(result.getContent()).isEqualTo("testContent1");
     }
 
     @Test
     public void deleteManagerNotice로_공지사항_삭제() {
 
+        //given
         User user = User.builder()
                 .id(1L)
                 .email("test02@test.com")
@@ -138,15 +137,18 @@ class ManagerServiceTest {
                 .category("FAQ4")
                 .build();
 
+        //when
         Manager result = managerService.createAdminNotices(manager);
 
-        //삭제 전 데이터가 존재하는지 확인
+        //then
+        // 삭제 전 데이터가 존재하는지 확인
         assertThat(result.getId()).isNotNull();
 
-        //데이터 삭제
+        //when
         managerService.deleteManagerNotices(4L);
 
-        // managerService.getNotices(4L); 메서드 실행시 IllegalArgumentException로 예외처리됨.
+        //then
+        // managerService.getNotices(4L); 메서드 실행시 IllegalArgumentException으로 예외처리됨.
         assertThrows(IllegalArgumentException.class, () -> {
             managerService.getNotices(4L);
         });
@@ -155,22 +157,19 @@ class ManagerServiceTest {
     @Test
     public void getNotices로_공지사항_업데이트() {
 
+        //given
         ManagerNoticesUpdate manager = ManagerNoticesUpdate.builder()
                 .content("updateContent")
                 .title("updateTitle")
                 .build();
 
+        //when
         managerService.updateAdminNotices(2L, manager);
-
         Manager result = managerService.getNotices(2L);
 
-        //성공
+        //then
         assertThat(result.getTitle()).isEqualTo("updateTitle");
         assertThat(result.getContent()).isEqualTo("updateContent");
-
-        //실패
-//        assertThat(result.getTitle()).isEqualTo("testTitle2");
-//        assertThat(result.getContent()).isEqualTo("testContent2");
 
     }
 

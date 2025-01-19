@@ -11,8 +11,8 @@ class ManagerTest {
 
     @Test
     public void create로_관리자_공지사항_작성() {
-        //given
 
+        //given
         User user = User.builder()
                 .id(1L)
                 .email("test02@test.com")
@@ -45,6 +45,7 @@ class ManagerTest {
     @Test
     public void updateManagerNotice로_관리자_공지사항_업데이트() {
 
+        //given
         ManagerNoticesUpdate managerUpdate = ManagerNoticesUpdate.builder()
                 .title("updateTitle")
                 .content("updateContent")
@@ -67,8 +68,10 @@ class ManagerTest {
                 .category("FAQ")
                 .build();
 
+        //when
         manager.updateManagerNotices(managerUpdate);
 
+        //then
         assertThat(manager.getId()).isEqualTo(1L);
         assertThat(manager.getManager()).isEqualTo(user);
         assertThat(manager.getTitle()).isEqualTo("updateTitle");

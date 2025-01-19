@@ -1,4 +1,4 @@
-package com.gagoo.thiscoding.domain.maria.manager.mock;
+package com.gagoo.thiscoding.domain.mock;
 
 import com.gagoo.thiscoding.domain.maria.manager.domain.Manager;
 import com.gagoo.thiscoding.domain.maria.manager.service.port.ManagerRepository;
@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class FakeManagerRepository implements ManagerRepository {
