@@ -18,8 +18,8 @@ class CertificationServiceImplTest {
         this.certificationService = CertificationServiceImpl.builder()
                 .mailSender(testContainer.mailSender)
                 .joinCodeStore(testContainer.joinCodeStore)
-                .build();
-    }
+            .build();
+}
 
     @Test
     void 이메일로_인증코드를_보낼_수_있다() {
@@ -31,25 +31,28 @@ class CertificationServiceImplTest {
 
         // then
         assertThat(result.getEmail()).isEqualTo(email);
-        assertThat(result.getCode()).isEqualTo("123456");
+        assertThat(result.getCode()).isNotNull();
+        assertThat(result.getCode()).hasSize(6);
     }
 
     @Test
     void 인증코드가_일치하는지_확인할_수_있다() {
         // given
         String email = "junsj1230@naver.com";
-        String code = "123456";
-        JoinCode joinCode = JoinCode.builder()
-                .email(email)
-                .code(code)
-                .build();
+
+        JoinCode sendJoinCode = certificationService.sendJoinCode(email);
 
         // when
+        JoinCode joinCode = JoinCode.builder()
+                .email(email)
+                .code(sendJoinCode.getCode())
+                .build();
+
         JoinCode result = certificationService.checkJoinCode(joinCode);
 
         // then
-        assertThat(result.getEmail()).isEqualTo(email);
-        assertThat(result.getCode()).isEqualTo(code);
+        assertThat(sendJoinCode.getEmail()).isEqualTo(result.getEmail());
+        assertThat(sendJoinCode.getCode()).isEqualTo(result.getCode());
     }
 
 }
