@@ -2,7 +2,6 @@ package com.gagoo.thiscoding.domain.maria.reply.domain;
 
 import com.gagoo.thiscoding.domain.maria.reply.domain.dto.ReplyCreate;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
-import com.gagoo.thiscoding.domain.maria.user.infrastructure.UserEntity;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -26,15 +25,6 @@ public class Reply {
         this.content = content;
         this.parentId = parentId;
         this.isBlinded = isBlinded;
-        this.createDate = createDate;
-    }
-
-    public Reply(Long id, String qnaId, UserEntity userEntity, String content, Long parentId, LocalDateTime createDate) {
-        this.id = id;
-        this.qnaId = qnaId;
-        this.user = userEntity.toModel();
-        this.content = content;
-        this.parentId = parentId;
         this.createDate = createDate;
     }
 
