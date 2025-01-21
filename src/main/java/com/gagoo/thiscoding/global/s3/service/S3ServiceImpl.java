@@ -40,7 +40,7 @@ public class S3ServiceImpl implements S3Service {
         String originalFileName = image.getOriginalFilename();
         String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
 
-        return imagePath + "/" + UUID.random().toString() + extension;
+        return imagePath + "/" + UUID.random() + extension;
     }
 
 }

@@ -4,8 +4,6 @@ import com.gagoo.thiscoding.domain.maria.coderoom.domain.CodeRoom;
 import jakarta.persistence.*;
 import lombok.Getter;
 
-import java.util.UUID;
-
 @Getter
 @Entity
 @Table(name = "code_room")
@@ -15,7 +13,7 @@ public class CodeRoomEntity {
     @Column(name = "code_room_id")
     private Long id;
 
-    private UUID uuid;
+    private String uuid;
 
     private String title;
 
