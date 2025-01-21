@@ -1,5 +1,6 @@
 package com.gagoo.thiscoding.domain.maria.user.service;
 
+import com.gagoo.thiscoding.domain.maria.user.controller.port.CertificationService;
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.JoinCode;
 import com.gagoo.thiscoding.domain.maria.user.service.exception.JoinCodeNotFoundException;
 import com.gagoo.thiscoding.domain.maria.user.service.exception.JoinCodeNotMatchException;
@@ -12,16 +13,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CertificationServiceImplTest {
 
-    public CertificationServiceImpl certificationService;
+    public CertificationService certificationService;
 
     @BeforeEach
     void init() {
         TestContainer testContainer = TestContainer.builder().build();
-
-        this.certificationService = CertificationServiceImpl.builder()
-                .mailSender(testContainer.mailSender)
-                .joinCodeStore(testContainer.joinCodeStore)
-            .build();
+        this.certificationService = testContainer.certificationService;
 }
 
     @Test
