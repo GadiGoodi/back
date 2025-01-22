@@ -2,7 +2,6 @@ package com.gagoo.thiscoding.domain.mongo.board.domain;
 
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.mongo.board.domain.dto.BoardCreate;
-import com.gagoo.thiscoding.domain.mongo.board.infrastructure.BoardDocument;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -18,7 +17,7 @@ public class Board {
     private String title;
     private String content;
     private String language;
-    private Long parentId;
+    private String parentId;
     private Long likeCount;
     private Long viewCount;
     private Long answerCount;
@@ -41,9 +40,5 @@ public class Board {
                 .isBlind(false)
                 .isSelected(false)
                 .build();
-    }
-
-    public static Board from(BoardDocument boardDocument) {
-        return Board.builder().build();
     }
 }

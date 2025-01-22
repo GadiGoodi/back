@@ -27,7 +27,7 @@ public class BoardDocument extends BaseTimeDocument {
 
     private String language;
 
-    private Long parentId;
+    private String parentId;
 
     @Field(name = "like_count")
     private Long likeCount;
