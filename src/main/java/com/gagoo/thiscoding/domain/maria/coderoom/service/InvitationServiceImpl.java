@@ -18,7 +18,7 @@ import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.UserCodeRoom;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.service.port.UserCodeRoomRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
-import com.gagoo.thiscoding.global.security.SecurityUtils;
+import com.gagoo.thiscoding.global.security.service.port.SecurityUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,6 +35,7 @@ public class InvitationServiceImpl implements InvitationService {
     private final AlarmRepository alarmRepository;
     private final CodeRoomCustomRepository codeRoomCustomRepository;
     private final UserCodeRoomRepository userCodeRoomRepository;
+    private final SecurityUtils securityUtils;
 
     /**
      * 초대된 코드방 조회
@@ -42,7 +43,7 @@ public class InvitationServiceImpl implements InvitationService {
     @Override
     public Page<InvitedCodeRoom> findInvitedCodeRoomsByUser(Pageable pageable) {
         Pageable customPageable = PageRequest.of(pageable.getPageNumber(), CODEROOM);
-        User currentUser = userRepository.getByEmail(SecurityUtils.getUserEmail());
+        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
 
         return codeRoomCustomRepository.findInvitedCodeRoomsByUser(
                 currentUser,
@@ -63,7 +64,7 @@ public class InvitationServiceImpl implements InvitationService {
         CodeRoom codeRoom = getByCodeRoomId(codeRoomId);
         codeRoom.join();
 
-        User currentUser = userRepository.getByEmail(SecurityUtils.getUserEmail());
+        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
 
         UserCodeRoom userCodeRoom = UserCodeRoom.create(currentUser, codeRoom);
 
