@@ -12,7 +12,7 @@ public class SearchResponse {
     private String title;
     private String content;
     private String language;
-    private Long parentId;
+    private String parentId;
     private Long likeCount;
     private Long viewCount;
     private Long answerCount;
@@ -21,7 +21,7 @@ public class SearchResponse {
 
     @Builder
     public SearchResponse(String id, Long userId, String title, String content, String language,
-        Long parentId, Long likeCount, Long viewCount, Long answerCount, boolean isSelected, LocalDateTime createDate) {
+        String parentId, Long likeCount, Long viewCount, Long answerCount, boolean isSelected, LocalDateTime createDate) {
         this.id = id;
         this.userId = userId;
         this.title = title;

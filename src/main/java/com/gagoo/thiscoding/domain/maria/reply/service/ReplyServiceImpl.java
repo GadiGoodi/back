@@ -13,27 +13,30 @@ import com.gagoo.thiscoding.domain.mongo.board.service.exception.QnaNotFoundExce
 import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
-import com.gagoo.thiscoding.global.security.SecurityUtils;
+import com.gagoo.thiscoding.global.security.service.port.SecurityUtils;
 import jakarta.transaction.Transactional;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
+@Builder
 @RequiredArgsConstructor
 public class ReplyServiceImpl implements ReplyService {
 
     private final ReplyRepository replyRepository;
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
+    private final SecurityUtils securityUtils;
 
     /**
      * 댓글 작성
      */
     @Override
     public Reply create(String qnaId, ReplyCreate replyCreate) {
-        User currentUser = userRepository.getByEmail(SecurityUtils.getUserEmail());
+        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
 
         validateCreateReply(qnaId, replyCreate);
         Reply reply = Reply.create(currentUser, qnaId, replyCreate);
@@ -107,7 +110,7 @@ public class ReplyServiceImpl implements ReplyService {
      * 댓글 작성자가 맞는지 확인
      * */
     private void validateUser(Reply reply) {
-        String currentUser = SecurityUtils.getUserEmail();
+        String currentUser = securityUtils.getUserEmail();
         String writerUser = reply.getUser().getEmail();
 
         if(!writerUser.equals(currentUser))

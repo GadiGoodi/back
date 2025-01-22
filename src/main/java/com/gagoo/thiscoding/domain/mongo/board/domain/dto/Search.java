@@ -14,7 +14,7 @@ public class Search {
     private String title;
     private String content;
     private String language;
-    private Long parentId;
+    private String parentId;
     private Long likeCount;
     private Long viewCount;
     private Long answerCount;
