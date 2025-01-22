@@ -10,6 +10,7 @@ import com.gagoo.thiscoding.domain.maria.user.service.port.MailSender;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardRepository;
 import com.gagoo.thiscoding.global.security.service.port.PasswordEncoderHolder;
+import com.gagoo.thiscoding.global.security.service.port.SecurityUtils;
 import lombok.Builder;
 
 public class TestContainer {
@@ -23,16 +24,17 @@ public class TestContainer {
     public final BoardRepository boardRepository;
     public final CertificationService certificationService;
     public final ReplyService replyService;
-
     @Builder
-    public TestContainer() {
+    public TestContainer(SecurityUtils securityUtils) {
         this.mailSender = new FakeMailSender();
-        this.joinCodeStore = new FakeJoinCodeStore();
         this.passwordEncoderHolder = new FakePasswordEncoder();
+
+        this.joinCodeStore = new FakeJoinCodeStore();
         this.fakeManagerRepository = new FakeManagerRepository();
         this.userRepository = new FakeUserRepository();
         this.replyRepository = new FakeReplyRepository();
         this.boardRepository = new FakeBoardRepository();
+
         this.certificationService = CertificationServiceImpl.builder()
                 .mailSender(this.mailSender)
                 .joinCodeStore(this.joinCodeStore)
@@ -41,6 +43,7 @@ public class TestContainer {
                 .replyRepository(this.replyRepository)
                 .userRepository(this.userRepository)
                 .boardRepository(this.boardRepository)
+                .securityUtils(securityUtils)
                 .build();
 
     }
