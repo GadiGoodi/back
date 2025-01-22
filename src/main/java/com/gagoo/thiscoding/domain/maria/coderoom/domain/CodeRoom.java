@@ -1,7 +1,7 @@
 package com.gagoo.thiscoding.domain.maria.coderoom.domain;
 
 import com.gagoo.thiscoding.domain.maria.coderoom.domain.dto.CodeRoomCreate;
-import com.gagoo.thiscoding.global.utils.infrastructure.SystemUuidHolder;
+import com.gagoo.thiscoding.global.utils.service.port.UuidHolder;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -25,9 +25,9 @@ public class CodeRoom {
         this.headCount = headCount;
     }
 
-    public static CodeRoom create(CodeRoomCreate codeRoomCreate, SystemUuidHolder systemUuidHolder) {
+    public static CodeRoom create(CodeRoomCreate codeRoomCreate, UuidHolder uuidHolder) {
         return CodeRoom.builder()
-                .uuid(systemUuidHolder.random())
+                .uuid(uuidHolder.random())
                 .title(codeRoomCreate.getTitle())
                 .content(codeRoomCreate.getContent())
                 .language(codeRoomCreate.getLanguage())

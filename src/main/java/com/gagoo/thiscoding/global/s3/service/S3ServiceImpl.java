@@ -4,7 +4,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.gagoo.thiscoding.global.s3.controller.port.S3Service;
 import com.gagoo.thiscoding.global.s3.domain.Images;
 import com.gagoo.thiscoding.global.s3.service.port.S3Bucket;
-import com.gagoo.thiscoding.global.utils.infrastructure.SystemUuidHolder;
+import com.gagoo.thiscoding.global.utils.service.port.UuidHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,7 +16,7 @@ import java.io.IOException;
 public class S3ServiceImpl implements S3Service {
 
     private final S3Bucket s3Bucket;
-    private final SystemUuidHolder UUID;
+    private final UuidHolder UUID;
 
     /**
      *
