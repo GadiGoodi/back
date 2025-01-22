@@ -10,14 +10,12 @@ import com.gagoo.thiscoding.domain.maria.user.service.exception.ExistUserNicknam
 import com.gagoo.thiscoding.domain.maria.user.service.exception.PasswordNotEqualException;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
-import com.gagoo.thiscoding.global.security.SecurityUtils;
-import com.gagoo.thiscoding.global.security.infrastructure.SystemPasswordEncoder;
 import com.gagoo.thiscoding.global.security.service.port.PasswordEncoderHolder;
+import com.gagoo.thiscoding.global.security.service.port.SecurityUtils;
 import com.gagoo.thiscoding.global.utils.HttpServletUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import static com.gagoo.thiscoding.global.security.constants.SecurityConstants.*;
@@ -30,6 +28,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoderHolder passwordEncoder;
     private final HttpServletUtils httpServletUtils;
     private final RefreshTokenStore refreshTokenStore;
+    private final SecurityUtils securityUtils;
 
     /**
      * 회원가입
@@ -67,7 +66,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User updateImage(UpdateProfile updateProfile) {
-        User currentUser = userRepository.getByEmail(SecurityUtils.getUserEmail());
+        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
         User updateUser = currentUser.updateProfile(updateProfile.getImageUrl());
 
         return userRepository.save(updateUser);
@@ -82,7 +81,7 @@ public class UserServiceImpl implements UserService {
         httpServletUtils.setHeader(response, AUTHORIZATION, "");
         httpServletUtils.removeCookie(request, response, AUTHORIZATION);
 
-        refreshTokenStore.remove(SecurityUtils.getUserEmail());
+        refreshTokenStore.remove(securityUtils.getUserEmail());
     }
 
     /**
