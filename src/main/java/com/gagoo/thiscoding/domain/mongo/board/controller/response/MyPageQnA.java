@@ -21,7 +21,7 @@ public class MyPageQnA {
     private String language;
     private Long likeCount;
     private Long viewCount;
-    private Long parentId;
+    private String parentId;
     private boolean isSelected;
 
 

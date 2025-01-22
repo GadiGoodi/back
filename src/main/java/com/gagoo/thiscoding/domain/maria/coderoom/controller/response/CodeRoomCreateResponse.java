@@ -4,13 +4,11 @@ import com.gagoo.thiscoding.domain.maria.coderoom.domain.CodeRoom;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.UUID;
-
 @Getter
 @Builder
 public class CodeRoomCreateResponse {
     private Long id;
-    private UUID uuid;
+    private String uuid;
 
     public static CodeRoomCreateResponse from(CodeRoom codeRoom) {
         return CodeRoomCreateResponse.builder()

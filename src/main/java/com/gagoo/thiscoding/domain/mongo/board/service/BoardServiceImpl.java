@@ -12,27 +12,31 @@ import com.gagoo.thiscoding.domain.mongo.board.service.dto.QnaList;
 import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardRepository;
 import com.gagoo.thiscoding.global.paging.PageSize;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
-import com.gagoo.thiscoding.global.security.SecurityUtils;
+import com.gagoo.thiscoding.global.security.service.port.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final ReplyRepository replyRepository;
+    private final SecurityUtils securityUtils;
 
     /**
      * qna 등록
      */
     @Override
+    @Transactional
     public Board create(BoardCreate boardCreate) {
-        User currentUser = userRepository.getByEmail(SecurityUtils.getUserEmail());
+        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
 
         Board board = Board.create(currentUser, boardCreate);
 
@@ -59,17 +63,19 @@ public class BoardServiceImpl implements BoardService {
     /**
      * 마이페이지 내가 작성한 Qna 조회
      */
-
     @Override
     public Page<Board> getMyPagePostQnA(Pageable pageable) {
-        User currentUser = userRepository.getByEmail(SecurityUtils.getUserEmail());
+        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
         return boardRepository.findByUserId(currentUser.getId(), pageable);
     }
 
+    /**
+     * 게시판 전체목록 조회
+     */
     @Override
     public CustomPageDto<QnaList> findAll(Pageable pageable) {
         Page<QnaList> qnaListPage = boardRepository.findByParentIdIsNull(pageable).map(
-                qna -> QnaList.from(qna)
+                QnaList::from
         );
 
         return CustomPageDto.of(qnaListPage);

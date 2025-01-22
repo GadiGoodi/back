@@ -11,10 +11,10 @@ public class BoardCreate {
     @NotBlank private final String title;
     @NotBlank private final String content;
     @NotBlank private final String language;
-    private final Long parentId;
+    private final String parentId;
 
     @Builder
-    public BoardCreate(String title, String content, String language, Long parentId) {
+    public BoardCreate(String title, String content, String language, String parentId) {
         this.title = title;
         this.content = content;
         this.language = language;
