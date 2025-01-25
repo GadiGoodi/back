@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -28,7 +29,7 @@ public class FakeReplyRepository implements ReplyRepository {
                     .content(reply.getContent())
                     .parentId(reply.getParentId())
                     .isBlinded(reply.isBlinded())
-                    .createDate(reply.getCreateDate())
+                    .createDate(LocalDateTime.now())
                     .build();
             data.add(savedReply);
 
