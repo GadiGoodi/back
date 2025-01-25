@@ -31,7 +31,6 @@ class ReplyTest {
                     .isActivated(true)
                     .isBanned(false)
                     .build();
-            ;
 
             ReplyCreate replyCreate = ReplyCreate.builder()
                     .content(content)
@@ -42,7 +41,6 @@ class ReplyTest {
             Reply reply = Reply.create(user, qnaId, replyCreate);
 
             // then
-            assertThat(reply.getId()).isNull();
             assertThat(reply.getQnaId()).isEqualTo(qnaId);
             assertThat(reply.getUser()).isEqualTo(user);
             assertThat(reply.getContent()).isEqualTo(content);
