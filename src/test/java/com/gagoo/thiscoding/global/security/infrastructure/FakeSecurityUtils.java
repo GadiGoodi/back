@@ -1,5 +1,7 @@
 package com.gagoo.thiscoding.global.security.infrastructure;
 
+import com.gagoo.thiscoding.global.exception.ErrorCode;
+import com.gagoo.thiscoding.global.security.AuthorizationException;
 import com.gagoo.thiscoding.global.security.service.port.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 
@@ -10,6 +12,10 @@ public class FakeSecurityUtils implements SecurityUtils {
 
     @Override
     public String getUserEmail() {
+        if (email == null) {
+            throw new AuthorizationException(ErrorCode.USER_NOT_LOGIN);
+        }
+
         return email;
     }
 

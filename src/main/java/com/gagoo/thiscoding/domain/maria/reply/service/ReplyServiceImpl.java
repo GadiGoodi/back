@@ -14,15 +14,16 @@ import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
 import com.gagoo.thiscoding.global.security.service.port.SecurityUtils;
-import jakarta.transaction.Transactional;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Builder
+@Transactional(readOnly = false)
 @RequiredArgsConstructor
 public class ReplyServiceImpl implements ReplyService {
 
@@ -44,15 +45,23 @@ public class ReplyServiceImpl implements ReplyService {
         return replyRepository.save(reply);
     }
 
+    /**
+     * 특정 게시물에 달린 댓글 전체 조회
+     */
     @Override
+    @Transactional(readOnly = true)
     public CustomPageDto<ReplyList> getQnAReply(String qnaId, Pageable pageable) {
+        validateQnAId(qnaId);
+
         Page<ReplyList> qnaReply = replyRepository.findByQnaId(qnaId, pageable);
 
         return CustomPageDto.of(qnaReply);
     }
 
+    /**
+     * 댓글 삭제
+     */
     @Override
-    @Transactional
     public void delete(String qnaId, Long replyId) {
         Reply reply = getById(replyId);
 
