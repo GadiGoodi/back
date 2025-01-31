@@ -5,10 +5,8 @@ import com.gagoo.thiscoding.domain.maria.coderoom.domain.dto.CodeRoomCreate;
 import com.gagoo.thiscoding.domain.maria.coderoom.domain.dto.CodeRoomEnter;
 import com.gagoo.thiscoding.domain.mongo.code.domain.Code;
 
-import java.util.UUID;
-
 public interface CodeRoomService {
     CodeRoom createCodeRoom(CodeRoomCreate codeRoomCreate);
-    CodeRoomEnter enterCodeRoom(UUID uuid);
+    CodeRoomEnter enterCodeRoom(String uuid);
     Code getCodeByRoomIdAndFileName(Long roomId, String fileName);
 }

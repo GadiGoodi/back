@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.UUID;
-
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -27,8 +25,7 @@ public class CodeRoomController {
     @GetMapping("/{uuid}")
     @AuthorizationRequired(value = Role.USER, status = OK)
     public ResponseEntity<CodeRoomEnterResponse> enterCodeRoom(@PathVariable String uuid) {
-        UUID uuidObject = UUID.fromString(uuid);
-        CodeRoomEnter codeRoomEnter = codeRoomService.enterCodeRoom(uuidObject);
+        CodeRoomEnter codeRoomEnter = codeRoomService.enterCodeRoom(uuid);
 
         return ResponseEntity
                 .ok(CodeRoomEnterResponse.from(codeRoomEnter));
