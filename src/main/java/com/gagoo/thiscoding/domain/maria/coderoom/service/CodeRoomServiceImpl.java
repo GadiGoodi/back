@@ -14,8 +14,6 @@ import com.gagoo.thiscoding.global.utils.service.port.UuidHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
 @RequiredArgsConstructor
 public class CodeRoomServiceImpl implements CodeRoomService {
@@ -42,7 +40,7 @@ public class CodeRoomServiceImpl implements CodeRoomService {
      * @return 입장한 CodeRoom
      */
     @Override
-    public CodeRoomEnter enterCodeRoom(UUID uuid) {
+    public CodeRoomEnter enterCodeRoom(String uuid) {
         CodeRoom codeRoom = codeRoomRepository.findByUuid(uuid).orElseThrow(
                 () -> new CodeRoomNotFoundException(ErrorCode.CODE_ROOM_NOT_FOUND)
         );

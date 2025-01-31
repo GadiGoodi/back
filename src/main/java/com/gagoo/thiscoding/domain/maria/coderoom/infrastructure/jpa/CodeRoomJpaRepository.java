@@ -4,8 +4,7 @@ import com.gagoo.thiscoding.domain.maria.coderoom.infrastructure.CodeRoomEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
-import java.util.UUID;
 
 public interface CodeRoomJpaRepository extends JpaRepository<CodeRoomEntity, Long> {
-    Optional<CodeRoomEntity> findByUuid(UUID uuid);
+    Optional<CodeRoomEntity> findByUuid(String uuid);
 }
