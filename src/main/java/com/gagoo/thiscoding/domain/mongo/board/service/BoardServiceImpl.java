@@ -13,6 +13,7 @@ import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardRepository;
 import com.gagoo.thiscoding.global.paging.PageSize;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
 import com.gagoo.thiscoding.global.security.service.port.SecurityUtils;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Builder
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService {
@@ -43,6 +45,9 @@ public class BoardServiceImpl implements BoardService {
         return boardRepository.save(board);
     }
 
+    /**
+     * qna 상세조회
+     */
     @Override
     public QnaDetail get(String qnaId) {
         Board qnaDetail = boardRepository.getById(qnaId);

@@ -52,7 +52,6 @@ public class ReplyReadServiceTest {
 
         this.testBoard = testContainer.boardRepository.save(board);
 
-        // 22개의 댓글 생성
         for (int i = 1; i <= 27; i++) {
             Reply reply = Reply.create(testUser, testBoard.getId(),
                     ReplyCreate.builder()
