@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -23,9 +24,15 @@ public class FakeBoardRepository implements BoardRepository {
             Board saveBoard = Board.builder()
                     .id(generateTestId())
                     .title(board.getTitle())
+                    .language(board.getLanguage())
                     .content(board.getContent())
-                    .userId(board.getUserId())
                     .parentId(board.getParentId())
+                    .likeCount(board.getLikeCount())
+                    .viewCount(board.getViewCount())
+                    .answerCount(board.getAnswerCount())
+                    .isSelected(board.isSelected())
+                    .userId(board.getUserId())
+                    .createDate(LocalDateTime.now())
                     .build();
 
             data.add(saveBoard);
