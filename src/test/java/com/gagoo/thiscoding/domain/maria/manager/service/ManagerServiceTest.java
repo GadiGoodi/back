@@ -1,5 +1,6 @@
 package com.gagoo.thiscoding.domain.maria.manager.service;
 
+import com.gagoo.thiscoding.domain.maria.manager.controller.port.ManagerService;
 import com.gagoo.thiscoding.domain.maria.manager.domain.Manager;
 import com.gagoo.thiscoding.domain.maria.manager.domain.ManagerNoticesCreate;
 import com.gagoo.thiscoding.domain.maria.manager.domain.ManagerNoticesUpdate;
@@ -20,14 +21,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ManagerServiceTest {
 
-    private ManagerServiceImpl managerService;
+    public ManagerService managerService;
 
     @BeforeEach
     void init() {
         TestContainer testContainer = TestContainer.builder().build();
-        this.managerService = ManagerServiceImpl.builder()
-                .managerRepository(testContainer.fakeManagerRepository)
-                .build();
+        this.managerService = testContainer.managerService;
 
         User user = User.builder()
                 .id(1L)
@@ -39,14 +38,14 @@ class ManagerServiceTest {
                 .social(Social.THIS_CODING)
                 .build();
 
-        testContainer.fakeManagerRepository.save(Manager.builder()
+        testContainer.managerRepository.save(Manager.builder()
                 .id(1L)
                 .content("testContent1")
                 .manager(user)
                 .title("testTitle1")
                 .category("FAQ1")
                 .build());
-        testContainer.fakeManagerRepository.save(Manager.builder()
+        testContainer.managerRepository.save(Manager.builder()
                 .id(2L)
                 .content("testContent2")
                 .manager(user)

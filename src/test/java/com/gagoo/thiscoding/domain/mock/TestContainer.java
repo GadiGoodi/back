@@ -1,5 +1,8 @@
 package com.gagoo.thiscoding.domain.mock;
 
+import com.gagoo.thiscoding.domain.maria.manager.controller.port.ManagerService;
+import com.gagoo.thiscoding.domain.maria.manager.service.ManagerServiceImpl;
+import com.gagoo.thiscoding.domain.maria.manager.service.port.ManagerRepository;
 import com.gagoo.thiscoding.domain.maria.reply.controller.port.ReplyService;
 import com.gagoo.thiscoding.domain.maria.reply.service.ReplyServiceImpl;
 import com.gagoo.thiscoding.domain.maria.reply.service.port.ReplyRepository;
@@ -20,13 +23,16 @@ public class TestContainer {
     public final MailSender mailSender;
     public final JoinCodeStore joinCodeStore;
     public final PasswordEncoderHolder passwordEncoderHolder;
-    public final FakeManagerRepository fakeManagerRepository;
     public final UserRepository userRepository;
     public final ReplyRepository replyRepository;
     public final BoardRepository boardRepository;
     public final CertificationService certificationService;
     public final ReplyService replyService;
     public final BoardService boardService;
+    public final ManagerRepository managerRepository;
+    public final ManagerService managerService;
+
+
 
     @Builder
     public TestContainer(SecurityUtils securityUtils) {
@@ -34,7 +40,7 @@ public class TestContainer {
         this.passwordEncoderHolder = new FakePasswordEncoder();
 
         this.joinCodeStore = new FakeJoinCodeStore();
-        this.fakeManagerRepository = new FakeManagerRepository();
+        this.managerRepository = new FakeManagerRepository();
         this.userRepository = new FakeUserRepository();
         this.replyRepository = new FakeReplyRepository();
         this.boardRepository = new FakeBoardRepository();
@@ -55,6 +61,11 @@ public class TestContainer {
                 .replyRepository(this.replyRepository)
                 .securityUtils(securityUtils)
                 .build();
+
+        this.managerService = ManagerServiceImpl.builder()
+                .managerRepository(this.managerRepository)
+                .build();
+
 
     }
 }
