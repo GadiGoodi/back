@@ -16,10 +16,11 @@ import java.util.Optional;
 public class ManagerRepositoryImpl implements ManagerRepository {
 
     private final ManagerNoticesJpaRepository managerNoticesJpaRepository;
+    private final ManagerNoticesRepositoryCustom managerNoticesRepositoryCustom;
 
     @Override
     public Page<Manager> findAll(Pageable pageable) {
-        return managerNoticesJpaRepository.findAll(pageable).map(ManagerEntity::toModel);
+        return managerNoticesRepositoryCustom.findAll(pageable);
     }
 
     @Override
@@ -33,8 +34,13 @@ public class ManagerRepositoryImpl implements ManagerRepository {
     }
 
     @Override
-    public Manager findById(Long id) {
-        return managerNoticesJpaRepository.findById(id).orElseThrow().toModel();
+    public Optional<Manager> findById(Long id) {
+        return managerNoticesJpaRepository.findById(id).map(ManagerEntity::toModel);
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return managerNoticesJpaRepository.existsById(id);
     }
 
 }
