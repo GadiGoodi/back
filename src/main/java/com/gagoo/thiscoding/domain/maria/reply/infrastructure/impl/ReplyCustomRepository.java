@@ -27,14 +27,15 @@ public class ReplyCustomRepository {
 
         List<ReplyList> results = query.select(Projections.constructor(ReplyList.class,
                         replyEntity.id,
-                        replyEntity.parentId,
+                        replyEntity.parent,
                         userEntity.nickname,
                         userEntity.imageUrl,
                         replyEntity.content,
                         replyEntity.createDate))
                 .from(replyEntity)
                 .leftJoin(replyEntity.user, userEntity)
-                .where(qnaIdEq(qnaId))
+                .leftJoin(replyEntity.parent)
+                .where(qnaReply(qnaId))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(replyEntity.createDate.desc().nullsLast())
@@ -47,14 +48,51 @@ public class ReplyCustomRepository {
         return PageableExecutionUtils.getPage(results, pageable, countQuery::fetchOne);
     }
 
+    public Page<ReplyList> findRepliesByParentId(String qnaId, Long parentId,Pageable pageable) {
+
+        List<ReplyList> results = query.select(Projections.constructor(ReplyList.class,
+                        replyEntity.id,
+                        replyEntity.parent,
+                        userEntity.nickname,
+                        userEntity.imageUrl,
+                        replyEntity.content,
+                        replyEntity.createDate))
+                .from(replyEntity)
+                .leftJoin(replyEntity.user, userEntity)
+                .leftJoin(replyEntity.parent)
+                .where(qnaReplies(qnaId))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(replyEntity.createDate.desc().nullsLast())
+                .fetch();
+
+        //대댓글 계산 쿼리
+        JPAQuery<Long> countQuery = query.select(replyEntity.count())
+                .from(replyEntity)
+                .where(replyEntity.parent.id.eq(parentId));
+
+    return PageableExecutionUtils.getPage(results,pageable, countQuery::fetchOne);
+    }
+
     public void deleteRepliesAndParent(Reply reply) {
         query.delete(replyEntity)
-            .where(replyEntity.parentId.eq(reply.getId())
+            .where(replyEntity.parent.id.eq(reply.getId())
                 .or(replyEntity.id.eq(reply.getId())))
             .execute();
     }
-
+    private  BooleanExpression qnaReply(String qnaId) {
+        return qnaIdEq(qnaId).and(parentIdIsNull());
+    }
+    private BooleanExpression qnaReplies(String qnaId){
+        return qnaIdEq(qnaId).and(parentIdIsNotNull());
+    }
     private BooleanExpression qnaIdEq(String qnaId) {
         return replyEntity.qnaId.eq(qnaId);
+    }
+    private  BooleanExpression parentIdIsNull(){
+        return replyEntity.parent.id.isNull();
+    }
+    private  BooleanExpression parentIdIsNotNull(){
+        return replyEntity.parent.id.isNotNull();
     }
 }

@@ -32,6 +32,12 @@ public class ReplyRepositoryImpl implements ReplyRepository {
     @Override
     public void delete(Reply reply){
         replyCustomRepository.deleteRepliesAndParent(reply);
+
+    }
+
+    @Override
+    public Page<ReplyList> findRepliesByParentId(String qnaId, Long parentId,Pageable pageable) {
+        return replyCustomRepository.findRepliesByParentId(qnaId, parentId,pageable);
     }
 
     @Override
@@ -41,7 +47,11 @@ public class ReplyRepositoryImpl implements ReplyRepository {
 
     @Override
     public Page<ReplyList> findByQnaId(String qnaId, Pageable pageable) {
-        return replyCustomRepository.findByQnaId(qnaId, pageable);
+        Page<ReplyList> result = replyCustomRepository.findByQnaId(qnaId, pageable);
+        for (ReplyList replyList : result) {
+            System.out.println("replyList = " + replyList.toString());
+        }
+        return result;
     }
 
     @Override

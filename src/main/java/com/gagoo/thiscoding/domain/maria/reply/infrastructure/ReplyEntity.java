@@ -1,10 +1,17 @@
 package com.gagoo.thiscoding.domain.maria.reply.infrastructure;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.gagoo.thiscoding.domain.maria.BaseTimeEntity;
 import com.gagoo.thiscoding.domain.maria.reply.domain.Reply;
 import com.gagoo.thiscoding.domain.maria.user.infrastructure.UserEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.ToString;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -14,16 +21,24 @@ public class ReplyEntity extends BaseTimeEntity {
     @Column(name = "reply_id")
     private Long id;
 
+    @JsonIgnore
     private String content;
 
-    @Column(name = "parent_id")
-    private Long parentId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "parent_id")
+    @JsonIgnore
+    private ReplyEntity parent;  // 셀프 조인
+
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<ReplyEntity> replies = new ArrayList<>();
 
     @Column(name = "is_blind")
     private boolean isBlinded;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
+    @JsonIgnore
     private UserEntity user;
 
     @Column(name = "qna_id")
@@ -33,7 +48,9 @@ public class ReplyEntity extends BaseTimeEntity {
         ReplyEntity replyEntity = new ReplyEntity();
         replyEntity.id = reply.getId();
         replyEntity.content = reply.getContent();
-        replyEntity.parentId = reply.getParentId();
+        if (reply.getParent() != null) {
+            replyEntity.parent = reply.getParent();
+        }
         replyEntity.isBlinded = reply.isBlinded();
         replyEntity.user = UserEntity.from(reply.getUser());
         replyEntity.qnaId = reply.getQnaId();
@@ -45,7 +62,6 @@ public class ReplyEntity extends BaseTimeEntity {
         return Reply.builder()
             .id(id)
             .content(content)
-            .parentId(parentId)
             .isBlinded(isBlinded)
             .user(user.toModel())
             .qnaId(qnaId)

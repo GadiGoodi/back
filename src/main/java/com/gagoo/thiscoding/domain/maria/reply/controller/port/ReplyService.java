@@ -13,4 +13,6 @@ public interface ReplyService {
     Reply create(String qnaId, ReplyCreate replyCreate);
 
     CustomPageDto<ReplyList> getQnAReply(String qnaId, Pageable pageable);
+
+    CustomPageDto<ReplyList> getReplies(String qnaId,Long parentId, Pageable pageable);
 }

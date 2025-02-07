@@ -1,5 +1,6 @@
 package com.gagoo.thiscoding.domain.maria.reply.domain.dto;
 
+import com.gagoo.thiscoding.domain.maria.reply.infrastructure.ReplyEntity;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,11 +10,11 @@ public class ReplyCreate {
 
     @NotBlank
     private final String content;
-    private final Long parentId;
+    private final Long parent;
 
     @Builder
-    public ReplyCreate(String content, Long parentId) {
+    public ReplyCreate(String content, Long parent) {
         this.content = content;
-        this.parentId = parentId;
+        this.parent = parent;
     }
 }
