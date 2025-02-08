@@ -31,9 +31,8 @@ public class Manager {
     }
 
     //공지사항 목록
-    public Manager(Long id, UserEntity manager, String title, String category, Long viewCount, LocalDateTime createDate) {
+    public Manager(Long id, String title, String category, Long viewCount, LocalDateTime createDate) {
         this.id = id;
-        this.manager = manager.toModel();
         this.title = title;
         this.category = category;
         this.viewCount = viewCount;
@@ -47,9 +46,9 @@ public class Manager {
                 .title(managerNoticesCreate.getTitle())
                 .content(managerNoticesCreate.getContent())
                 .category(managerNoticesCreate.getCategory())
+                .viewCount(0L)
                 .build();
     }
-
     public ManagerEntity toEntity() {
         return ManagerEntity.builder()
                 .id(this.id) // ID가 엔티티에서도 필요하다면 포함

@@ -27,7 +27,6 @@ public class ManagerNoticesRepositoryCustom {
     public Page<Manager> findAll(Pageable pageable) {
         List<Manager> results = queryFactory.select(Projections.constructor(Manager.class,
                         managerEntity.id,
-                        managerEntity.manager,
                         managerEntity.title,
                         managerEntity.category,
                         managerEntity.viewCount,
