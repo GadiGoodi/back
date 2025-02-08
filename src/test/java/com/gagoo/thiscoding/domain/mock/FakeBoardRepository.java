@@ -53,8 +53,28 @@ public class FakeBoardRepository implements BoardRepository {
 
     @Override
     public Page<Board> findByUserId(Long userId, Pageable pageable) {
-        return null;
+        if (pageable.getPageSize() < 1) {
+            return Page.empty(pageable);
+        }
+        List<Board> findUserId = data.stream()
+                .filter(board -> board.getUserId().equals(userId))
+                .toList();
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), findUserId.size());
+
+        if (start >= findUserId.size()) {
+            return Page.empty(pageable);
+        }
+
+        List<Board> pageableBoard = findUserId.subList(start, end);
+
+        return PageableExecutionUtils.getPage(
+                pageableBoard,
+                pageable,
+                findUserId::size);
     }
+
 
     @Override
     public Page<Search> findByTitleOrContent(String title, String content, Pageable pageable) {
