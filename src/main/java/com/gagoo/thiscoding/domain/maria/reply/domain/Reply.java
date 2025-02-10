@@ -19,13 +19,13 @@ public class Reply {
     private String qnaId;
     private User user;
     private String content;
-    private ReplyEntity parent;
-    private List<ReplyEntity> replies;
+    private Reply parent;
+    private List<Reply> replies;
     private boolean isBlinded;
     private LocalDateTime createDate;
 
     @Builder
-    public Reply(Long id, String qnaId, User user, String content, ReplyEntity parent,List<ReplyEntity> replies, boolean isBlinded, LocalDateTime createDate) {
+    public Reply(Long id, String qnaId, User user, String content, Reply parent,List<Reply> replies, boolean isBlinded, LocalDateTime createDate) {
         this.id = id;
         this.qnaId = qnaId;
         this.user = user;
@@ -36,7 +36,7 @@ public class Reply {
         this.createDate = createDate;
     }
 
-    public static Reply create(User currentUser, String qnaId, ReplyCreate replyCreate, ReplyEntity parentComment) {
+    public static Reply create(User currentUser, String qnaId, ReplyCreate replyCreate, Reply parentComment) {
         return Reply.builder()
                 .qnaId(qnaId)
                 .user(currentUser)

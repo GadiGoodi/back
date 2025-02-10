@@ -45,10 +45,10 @@ public class ReplyServiceImpl implements ReplyService {
 
         validateCreateReply(qnaId, replyCreate);
 
-        ReplyEntity parentComment = replyCreate.getParent() != null ? replyRepository.findById(replyCreate.getParent())
-                .map(ReplyEntity::from)
-                .orElseThrow(
-                () -> new GlobalException(ErrorCode.REPLY_NOT_FOUND)) : null;
+        Reply parentComment = Optional.ofNullable(replyRepository.findById(replyCreate.getParent()))
+                .orElseThrow(() -> new GlobalException(ErrorCode.REPLY_NOT_FOUND))
+                .orElse(null);
+
                 Reply reply = Reply.create(currentUser, qnaId, replyCreate,parentComment);
 
         return replyRepository.save(reply);

@@ -13,7 +13,7 @@ import java.util.List;
 @ToString
 public class ReplyList {
     private final Long replyId;
-    private final ReplyEntity parent; // parentId 유지
+    private final Long parentId; // parentId 유지
     private final List<ReplyList> replies = new ArrayList<>(); // 대댓글 리스트
     private final String nickname;
     private final String profileImage;
@@ -21,9 +21,9 @@ public class ReplyList {
     private final LocalDateTime createDate;
 
     @Builder
-    public ReplyList(Long replyId, ReplyEntity parent, String nickname, String profileImage, String content, LocalDateTime createDate) {
+    public ReplyList(Long replyId, Long parentId, String nickname, String profileImage, String content, LocalDateTime createDate) {
         this.replyId = replyId;
-        this.parent = parent;
+        this.parentId = parentId;
         this.nickname = nickname;
         this.profileImage = profileImage;
         this.content = content;

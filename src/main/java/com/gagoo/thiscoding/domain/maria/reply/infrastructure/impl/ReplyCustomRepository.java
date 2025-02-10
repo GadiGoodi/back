@@ -27,7 +27,7 @@ public class ReplyCustomRepository {
 
         List<ReplyList> results = query.select(Projections.constructor(ReplyList.class,
                         replyEntity.id,
-                        replyEntity.parent,
+                        replyEntity.parent.id,
                         userEntity.nickname,
                         userEntity.imageUrl,
                         replyEntity.content,
@@ -52,7 +52,7 @@ public class ReplyCustomRepository {
 
         List<ReplyList> results = query.select(Projections.constructor(ReplyList.class,
                         replyEntity.id,
-                        replyEntity.parent,
+                        replyEntity.parent.id,
                         userEntity.nickname,
                         userEntity.imageUrl,
                         replyEntity.content,

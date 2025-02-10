@@ -21,10 +21,9 @@ public class ReplyEntity extends BaseTimeEntity {
     @Column(name = "reply_id")
     private Long id;
 
-    @JsonIgnore
     private String content;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     @JsonIgnore
     private ReplyEntity parent;  // 셀프 조인
@@ -38,7 +37,6 @@ public class ReplyEntity extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
-    @JsonIgnore
     private UserEntity user;
 
     @Column(name = "qna_id")
@@ -49,7 +47,7 @@ public class ReplyEntity extends BaseTimeEntity {
         replyEntity.id = reply.getId();
         replyEntity.content = reply.getContent();
         if (reply.getParent() != null) {
-            replyEntity.parent = reply.getParent();
+            replyEntity.parent = ReplyEntity.from(reply.getParent());
         }
         replyEntity.isBlinded = reply.isBlinded();
         replyEntity.user = UserEntity.from(reply.getUser());
@@ -62,6 +60,7 @@ public class ReplyEntity extends BaseTimeEntity {
         return Reply.builder()
             .id(id)
             .content(content)
+            .parent(parent.toModel())
             .isBlinded(isBlinded)
             .user(user.toModel())
             .qnaId(qnaId)

@@ -18,12 +18,8 @@ public class ReplyWriteController {
 
     @PostMapping("/{qnaId}/reply")
     @AuthorizationRequired(value = {Role.USER, Role.ADMIN}, status = HttpStatus.OK)
-    public ResponseEntity<Void> create(@PathVariable String qnaId,
-                                        @RequestBody ReplyCreate replyCreate) {
+    public ResponseEntity<Void> create(@PathVariable String qnaId,@RequestBody ReplyCreate replyCreate) {
 
-        System.out.println("==================Controller===============================");
-        System.out.println(replyCreate.getParent());
-        System.out.println(replyCreate.getContent());
         replyService.create(qnaId, replyCreate);
 
         return ResponseEntity.ok().build();
