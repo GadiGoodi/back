@@ -1,4 +1,4 @@
-package com.gagoo.thiscoding.global.security.service.port;
+package com.gagoo.thiscoding.domain.auth.service.port;
 
 public interface SecurityUtils {
 

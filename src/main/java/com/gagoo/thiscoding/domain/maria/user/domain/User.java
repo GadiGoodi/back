@@ -3,8 +3,7 @@ package com.gagoo.thiscoding.domain.maria.user.domain;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Social;
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.UserCreate;
-import com.gagoo.thiscoding.global.security.infrastructure.SystemPasswordEncoder;
-import com.gagoo.thiscoding.global.security.service.port.PasswordEncoderHolder;
+import com.gagoo.thiscoding.domain.auth.service.port.PasswordEncoderHolder;
 import lombok.Builder;
 import lombok.Getter;
 

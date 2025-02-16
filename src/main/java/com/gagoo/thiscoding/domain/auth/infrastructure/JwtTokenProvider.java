@@ -1,9 +1,9 @@
-package com.gagoo.thiscoding.domain.maria.user.infrastructure.security;
+package com.gagoo.thiscoding.domain.auth.infrastructure;
 
-import com.gagoo.thiscoding.domain.maria.user.service.port.JwtUtil;
+import com.gagoo.thiscoding.domain.auth.service.port.TokenProvider;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.global.exception.GlobalException;
-import com.gagoo.thiscoding.global.security.JwtProperties;
+import com.gagoo.thiscoding.global.security.config.JwtProperties;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -15,15 +15,15 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
-import static com.gagoo.thiscoding.global.security.constants.SecurityConstants.*;
+import static com.gagoo.thiscoding.global.security.common.AuthConstants.*;
 
 @Component
-public class JwtUtilImpl implements JwtUtil {
+public class JwtTokenProvider implements TokenProvider {
 
     private static final String JWT_HS256_ALGORITHM = Jwts.SIG.HS256.key().build().getAlgorithm();
     private final SecretKey secretKey;
 
-    public JwtUtilImpl(JwtProperties jwtProperties) {
+    public JwtTokenProvider(JwtProperties jwtProperties) {
         this.secretKey =
                 new SecretKeySpec(
                         jwtProperties.getSecretKey().getBytes(StandardCharsets.UTF_8),
@@ -103,6 +103,7 @@ public class JwtUtilImpl implements JwtUtil {
     /**
      * 리프레쉬 토큰 발급
      */
+    @Override
     public String createRtk(String email, String role, Long expTime) {
         return createToken(email, role, expTime);
     }

@@ -1,6 +1,6 @@
-package com.gagoo.thiscoding.global.security.infrastructure;
+package com.gagoo.thiscoding.global.security.infrastructure.impl;
 
-import com.gagoo.thiscoding.global.security.service.port.PasswordEncoderHolder;
+import com.gagoo.thiscoding.domain.auth.service.port.PasswordEncoderHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -14,5 +14,10 @@ public class SystemPasswordEncoder implements PasswordEncoderHolder {
     @Override
     public String encode(String password) {
         return passwordEncoder.encode(password);
+    }
+
+    @Override
+    public boolean matches(String password, String encodedPassword) {
+        return passwordEncoder.matches(password, encodedPassword);
     }
 }
