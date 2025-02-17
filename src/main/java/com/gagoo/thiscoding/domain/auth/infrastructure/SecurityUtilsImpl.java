@@ -1,9 +1,9 @@
-package com.gagoo.thiscoding.global.security.infrastructure;
+package com.gagoo.thiscoding.domain.auth.infrastructure;
 
-import com.gagoo.thiscoding.domain.maria.user.infrastructure.security.CustomUserDetails;
+import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
-import com.gagoo.thiscoding.global.security.AuthorizationException;
-import com.gagoo.thiscoding.global.security.service.port.SecurityUtils;
+import com.gagoo.thiscoding.global.security.exception.AuthorizationException;
+import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -19,22 +19,22 @@ public class SecurityUtilsImpl implements SecurityUtils {
      */
     @Override
     public String getUserEmail() {
-        CustomUserDetails user = getUser();  // getUser()에서 예외 처리됨
+        User user = getUser();  // getUser()에서 예외 처리됨
 
-        return user.getUsername();
+        return user.getEmail();
     }
 
     /**
      * SecurityContextHolder에 저장된 유저 정보 반환
      */
-    private static CustomUserDetails getUser() {
+    private static User getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null) {
             throw new AuthorizationException(ErrorCode.USER_NOT_LOGIN);
         }
 
-        return (CustomUserDetails) authentication.getPrincipal();
+        return (User) authentication.getPrincipal();
     }
 
 }

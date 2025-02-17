@@ -1,11 +1,9 @@
 package com.gagoo.thiscoding.global.security.config;
 
-import com.gagoo.thiscoding.domain.maria.user.infrastructure.security.JwtFilter;
-import com.gagoo.thiscoding.domain.maria.user.infrastructure.security.JwtLoginFilter;
-import com.gagoo.thiscoding.domain.maria.user.infrastructure.security.JwtUtilImpl;
-import com.gagoo.thiscoding.domain.maria.user.service.port.RefreshTokenStore;
-import com.gagoo.thiscoding.global.security.JwtProperties;
-import com.gagoo.thiscoding.global.utils.HttpServletUtils;
+import com.gagoo.thiscoding.domain.auth.service.port.SecurityService;
+import com.gagoo.thiscoding.domain.auth.service.port.TokenProvider;
+import com.gagoo.thiscoding.global.common.util.HttpServletUtils;
+import com.gagoo.thiscoding.global.security.infrastructure.filter.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,15 +32,27 @@ import static org.springframework.http.HttpHeaders.*;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtFilter jwtFilter;
-    private final AuthenticationConfiguration authenticationConfig;
-    private final RefreshTokenStore refreshTokenStore;
-    private final JwtUtilImpl jwtUtilImpl;
-    private final JwtProperties jwtProperties;
-    private final HttpServletUtils httpServletUtils;
+    private final SecurityService securityService;
+    private final HttpServletUtils servletUtils;
+    private final TokenProvider tokenProvider;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public JwtFilter jwtFilter() {
+        return new JwtFilter(securityService, servletUtils, tokenProvider);
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
 
         http
                 .csrf(auth -> auth.disable())
@@ -63,16 +73,7 @@ public class SecurityConfig {
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
-        http.addFilterAt(new JwtLoginFilter(
-                        authenticationManager(authenticationConfig), jwtUtilImpl, refreshTokenStore, httpServletUtils, jwtProperties),
-                UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
     }
 
     @Bean
@@ -90,10 +91,7 @@ public class SecurityConfig {
         return source;
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+
 
     private List<String> getExposedHeaders() {
         return Arrays.asList(

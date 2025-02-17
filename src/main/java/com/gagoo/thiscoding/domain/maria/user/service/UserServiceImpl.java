@@ -10,15 +10,15 @@ import com.gagoo.thiscoding.domain.maria.user.service.exception.ExistUserNicknam
 import com.gagoo.thiscoding.domain.maria.user.service.exception.PasswordNotEqualException;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
-import com.gagoo.thiscoding.global.security.service.port.PasswordEncoderHolder;
-import com.gagoo.thiscoding.global.security.service.port.SecurityUtils;
-import com.gagoo.thiscoding.global.utils.HttpServletUtils;
+import com.gagoo.thiscoding.domain.auth.service.port.PasswordEncoderHolder;
+import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
+import com.gagoo.thiscoding.global.common.util.HttpServletUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import static com.gagoo.thiscoding.global.security.constants.SecurityConstants.*;
+import static com.gagoo.thiscoding.global.security.common.AuthConstants.*;
 
 @Service
 @RequiredArgsConstructor

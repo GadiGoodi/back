@@ -1,4 +1,4 @@
-package com.gagoo.thiscoding.domain.maria.user.domain.dto;
+package com.gagoo.thiscoding.global.security.controller.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class UserLogin {
+public class LoginRequest {
 
     @Email @NotBlank
     private final String email;
@@ -15,7 +15,7 @@ public class UserLogin {
     private final String password;
 
     @Builder
-    public UserLogin(@JsonProperty("email") String email, @JsonProperty("password") String password) {
+    public LoginRequest(@JsonProperty("email") String email, @JsonProperty("password") String password) {
         this.email = email;
         this.password = password;
     }

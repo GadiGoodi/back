@@ -2,7 +2,7 @@ package com.gagoo.thiscoding.global.security.aop;
 
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
-import com.gagoo.thiscoding.global.security.AuthorizationException;
+import com.gagoo.thiscoding.global.security.exception.AuthorizationException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;

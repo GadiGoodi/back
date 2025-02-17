@@ -1,4 +1,4 @@
-package com.gagoo.thiscoding.global.utils;
+package com.gagoo.thiscoding.global.common.util;
 
 import static java.util.Optional.empty;
 
@@ -20,11 +20,11 @@ public class HttpServletUtils {
         response.setHeader(name, value);
     }
 
-    public void addCookie(HttpServletResponse response, String name, String value, int seconds) {
+    public void addCookie(HttpServletResponse response, String name, String value, Long seconds) {
         Cookie cookie = new Cookie(name, value);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
-        cookie.setMaxAge(seconds);
+        cookie.setMaxAge(seconds.intValue());
         cookie.setSecure(true);
         cookie.setAttribute("SameSite", "None");
         response.addCookie(cookie);
