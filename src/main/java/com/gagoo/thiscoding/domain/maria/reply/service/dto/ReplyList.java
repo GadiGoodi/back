@@ -1,6 +1,5 @@
 package com.gagoo.thiscoding.domain.maria.reply.service.dto;
 
-import com.gagoo.thiscoding.domain.maria.reply.infrastructure.ReplyEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -21,9 +20,9 @@ public class ReplyList {
     private final LocalDateTime createDate;
 
     @Builder
-    public ReplyList(Long replyId, Long parentId, String nickname, String profileImage, String content, LocalDateTime createDate) {
+    public ReplyList(Long replyId, Long parent, String nickname, String profileImage, String content, LocalDateTime createDate) {
         this.replyId = replyId;
-        this.parentId = parentId;
+        this.parentId = parent;
         this.nickname = nickname;
         this.profileImage = profileImage;
         this.content = content;

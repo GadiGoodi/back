@@ -45,11 +45,12 @@ public class ReplyServiceImpl implements ReplyService {
 
         validateCreateReply(qnaId, replyCreate);
 
-        Reply parentComment = Optional.ofNullable(replyRepository.findById(replyCreate.getParent()))
-                .orElseThrow(() -> new GlobalException(ErrorCode.REPLY_NOT_FOUND))
+        Reply parentComment = Optional.ofNullable(replyCreate.getParentId())
+                .map(parentId -> replyRepository.findById(parentId)
+                        .orElseThrow(() -> new GlobalException(ErrorCode.REPLY_NOT_FOUND)))
                 .orElse(null);
 
-                Reply reply = Reply.create(currentUser, qnaId, replyCreate,parentComment);
+        Reply reply = Reply.create(currentUser, qnaId, replyCreate, parentComment);
 
         return replyRepository.save(reply);
     }
@@ -74,7 +75,7 @@ public class ReplyServiceImpl implements ReplyService {
     public CustomPageDto<ReplyList> getReplies(String qnaId, Long parentId, Pageable pageable) {
         validateReplyId(parentId);
 
-        Page<ReplyList> qnaReplies = replyRepository.findRepliesByParentId(qnaId,parentId, pageable);
+        Page<ReplyList> qnaReplies = replyRepository.findRepliesByParentId(qnaId, parentId, pageable);
 
         return CustomPageDto.of(qnaReplies);
     }
@@ -97,14 +98,14 @@ public class ReplyServiceImpl implements ReplyService {
     private void validateCreateReply(String qnaId, ReplyCreate replyCreate) {
         validateQnAId(qnaId);
 
-        if(replyCreate.getParent() != null) {
-            validateReplyId(replyCreate.getParent());
+        if (replyCreate.getParentId() != null) {
+            validateReplyId(replyCreate.getParentId());
         }
     }
 
     /**
      * 댓글 삭제 검증 로직
-     * */
+     */
     private void validateDeleteReply(String qnaId, Reply reply) {
         validateQnAId(qnaId);
         validateUser(reply);
@@ -124,7 +125,7 @@ public class ReplyServiceImpl implements ReplyService {
      */
     public Reply getById(Long replyId) {
         return replyRepository.findById(replyId).orElseThrow(() -> new ReplyNotFoundException(
-            ErrorCode.REPLY_NOT_FOUND));
+                ErrorCode.REPLY_NOT_FOUND));
     }
 
     /**
@@ -138,12 +139,12 @@ public class ReplyServiceImpl implements ReplyService {
 
     /**
      * 댓글 작성자가 맞는지 확인
-     * */
+     */
     private void validateUser(Reply reply) {
         String currentUser = securityUtils.getUserEmail();
         String writerUser = reply.getUser().getEmail();
 
-        if(!writerUser.equals(currentUser))
+        if (!writerUser.equals(currentUser))
             throw new NotReplyAuthorException(ErrorCode.NOT_REPLY_AUTHOR);
     }
 }

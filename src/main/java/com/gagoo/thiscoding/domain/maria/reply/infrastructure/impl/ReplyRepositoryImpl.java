@@ -47,11 +47,7 @@ public class ReplyRepositoryImpl implements ReplyRepository {
 
     @Override
     public Page<ReplyList> findByQnaId(String qnaId, Pageable pageable) {
-        Page<ReplyList> result = replyCustomRepository.findByQnaId(qnaId, pageable);
-        for (ReplyList replyList : result) {
-            System.out.println("replyList = " + replyList.toString());
-        }
-        return result;
+        return replyCustomRepository.findByQnaId(qnaId, pageable);
     }
 
     @Override

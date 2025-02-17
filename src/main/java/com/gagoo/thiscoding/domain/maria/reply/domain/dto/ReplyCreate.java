@@ -10,11 +10,11 @@ public class ReplyCreate {
 
     @NotBlank
     private final String content;
-    private final Long parent;
+    private final Long parentId;
 
     @Builder
-    public ReplyCreate(String content, Long parent) {
+    public ReplyCreate(String content, Long parentId) {
         this.content = content;
-        this.parent = parent;
+        this.parentId = parentId;
     }
 }
