@@ -14,4 +14,5 @@ public interface ReplyRepository {
     Long countByQnaId(String qnaId);
     boolean existsById(Long parentId);
     void delete(Reply reply);
+    Page<ReplyList> findRepliesByParentId(String qnaId, Long parentId, Pageable pageable);
 }
