@@ -45,6 +45,17 @@ public class User {
                 .build();
     }
 
+    public static User oAuth2Register(String email, String nickname, String provider) {
+        return User.builder()
+                .email(email)
+                .nickname(nickname)
+                .isActivated(true)
+                .isBanned(false)
+                .role(Role.USER)
+                .social(Social.valueOf(provider.toUpperCase()))
+                .build();
+    }
+
     public User updateProfile(String imageUrl) {
         return User.builder()
                 .id(this.id)

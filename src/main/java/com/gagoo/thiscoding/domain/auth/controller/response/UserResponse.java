@@ -1,4 +1,4 @@
-package com.gagoo.thiscoding.global.security.controller.response;
+package com.gagoo.thiscoding.domain.auth.controller.response;
 
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package com.gagoo.thiscoding.global.security.controller.request;
+package com.gagoo.thiscoding.domain.auth.controller.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;

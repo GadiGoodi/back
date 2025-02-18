@@ -56,6 +56,7 @@ public class UserRepositoryImpl implements UserRepository {
     /**
      * 이메일로 유저 객체 조회
      */
+    @Override
     public Optional<User> findByEmail(String email) {
         return userJpaRepository.findByEmail(email).map(UserEntity::toModel);
     }
