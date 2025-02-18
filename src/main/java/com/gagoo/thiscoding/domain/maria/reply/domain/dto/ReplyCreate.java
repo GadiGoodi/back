@@ -1,5 +1,6 @@
 package com.gagoo.thiscoding.domain.maria.reply.domain.dto;
 
+import com.gagoo.thiscoding.domain.maria.reply.infrastructure.ReplyEntity;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;

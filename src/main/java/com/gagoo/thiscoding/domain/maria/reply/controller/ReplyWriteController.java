@@ -18,8 +18,7 @@ public class ReplyWriteController {
 
     @PostMapping("/{qnaId}/reply")
     @AuthorizationRequired(value = {Role.USER, Role.ADMIN}, status = HttpStatus.OK)
-    public ResponseEntity<Void> create(@PathVariable String qnaId,
-                                        @RequestBody ReplyCreate replyCreate) {
+    public ResponseEntity<Void> create(@PathVariable String qnaId,@RequestBody ReplyCreate replyCreate) {
 
         replyService.create(qnaId, replyCreate);
 
