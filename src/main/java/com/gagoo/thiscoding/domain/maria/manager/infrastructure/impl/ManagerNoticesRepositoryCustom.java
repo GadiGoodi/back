@@ -13,11 +13,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 
 @RequiredArgsConstructor
+@Repository
 public class ManagerNoticesRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
@@ -25,17 +27,16 @@ public class ManagerNoticesRepositoryCustom {
     public Page<Manager> findAll(Pageable pageable) {
         List<Manager> results = queryFactory.select(Projections.constructor(Manager.class,
                         managerEntity.id,
-                        managerEntity.manager,
                         managerEntity.title,
                         managerEntity.category,
-                        managerEntity.viewCount
+                        managerEntity.viewCount,
+                        managerEntity.createDate
                 ))
                 .from(managerEntity)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(managerEntity.id.desc())
                 .fetch();
-
 
         JPAQuery<Long> countQuery = queryFactory.select(managerEntity.count()).from(managerEntity);
 

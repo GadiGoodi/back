@@ -3,6 +3,7 @@ package com.gagoo.thiscoding.domain.mongo.board.controller;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
 import com.gagoo.thiscoding.domain.mongo.board.controller.port.BoardService;
 import com.gagoo.thiscoding.domain.mongo.board.controller.response.MyPageQnA;
+import com.gagoo.thiscoding.global.paging.aop.ConvertToOneBase;
 import com.gagoo.thiscoding.global.security.aop.AuthorizationRequired;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,7 @@ public class MyQnaController {
 
     @AuthorizationRequired(value = {Role.USER}, status = OK)
     @GetMapping("/qna")
+    @ConvertToOneBase
     public ResponseEntity<Page<MyPageQnA>> getMyPageQnA(Pageable pageable) {
         return ResponseEntity
                 .ok()

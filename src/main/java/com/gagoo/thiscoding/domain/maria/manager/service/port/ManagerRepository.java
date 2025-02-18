@@ -11,6 +11,6 @@ public interface ManagerRepository {
     Page<Manager> findAll(Pageable pageable);
     Manager save(Manager manager);
     void deleteById(Long id);
-   Manager findById(Long id);
+   Optional<Manager> findById(Long id);
+   boolean existsById(Long id);
 }
-

@@ -5,6 +5,7 @@ import com.gagoo.thiscoding.domain.maria.manager.controller.response.ManagerNoti
 import com.gagoo.thiscoding.domain.maria.manager.controller.response.ManagerNoticesList;
 import com.gagoo.thiscoding.domain.maria.manager.domain.ManagerNoticesUpdate;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
+import com.gagoo.thiscoding.global.paging.aop.ConvertToOneBase;
 import com.gagoo.thiscoding.global.security.aop.AuthorizationRequired;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class ManagerNoticesController {
 
     //공지사항 목록 조회
     @GetMapping
+    @ConvertToOneBase
     @AuthorizationRequired(value = {Role.ADMIN, Role.USER}, status = OK)
     public ResponseEntity<Page<ManagerNoticesList>> getNoticesAll(Pageable pageable) {
         return ResponseEntity
