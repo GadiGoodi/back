@@ -1,8 +1,6 @@
 package com.gagoo.thiscoding.domain.maria.user.controller;
 
 import com.gagoo.thiscoding.domain.maria.user.controller.port.UserService;
-import com.gagoo.thiscoding.domain.maria.user.controller.response.UserResponse;
-import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.UserCreate;
 import com.gagoo.thiscoding.global.security.aop.AuthorizationRequired;
@@ -21,12 +19,12 @@ public class UserWriteController {
     private final UserService userService;
 
     @PostMapping("sign-up")
-    public ResponseEntity<UserResponse> create(@RequestBody UserCreate userCreate) {
-        User user = userService.create(userCreate);
+    public ResponseEntity<Void> create(@RequestBody UserCreate userCreate) {
+        userService.create(userCreate);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(UserResponse.from(user));
+                .build();
     }
 
     @DeleteMapping("/logout")

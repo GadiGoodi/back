@@ -2,12 +2,12 @@ package com.gagoo.thiscoding.domain.maria.user.service;
 
 import com.gagoo.thiscoding.domain.maria.user.controller.port.TokenReissueService;
 import com.gagoo.thiscoding.domain.maria.user.service.exception.TokenNotEquals;
-import com.gagoo.thiscoding.domain.maria.user.service.port.JwtUtil;
+import com.gagoo.thiscoding.domain.auth.service.port.TokenProvider;
 import com.gagoo.thiscoding.domain.maria.user.service.port.RefreshTokenStore;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.global.exception.GlobalException;
-import com.gagoo.thiscoding.global.security.JwtProperties;
-import com.gagoo.thiscoding.global.utils.HttpServletUtils;
+import com.gagoo.thiscoding.global.security.config.JwtProperties;
+import com.gagoo.thiscoding.global.common.util.HttpServletUtils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,15 +16,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static com.gagoo.thiscoding.global.security.JwtProperties.*;
-import static com.gagoo.thiscoding.global.security.constants.SecurityConstants.*;
+import static com.gagoo.thiscoding.domain.auth.common.AuthConstants.*;
 
 @Service
 @RequiredArgsConstructor
 public class TokenReissueServiceImpl implements TokenReissueService {
 
     private final RefreshTokenStore refreshTokenStore;
-    private final JwtUtil jwtUtil;
+    private final TokenProvider tokenProvider;
     private final HttpServletUtils httpServletUtils;
     private final JwtProperties jwtProperties;
 
@@ -35,15 +34,15 @@ public class TokenReissueServiceImpl implements TokenReissueService {
     public void create(HttpServletRequest request, HttpServletResponse response) {
         String rtk = validateRtk(httpServletUtils.getCookie(request, AUTHORIZATION));
 
-        String email = jwtUtil.getUsername(rtk);
+        String email = tokenProvider.getUsername(rtk);
 
         validateToken(rtk, email);
 
-        String role = jwtUtil.getRole(rtk);
-        String reissueAtk = jwtUtil.createAtk(email, role, jwtProperties.getAtkExpireTime());
+        String role = tokenProvider.getRole(rtk);
+        String reissueAtk = tokenProvider.createAtk(email, role, jwtProperties.getAtkExpireTime());
 
         String reissueRtk = isReissueRtk(rtk) ?
-                jwtUtil.createRtk(email, role, jwtProperties.getRtkExpireTime()) : rtk;
+                tokenProvider.createRtk(email, role, jwtProperties.getRtkExpireTime()) : rtk;
 
         reissueToken(response, reissueAtk, reissueRtk);
     }
@@ -52,10 +51,10 @@ public class TokenReissueServiceImpl implements TokenReissueService {
      * 리프레쉬 토큰 갱신이 필요한지 확인
      */
     private boolean isReissueRtk(String rtk) {
-        long expirationTime = jwtUtil.getExpirationTime(rtk);
+        long expirationTime = tokenProvider.getExpirationTime(rtk);
         long currentTime = System.currentTimeMillis() / 1000;
 
-        return (expirationTime - currentTime) < REFRESH_TOKEN_REISSUE_TIME;
+        return (expirationTime - currentTime) < jwtProperties.getRtkExpireTime();
     }
 
     /**
@@ -63,7 +62,7 @@ public class TokenReissueServiceImpl implements TokenReissueService {
      */
     private void reissueToken(HttpServletResponse response, String reissueAtk, String reissueRtk) {
         httpServletUtils.setHeader(response, AUTHORIZATION, reissueAtk);
-        httpServletUtils.addCookie(response, AUTHORIZATION, reissueRtk, jwtProperties.getRtkExpireTime().intValue());
+        httpServletUtils.addCookie(response, AUTHORIZATION, reissueRtk, jwtProperties.getRtkExpireTime());
     }
 
     /**
@@ -87,7 +86,7 @@ public class TokenReissueServiceImpl implements TokenReissueService {
      * 만료된 토큰인지 확인
      */
     private void validateTokenExpired(String rtk) {
-        if (jwtUtil.isExpired(rtk)) {
+        if (tokenProvider.isExpired(rtk)) {
             new GlobalException(ErrorCode.TOKEN_EXPIRED);
         }
     }
@@ -98,7 +97,7 @@ public class TokenReissueServiceImpl implements TokenReissueService {
     private String validateRtk(Optional<Cookie> cookie) {
         return cookie
                 .filter(c -> "rtk".equals(c.getName()))  // 쿠키 이름이 "rtk"인 경우만 필터링
-                .map(c -> c.getValue().substring(BEARER_PREFIX.length()))  // "Bearer "를 제거한 토큰 값 반환
+                .map(c -> c.getValue().substring(TOKEN_PREFIX.length()))  // "Bearer "를 제거한 토큰 값 반환
                 .orElseThrow(() -> new GlobalException(ErrorCode.TOKEN_NOT_FOUND));
     }
 

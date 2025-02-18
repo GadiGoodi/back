@@ -10,7 +10,7 @@ import com.gagoo.thiscoding.domain.mongo.code.domain.Code;
 import com.gagoo.thiscoding.domain.mongo.code.service.exception.CodeNotFoundException;
 import com.gagoo.thiscoding.domain.mongo.code.service.port.CodeRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
-import com.gagoo.thiscoding.global.utils.service.port.UuidHolder;
+import com.gagoo.thiscoding.global.common.uuid.service.port.UuidHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

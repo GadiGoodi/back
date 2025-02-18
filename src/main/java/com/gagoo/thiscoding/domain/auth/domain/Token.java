@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import static com.gagoo.thiscoding.global.security.common.AuthConstants.*;
+import static com.gagoo.thiscoding.domain.auth.common.AuthConstants.*;
 
 @Builder
 @Getter

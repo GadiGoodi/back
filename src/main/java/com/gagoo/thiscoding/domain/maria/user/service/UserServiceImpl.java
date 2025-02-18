@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import static com.gagoo.thiscoding.global.security.common.AuthConstants.*;
+import static com.gagoo.thiscoding.domain.auth.common.AuthConstants.*;
 
 @Service
 @RequiredArgsConstructor

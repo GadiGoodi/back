@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.gagoo.thiscoding.global.security.common.AuthConstants.*;
+import static com.gagoo.thiscoding.domain.auth.common.AuthConstants.*;
 
 @RestController
 @RequestMapping("/api/auth")

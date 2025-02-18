@@ -1,7 +1,7 @@
 package com.gagoo.thiscoding.domain.maria.coderoom.domain;
 
 import com.gagoo.thiscoding.domain.maria.coderoom.domain.dto.CodeRoomCreate;
-import com.gagoo.thiscoding.global.utils.service.port.UuidHolder;
+import com.gagoo.thiscoding.global.common.uuid.service.port.UuidHolder;
 import lombok.Builder;
 import lombok.Getter;
 

@@ -10,7 +10,7 @@ import com.gagoo.thiscoding.domain.maria.usercoderoom.service.port.UserCodeRoomR
 import com.gagoo.thiscoding.domain.mongo.code.service.exception.CodeNotFoundException;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.global.paging.PageSize;
-import com.gagoo.thiscoding.global.security.service.port.SecurityUtils;
+import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

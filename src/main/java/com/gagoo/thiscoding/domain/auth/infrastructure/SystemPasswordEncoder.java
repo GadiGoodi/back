@@ -1,4 +1,4 @@
-package com.gagoo.thiscoding.global.security.infrastructure.impl;
+package com.gagoo.thiscoding.domain.auth.infrastructure;
 
 import com.gagoo.thiscoding.domain.auth.service.port.PasswordEncoderHolder;
 import lombok.RequiredArgsConstructor;

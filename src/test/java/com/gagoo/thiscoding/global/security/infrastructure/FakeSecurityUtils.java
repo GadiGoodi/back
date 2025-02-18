@@ -1,8 +1,8 @@
 package com.gagoo.thiscoding.global.security.infrastructure;
 
 import com.gagoo.thiscoding.global.exception.ErrorCode;
-import com.gagoo.thiscoding.global.security.AuthorizationException;
-import com.gagoo.thiscoding.global.security.service.port.SecurityUtils;
+import com.gagoo.thiscoding.global.security.exception.AuthorizationException;
+import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

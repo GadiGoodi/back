@@ -4,7 +4,7 @@ import com.gagoo.thiscoding.domain.maria.user.controller.port.MyPageService;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardCustomRepository;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
-import com.gagoo.thiscoding.global.security.service.port.SecurityUtils;
+import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
