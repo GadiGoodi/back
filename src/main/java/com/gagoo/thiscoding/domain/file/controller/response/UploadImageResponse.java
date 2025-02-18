@@ -1,6 +1,6 @@
-package com.gagoo.thiscoding.global.s3.controller.response;
+package com.gagoo.thiscoding.domain.file.controller.response;
 
-import com.gagoo.thiscoding.global.s3.domain.Images;
+import com.gagoo.thiscoding.domain.file.domain.Images;
 import lombok.Builder;
 import lombok.Getter;
 

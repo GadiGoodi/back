@@ -1,4 +1,4 @@
-package com.gagoo.thiscoding.global.s3.controller.validator;
+package com.gagoo.thiscoding.domain.file.controller.validator;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

@@ -1,7 +1,7 @@
-package com.gagoo.thiscoding.global.s3.service.port;
+package com.gagoo.thiscoding.domain.file.service.port;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.gagoo.thiscoding.global.s3.domain.Images;
+import com.gagoo.thiscoding.domain.file.domain.Images;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

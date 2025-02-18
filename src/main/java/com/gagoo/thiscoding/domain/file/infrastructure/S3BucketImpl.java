@@ -1,9 +1,9 @@
-package com.gagoo.thiscoding.global.s3.infrastructure;
+package com.gagoo.thiscoding.domain.file.infrastructure;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.gagoo.thiscoding.global.s3.domain.Images;
-import com.gagoo.thiscoding.global.s3.service.port.S3Bucket;
+import com.gagoo.thiscoding.domain.file.domain.Images;
+import com.gagoo.thiscoding.domain.file.service.port.S3Bucket;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

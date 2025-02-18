@@ -1,11 +1,11 @@
-package com.gagoo.thiscoding.global.s3.controller;
+package com.gagoo.thiscoding.domain.file.controller;
 
 
-import com.gagoo.thiscoding.global.s3.controller.port.S3Service;
-import com.gagoo.thiscoding.global.s3.controller.response.UploadImageResponse;
-import com.gagoo.thiscoding.global.s3.controller.validator.ImagePath;
-import com.gagoo.thiscoding.global.s3.controller.validator.ValidateImagePath;
-import com.gagoo.thiscoding.global.s3.domain.Images;
+import com.gagoo.thiscoding.domain.file.controller.port.FileService;
+import com.gagoo.thiscoding.domain.file.controller.response.UploadImageResponse;
+import com.gagoo.thiscoding.domain.file.controller.validator.ValidateImagePath;
+import com.gagoo.thiscoding.domain.file.controller.validator.ImagePath;
+import com.gagoo.thiscoding.domain.file.domain.Images;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,16 +16,16 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/files")
-public class S3Controller {
+public class FileController {
 
-    private final S3Service s3Service;
+    private final FileService fileService;
 
     @PostMapping("/images")
     public ResponseEntity<UploadImageResponse> uploadImage(
             @RequestPart(value = "image") MultipartFile image,
             @RequestPart(value = "path") @ValidateImagePath(enumClass = ImagePath.class) String path
     ) throws IOException {
-        Images images = s3Service.uploadImage(image, path);
+        Images images = fileService.uploadImage(image, path);
 
         return ResponseEntity.ok()
                 .body(UploadImageResponse.from(images));

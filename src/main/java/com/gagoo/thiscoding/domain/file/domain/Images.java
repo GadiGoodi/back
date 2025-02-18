@@ -1,4 +1,4 @@
-package com.gagoo.thiscoding.global.s3.domain;
+package com.gagoo.thiscoding.domain.file.domain;
 
 import lombok.Builder;
 import lombok.Getter;
