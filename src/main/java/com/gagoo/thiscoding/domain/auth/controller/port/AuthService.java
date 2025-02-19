@@ -1,6 +1,6 @@
-package com.gagoo.thiscoding.global.security.controller.port;
+package com.gagoo.thiscoding.domain.auth.controller.port;
 
-import com.gagoo.thiscoding.global.security.controller.request.LoginRequest;
+import com.gagoo.thiscoding.domain.auth.controller.request.LoginRequest;
 import com.gagoo.thiscoding.domain.auth.dto.LoginDto;
 
 public interface AuthService {

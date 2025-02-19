@@ -1,8 +1,8 @@
-package com.gagoo.thiscoding.global.security.controller;
+package com.gagoo.thiscoding.domain.auth.controller;
 
-import com.gagoo.thiscoding.global.security.controller.port.AuthService;
-import com.gagoo.thiscoding.global.security.controller.request.LoginRequest;
-import com.gagoo.thiscoding.global.security.controller.response.UserResponse;
+import com.gagoo.thiscoding.domain.auth.controller.port.AuthService;
+import com.gagoo.thiscoding.domain.auth.controller.request.LoginRequest;
+import com.gagoo.thiscoding.domain.auth.controller.response.UserResponse;
 import com.gagoo.thiscoding.domain.auth.dto.LoginDto;
 import com.gagoo.thiscoding.global.common.util.HttpServletUtils;
 import jakarta.servlet.http.HttpServletResponse;
