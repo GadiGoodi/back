@@ -1,4 +1,4 @@
-package com.gagoo.thiscoding.global.s3.infrastructure;
+package com.gagoo.thiscoding.domain.file.infrastructure;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;

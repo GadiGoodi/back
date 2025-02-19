@@ -15,7 +15,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
-import static com.gagoo.thiscoding.global.security.common.AuthConstants.*;
+import static com.gagoo.thiscoding.domain.auth.common.AuthConstants.*;
 
 @Component
 public class JwtTokenProvider implements TokenProvider {

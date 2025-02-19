@@ -14,8 +14,8 @@ import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.domain.mongo.board.controller.port.BoardService;
 import com.gagoo.thiscoding.domain.mongo.board.service.BoardServiceImpl;
 import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardRepository;
-import com.gagoo.thiscoding.global.security.service.port.PasswordEncoderHolder;
-import com.gagoo.thiscoding.global.security.service.port.SecurityUtils;
+import com.gagoo.thiscoding.domain.auth.service.port.PasswordEncoderHolder;
+import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
 import lombok.Builder;
 
 public class TestContainer {

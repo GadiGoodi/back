@@ -18,7 +18,7 @@ import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.UserCodeRoom;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.service.port.UserCodeRoomRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
-import com.gagoo.thiscoding.global.security.service.port.SecurityUtils;
+import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

@@ -1,7 +1,7 @@
 package com.gagoo.thiscoding.domain.maria.user.infrastructure.impl;
 
 import com.gagoo.thiscoding.domain.maria.user.service.port.RefreshTokenStore;
-import com.gagoo.thiscoding.global.security.JwtProperties;
+import com.gagoo.thiscoding.global.security.config.JwtProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;

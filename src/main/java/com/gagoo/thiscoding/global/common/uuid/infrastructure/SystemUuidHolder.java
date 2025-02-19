@@ -1,6 +1,6 @@
-package com.gagoo.thiscoding.global.utils.infrastructure;
+package com.gagoo.thiscoding.global.common.uuid.infrastructure;
 
-import com.gagoo.thiscoding.global.utils.service.port.UuidHolder;
+import com.gagoo.thiscoding.global.common.uuid.service.port.UuidHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;

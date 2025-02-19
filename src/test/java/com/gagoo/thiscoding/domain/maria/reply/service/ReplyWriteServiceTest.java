@@ -9,7 +9,7 @@ import com.gagoo.thiscoding.domain.mock.TestContainer;
 import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
 import com.gagoo.thiscoding.domain.mongo.board.domain.dto.BoardCreate;
 import com.gagoo.thiscoding.domain.mongo.board.service.exception.QnaNotFoundException;
-import com.gagoo.thiscoding.global.security.AuthorizationException;
+import com.gagoo.thiscoding.global.security.exception.AuthorizationException;
 import com.gagoo.thiscoding.global.security.infrastructure.FakeSecurityUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

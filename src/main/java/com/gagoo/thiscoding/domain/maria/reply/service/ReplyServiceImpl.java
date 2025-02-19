@@ -15,7 +15,7 @@ import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.global.exception.GlobalException;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
-import com.gagoo.thiscoding.global.security.service.port.SecurityUtils;
+import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

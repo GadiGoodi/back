@@ -447,3 +447,4 @@ gradle-app.setting
 build/
 .idea/
 .gradle/
+application-test.yml

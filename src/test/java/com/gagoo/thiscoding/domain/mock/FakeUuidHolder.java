@@ -1,6 +1,6 @@
 package com.gagoo.thiscoding.domain.mock;
 
-import com.gagoo.thiscoding.global.utils.service.port.UuidHolder;
+import com.gagoo.thiscoding.global.common.uuid.service.port.UuidHolder;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

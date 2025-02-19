@@ -1,4 +1,4 @@
-package com.gagoo.thiscoding.global.security.common;
+package com.gagoo.thiscoding.domain.auth.common;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
