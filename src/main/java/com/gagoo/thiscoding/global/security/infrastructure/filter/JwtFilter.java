@@ -11,23 +11,19 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
 @Slf4j
+@Component
 @RequiredArgsConstructor
-public class JwtFilter extends OncePerRequestFilter {
+    public class JwtFilter extends OncePerRequestFilter {
 
-    private final SecurityService securityService;
-    private final HttpServletUtils servletUtils;
-    private final TokenProvider tokenProvider;
-
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
-        String path = request.getServletPath();
-        return path.startsWith("/api/auth/login");
-    }
+        private final SecurityService securityService;
+        private final HttpServletUtils servletUtils;
+        private final TokenProvider tokenProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -55,7 +51,7 @@ public class JwtFilter extends OncePerRequestFilter {
      * 토큰이 올바른 형식인지 확인
      */
     private boolean isValidTokenFormat(String token) {
-        return token != null && token.startsWith("Bearer ");
+        return token == null || !token.startsWith("Bearer ");
     }
 
     /**
