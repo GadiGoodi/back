@@ -1,8 +1,7 @@
 package com.gagoo.thiscoding.global.security.config;
 
-import com.gagoo.thiscoding.domain.auth.service.port.SecurityService;
-import com.gagoo.thiscoding.domain.auth.service.port.TokenProvider;
-import com.gagoo.thiscoding.global.common.util.HttpServletUtils;
+import com.gagoo.thiscoding.domain.auth.infrastructure.oauth.OAuth2UserServiceHandler;
+import com.gagoo.thiscoding.domain.auth.infrastructure.oauth.handler.OAuth2AuthenticationSuccessHandler;
 import com.gagoo.thiscoding.global.security.infrastructure.filter.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -32,18 +30,13 @@ import static org.springframework.http.HttpHeaders.*;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final SecurityService securityService;
-    private final HttpServletUtils servletUtils;
-    private final TokenProvider tokenProvider;
+    private final OAuth2AuthenticationSuccessHandler oAuthSuccessHandler;
+    private final OAuth2UserServiceHandler oAuthServiceHandler;
+    private final JwtFilter jwtFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public JwtFilter jwtFilter() {
-        return new JwtFilter(securityService, servletUtils, tokenProvider);
     }
 
     @Bean
@@ -52,7 +45,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
                 .csrf(auth -> auth.disable())
@@ -66,10 +59,20 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorizeRequest ->
                         authorizeRequest
-                                .requestMatchers(
-                                        AntPathRequestMatcher.antMatcher("/**")
+                                .requestMatchers("/login/oauth2/**", "/oauth2/authorization/**", "/api/auth/login", "/**"
                                 ).permitAll()
                 );
+
+        http
+                .oauth2Login(configure -> {
+                    configure.authorizationEndpoint(endpoint ->
+                                    endpoint.baseUri("/oauth2/authorization")
+                            )
+                            .userInfoEndpoint(customizer ->
+                                    customizer.userService(oAuthServiceHandler)
+                            )
+                            .successHandler(oAuthSuccessHandler);
+                });
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
