@@ -27,7 +27,7 @@ public class FakeReplyRepository implements ReplyRepository {
                     .qnaId(reply.getQnaId())
                     .user(reply.getUser())
                     .content(reply.getContent())
-                    .parentId(reply.getParentId())
+                    .parent(reply.getParent())
                     .isBlinded(reply.isBlinded())
                     .createDate(LocalDateTime.now())
                     .build();
@@ -60,7 +60,7 @@ public class FakeReplyRepository implements ReplyRepository {
                 .sorted(Comparator.comparing(Reply::getCreateDate).reversed())
                 .map(reply -> ReplyList.builder()
                         .replyId(reply.getId())
-                        .parentId(reply.getParentId())
+                        .parentId(reply.getParent().getId())
                         .nickname(reply.getUser().getNickname())
                         .profileImage(reply.getUser().getImageUrl())
                         .content(reply.getContent())
@@ -93,11 +93,16 @@ public class FakeReplyRepository implements ReplyRepository {
     @Override
     public boolean existsById(Long parentId) {
         return data.stream()
-                .anyMatch(reply -> reply.getParentId().equals(parentId));
+                .anyMatch(reply -> reply.getParent() != null &&  reply.getParent().getId().equals(parentId));
     }
 
     @Override
     public void delete(Reply reply) {
 
+    }
+
+    @Override
+    public Page<ReplyList> findRepliesByParentId(String qnaId, Long parentId, Pageable pageable) {
+        return null;
     }
 }

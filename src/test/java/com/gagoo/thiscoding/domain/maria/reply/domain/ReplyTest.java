@@ -38,13 +38,13 @@ class ReplyTest {
                     .build();
 
             // when
-            Reply reply = Reply.create(user, qnaId, replyCreate);
+            Reply reply = Reply.create(user, qnaId, replyCreate,null);
 
             // then
             assertThat(reply.getQnaId()).isEqualTo(qnaId);
             assertThat(reply.getUser()).isEqualTo(user);
             assertThat(reply.getContent()).isEqualTo(content);
-            assertThat(reply.getParentId()).isEqualTo(parentId);
+            assertThat(reply.getParent()).isEqualTo(parentId);
             assertThat(reply.isBlinded()).isFalse();
             assertThat(reply.getCreateDate()).isNull();
         }
@@ -71,10 +71,10 @@ class ReplyTest {
                     .content(content)
                     .build();
 
-            Reply reply = Reply.create(user, qnaId, replyCreate);
+            Reply reply = Reply.create(user, qnaId, replyCreate,null);
 
             // then
-            assertThat(reply.getParentId()).isNull();
+            assertThat(reply.getParent()).isNull();
             assertThat(reply.getContent()).isEqualTo(content);
             assertThat(reply.isBlinded()).isFalse();
         }
