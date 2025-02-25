@@ -28,6 +28,7 @@ public class ReplyCustomRepository {
         List<ReplyList> results = query.select(Projections.constructor(ReplyList.class,
                         replyEntity.id,
                         replyEntity.parent.id,
+                        replyEntity.replies.size(),
                         userEntity.nickname,
                         userEntity.imageUrl,
                         replyEntity.content,
@@ -43,7 +44,7 @@ public class ReplyCustomRepository {
 
         JPAQuery<Long> countQuery = query.select(replyEntity.count())
                 .from(replyEntity)
-                .where(qnaIdEq(qnaId));
+                .where(qnaReply(qnaId));
 
         return PageableExecutionUtils.getPage(results, pageable, countQuery::fetchOne);
     }
@@ -60,7 +61,7 @@ public class ReplyCustomRepository {
                 .from(replyEntity)
                 .leftJoin(replyEntity.user, userEntity)
                 .leftJoin(replyEntity.parent)
-                .where(qnaReplies(qnaId))
+                .where(qnaReplies(qnaId,parentId))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(replyEntity.createDate.desc().nullsLast())
@@ -83,8 +84,8 @@ public class ReplyCustomRepository {
     private  BooleanExpression qnaReply(String qnaId) {
         return qnaIdEq(qnaId).and(parentIdIsNull());
     }
-    private BooleanExpression qnaReplies(String qnaId){
-        return qnaIdEq(qnaId).and(parentIdIsNotNull());
+    private BooleanExpression qnaReplies(String qnaId,Long parentId){
+        return qnaIdEq(qnaId).and(parentIdIsNotNull()).and(parentIdEq(parentId));
     }
     private BooleanExpression qnaIdEq(String qnaId) {
         return replyEntity.qnaId.eq(qnaId);
@@ -94,5 +95,8 @@ public class ReplyCustomRepository {
     }
     private  BooleanExpression parentIdIsNotNull(){
         return replyEntity.parent.id.isNotNull();
+    }
+    private  BooleanExpression parentIdEq(Long parentId){
+        return replyEntity.parent.id.eq(parentId);
     }
 }

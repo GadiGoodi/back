@@ -1,17 +1,12 @@
 package com.gagoo.thiscoding.domain.maria.reply.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.gagoo.thiscoding.domain.maria.reply.domain.dto.ReplyCreate;
-import com.gagoo.thiscoding.domain.maria.reply.infrastructure.ReplyEntity;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Getter
 public class Reply {
