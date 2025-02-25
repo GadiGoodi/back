@@ -58,7 +58,7 @@ public class ReplyReadServiceTest {
                             .content("테스트 댓글 " + i)
                             .parentId(null)
                             .build()
-            );
+            ,null);
             testContainer.replyRepository.save(reply);
         }
     }
