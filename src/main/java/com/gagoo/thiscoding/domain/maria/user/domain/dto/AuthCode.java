@@ -2,25 +2,17 @@ package com.gagoo.thiscoding.domain.maria.user.domain.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
-import lombok.Getter;
 
-@Getter
-public class JoinCode {
-
-    @NotBlank
-    private final String email;
-
-    @NotBlank
-    private final String code;
+public record AuthCode(@NotBlank String email, @NotBlank String code) {
 
     @Builder
-    public JoinCode(String email, String code) {
+    public AuthCode(String email, String code) {
         this.email = email;
         this.code = code;
     }
 
-    public static JoinCode from(Certification certification) {
-        return JoinCode.builder()
+    public static AuthCode from(Certification certification) {
+        return AuthCode.builder()
                 .email(certification.getEmail())
                 .code(certification.getCode())
                 .build();

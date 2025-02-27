@@ -7,6 +7,8 @@ import com.gagoo.thiscoding.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class PasswordServiceImpl implements PasswordService {
@@ -21,6 +23,26 @@ public class PasswordServiceImpl implements PasswordService {
     @Override
     public void matchPassword(String rawPassword, String encodedPassword) {
         if (!passwordEncoder.matches(rawPassword, encodedPassword)) {
+            throw new PasswordNotEqualException(ErrorCode.PASSWORD_NOT_EQUAL);
+        }
+    }
+
+    /**
+     * 비밀번호 인코딩
+     */
+    @Override
+    public String encode(String password) {
+        return passwordEncoder.encode(password);
+    }
+
+    /**
+     * 비밀번호가 맞는지 확인
+     * @param newPassword 새로운 비밀번호
+     * @param checkPassword 새로운 비밀번호가 맞는지 확인용 비밀번호
+     */
+    @Override
+    public void validatePasswordMatch(String newPassword, String checkPassword) {
+        if (!Objects.equals(newPassword, checkPassword)) {
             throw new PasswordNotEqualException(ErrorCode.PASSWORD_NOT_EQUAL);
         }
     }
