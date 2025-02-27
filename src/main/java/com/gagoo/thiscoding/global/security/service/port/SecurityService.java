@@ -1,4 +1,4 @@
-package com.gagoo.thiscoding.domain.auth.service.port;
+package com.gagoo.thiscoding.global.security.service.port;
 
 import org.springframework.security.core.Authentication;
 

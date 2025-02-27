@@ -33,10 +33,13 @@ public class User {
         this.social = social;
     }
 
-    public static User create(UserCreate userCreate, PasswordEncoderHolder passwordEncoder) {
+    /**
+     * 회원가입
+     */
+    public static User create(UserCreate userCreate, String encodedPassword) {
         return User.builder()
                 .email(userCreate.getEmail())
-                .password(passwordEncoder.encode(userCreate.getPassword()))
+                .password(encodedPassword)
                 .nickname(userCreate.getNickname())
                 .isActivated(true)
                 .isBanned(false)
@@ -45,6 +48,9 @@ public class User {
                 .build();
     }
 
+    /**
+     * 소셜 로그인 회원가입
+     */
     public static User oAuth2Register(String email, String nickname, String provider) {
         return User.builder()
                 .email(email)
