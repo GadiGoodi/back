@@ -18,5 +18,4 @@ public interface UserRepository {
     boolean existsByNickname(String nickname);
 
     boolean existsByUserId(Long userId);
-
 }

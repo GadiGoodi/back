@@ -1,16 +1,16 @@
 package com.gagoo.thiscoding.domain.maria.user.service;
 
+import com.gagoo.thiscoding.domain.auth.service.port.PasswordService;
 import com.gagoo.thiscoding.domain.maria.user.controller.port.UserService;
+import com.gagoo.thiscoding.domain.maria.user.controller.request.UpdateProfileNicknameRequest;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
-import com.gagoo.thiscoding.domain.maria.user.domain.dto.UpdateProfile;
+import com.gagoo.thiscoding.domain.maria.user.domain.dto.UpdateProfileImageRequest;
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.UserCreate;
 import com.gagoo.thiscoding.domain.maria.user.service.port.RefreshTokenStore;
 import com.gagoo.thiscoding.domain.maria.user.service.exception.AlreadyCreateEmail;
 import com.gagoo.thiscoding.domain.maria.user.service.exception.ExistUserNickname;
-import com.gagoo.thiscoding.domain.maria.user.service.exception.PasswordNotEqualException;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
-import com.gagoo.thiscoding.domain.auth.service.port.PasswordEncoderHolder;
 import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
 import com.gagoo.thiscoding.global.common.util.HttpServletUtils;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +25,7 @@ import static com.gagoo.thiscoding.domain.auth.common.AuthConstants.*;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoderHolder passwordEncoder;
+    private final PasswordService passwordService;
     private final HttpServletUtils httpServletUtils;
     private final RefreshTokenStore refreshTokenStore;
     private final SecurityUtils securityUtils;
@@ -37,14 +37,15 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User create(UserCreate userCreate) {
-        validatePasswordsMatch(userCreate);
-        User user = User.create(userCreate, passwordEncoder);
+        passwordService.validatePasswordMatch(userCreate.getPassword(), userCreate.getCheckPassword());
+        String encodedPassword = passwordService.encode(userCreate.getPassword());
+        User user = User.create(userCreate, encodedPassword);
 
         return userRepository.save(user);
     }
 
     /**
-     * 이메일 존재 여부 검증
+     * 회원가입 진행 시 이메일 존재 여부 검증
      * @return 존재하지 않을 경우 false
      */
     @Override
@@ -53,7 +54,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 닉네임 존재 여부 검증
+     * 회원가입 진행 시 닉네임 존재 여부 검증
      * @return 존재하지 않을 경우 false
      */
     @Override
@@ -62,12 +63,25 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 닉네임 변경
+     */
+    @Override
+    public User updateNickname(UpdateProfileNicknameRequest request) {
+        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
+        validateNicknameExists(currentUser.getNickname());
+
+        User updateUser = currentUser.updateNickname(request.nickname());
+
+        return userRepository.save(updateUser);
+    }
+
+    /**
      * 회원 프로필 이미지 수정
      */
     @Override
-    public User updateImage(UpdateProfile updateProfile) {
+    public User updateImage(UpdateProfileImageRequest request) {
         User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
-        User updateUser = currentUser.updateProfile(updateProfile.getImageUrl());
+        User updateUser = currentUser.updateProfile(request.imageUrl());
 
         return userRepository.save(updateUser);
     }
@@ -104,14 +118,5 @@ public class UserServiceImpl implements UserService {
         }
 
         return false;
-    }
-
-    /**
-     * 비밀번호와 확인 비밀번호 일치하는지 검증
-     */
-    private static void validatePasswordsMatch(UserCreate userCreate) {
-        if (!userCreate.getPassword().equals(userCreate.getCheckPassword())) {
-            throw new PasswordNotEqualException(ErrorCode.PASSWORD_NOT_EQUAL);
-        }
     }
 }

@@ -56,6 +56,26 @@ public class User {
                 .build();
     }
 
+    /**
+     * 닉네임 변경
+     */
+    public User updateNickname(String nickname) {
+        return User.builder()
+                .id(this.id)
+                .email(this.email)
+                .password(this.password)
+                .nickname(nickname)
+                .imageUrl(this.imageUrl)
+                .isActivated(this.isActivated)
+                .isBanned(this.isBanned)
+                .role(this.role)
+                .social(this.social)
+                .build();
+    }
+
+    /**
+     * 프로필 이미지 변경
+     */
     public User updateProfile(String imageUrl) {
         return User.builder()
                 .id(this.id)
