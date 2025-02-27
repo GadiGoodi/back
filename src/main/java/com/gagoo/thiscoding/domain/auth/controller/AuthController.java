@@ -71,4 +71,15 @@ public class AuthController {
     public ResponseEntity<UserResponse> getOauthUserInfo() {
         return ResponseEntity.ok(UserResponse.from(authService.getUserInfo()));
     }
+
+    @DeleteMapping("/logout")
+    @AuthorizationRequired({Role.USER})
+    public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
+        authService.removeToken();
+
+        servletUtils.setHeader(response, AUTHORIZATION, "");
+        servletUtils.removeCookie(request, response, AUTHORIZATION);
+
+        return ResponseEntity.ok().build();
+    }
 }
