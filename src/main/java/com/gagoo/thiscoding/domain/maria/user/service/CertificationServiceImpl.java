@@ -24,7 +24,7 @@ public class CertificationServiceImpl implements CertificationService {
     @Override
     public AuthCode sendJoinCode(String email) {
         Certification certification = mailSender.sendSignUpCode(email);
-        AuthCode authCode = AuthCode.from(certification);
+        AuthCode authCode = AuthCode.of(certification.getEmail(), certification.getCode());
 
         return authCodeStore.save(authCode);
     }
@@ -36,7 +36,7 @@ public class CertificationServiceImpl implements CertificationService {
     @Override
     public AuthCode sendTemporaryPassword(String email) {
         Certification certification = mailSender.sendResetPasswordCode(email);
-        AuthCode authCode = AuthCode.from(certification);
+        AuthCode authCode = AuthCode.of(certification.getEmail(), certification.getCode());
 
         return authCodeStore.save(authCode);
     }
