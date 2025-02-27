@@ -2,9 +2,10 @@ package com.gagoo.thiscoding.domain.maria.user.controller;
 
 import com.gagoo.thiscoding.domain.maria.user.controller.port.MyPageService;
 import com.gagoo.thiscoding.domain.maria.user.controller.port.UserService;
+import com.gagoo.thiscoding.domain.maria.user.controller.request.UpdateProfileNicknameRequest;
 import com.gagoo.thiscoding.domain.maria.user.controller.response.Top10StatusResponse;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
-import com.gagoo.thiscoding.domain.maria.user.domain.dto.UpdateProfile;
+import com.gagoo.thiscoding.domain.maria.user.domain.dto.UpdateProfileImageRequest;
 import com.gagoo.thiscoding.global.security.aop.AuthorizationRequired;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,11 +28,18 @@ public class MyPageController {
                 .ok(Top10StatusResponse.from(myPageService.isTop10()));
     }
 
-    @PatchMapping("/me")
+    @PatchMapping("/me/profile/nickname")
     @AuthorizationRequired(value = {Role.USER}, status = OK)
-    public ResponseEntity<Void> updateProfile(@RequestBody UpdateProfile updateProfile) {
-        userService.updateImage(updateProfile);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> updateProfileNickname(@RequestBody UpdateProfileNicknameRequest request) {
+        userService.updateNickname(request);
+        return ResponseEntity.ok().body("닉네임 사진 변경 완료");
+    }
+
+    @PatchMapping("/me/profile/image")
+    @AuthorizationRequired(value = {Role.USER}, status = OK)
+    public ResponseEntity<String> updateProfileImage(@RequestBody UpdateProfileImageRequest request) {
+        userService.updateImage(request);
+        return ResponseEntity.ok().body("프로필 사진 변경 완료");
     }
 
 }
