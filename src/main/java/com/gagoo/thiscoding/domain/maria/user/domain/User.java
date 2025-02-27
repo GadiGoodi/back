@@ -69,4 +69,21 @@ public class User {
                 .social(this.social)
                 .build();
     }
+
+    /**
+     * 비밀번호 변경
+     */
+    public User changePassword(String newPassword) {
+        return User.builder()
+                .id(this.id)
+                .email(this.email)
+                .password(newPassword)
+                .nickname(this.nickname)
+                .imageUrl(this.imageUrl)
+                .isActivated(this.isActivated)
+                .isBanned(this.isBanned)
+                .role(this.role)
+                .social(this.social)
+                .build();
+    }
 }
