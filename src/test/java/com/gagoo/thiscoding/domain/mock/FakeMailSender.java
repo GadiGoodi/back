@@ -8,8 +8,13 @@ import java.security.SecureRandom;
 public class FakeMailSender implements MailSender {
 
     @Override
-    public Certification send(String email) {
+    public Certification sendSignUpCode(String email) {
         return new Certification(email, generateSecureCode());
+    }
+
+    @Override
+    public Certification sendResetPasswordCode(String email) {
+        return null;
     }
 
     private String generateSecureCode() {

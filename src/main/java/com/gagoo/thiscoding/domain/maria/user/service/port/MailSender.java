@@ -4,5 +4,6 @@ import com.gagoo.thiscoding.domain.maria.user.domain.dto.Certification;
 
 public interface MailSender {
 
-    Certification send(String email);
+    Certification sendSignUpCode(String email);
+    Certification sendResetPasswordCode(String email);
 }

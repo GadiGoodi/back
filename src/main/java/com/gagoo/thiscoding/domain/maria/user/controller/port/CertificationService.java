@@ -1,9 +1,10 @@
 package com.gagoo.thiscoding.domain.maria.user.controller.port;
 
-import com.gagoo.thiscoding.domain.maria.user.domain.dto.JoinCode;
+import com.gagoo.thiscoding.domain.maria.user.domain.dto.AuthCode;
 
 public interface CertificationService {
-    JoinCode sendJoinCode(String email);
+    AuthCode sendJoinCode(String email);
+    AuthCode sendTemporaryPassword(String email);
 
-    JoinCode checkJoinCode(JoinCode joinCode);
+    AuthCode checkAuthCode(AuthCode authCode);
 }

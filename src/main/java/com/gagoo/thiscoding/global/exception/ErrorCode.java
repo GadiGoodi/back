@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ErrorCode {
     SOCIAL_NOT_PROVIDED(HttpStatus.BAD_REQUEST, "이메일이 제공되지 않는 소셜 로그인은 허용되지 않습니다."),
-    JOIN_CODE_NOT_MATCH(HttpStatus.BAD_REQUEST, "인증코드가 일치하지 않습니다"),
+    AUTH_CODE_NOT_MATCH(HttpStatus.BAD_REQUEST, "인증코드가 일치하지 않습니다"),
     PASSWORD_NOT_EQUAL(HttpStatus.BAD_REQUEST, "패스워드가 일치하지 않습니다."),
     CLAIM_NOT_FOUND(HttpStatus.BAD_REQUEST, "토큰에 필요한 클레임이 존재하지 않습니다."),
     INVALID_PAGE_INDEX(HttpStatus.BAD_REQUEST, "페이지가 유효하지 않습니다."),
@@ -25,7 +25,7 @@ public enum ErrorCode {
     CODE_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 코드방입니다."),
     CODE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 파일입니다."),
     CHAT_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 채팅방입니다."),
-    JOIN_CODE_NOT_FOUND(HttpStatus.NOT_FOUND, "인증코드가 존재하지 않습니다."),
+    AUTH_CODE_NOT_FOUND(HttpStatus.NOT_FOUND, "인증코드가 존재하지 않습니다."),
     REPLY_NOT_FOUND(HttpStatus.NOT_FOUND, "댓글이 존재하지 않습니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 이메일입니다."),
     FRIEND_NOT_FOUND(HttpStatus.NOT_FOUND,"친구를 찾을 수 없습니다."),
