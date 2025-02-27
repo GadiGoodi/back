@@ -8,8 +8,8 @@ import com.gagoo.thiscoding.domain.mock.TestContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CertificationServiceImplTest {
 
@@ -19,7 +19,7 @@ class CertificationServiceImplTest {
     void init() {
         TestContainer testContainer = TestContainer.builder().build();
         this.certificationService = testContainer.certificationService;
-}
+    }
 
     @Test
     void 이메일로_인증코드를_보낼_수_있다() {
@@ -43,10 +43,7 @@ class CertificationServiceImplTest {
         AuthCode sendAuthCode = certificationService.sendJoinCode(email);
 
         // when
-        AuthCode authCode = AuthCode.builder()
-                .email(email)
-                .code(sendAuthCode.code())
-                .build();
+        AuthCode authCode = AuthCode.of(email, sendAuthCode.code());
 
         AuthCode result = certificationService.checkAuthCode(authCode);
 
@@ -62,10 +59,7 @@ class CertificationServiceImplTest {
         certificationService.sendJoinCode(email);
 
         // when
-        AuthCode wrongAuthCode = AuthCode.builder()
-                .email(email)
-                .code("000000") // 잘못된 코드
-                .build();
+        AuthCode wrongAuthCode = AuthCode.of(email, "000000"); // 잘못된 코드
 
         // then
         assertThrows(AuthCodeNotMatchException.class,
@@ -80,15 +74,13 @@ class CertificationServiceImplTest {
         AuthCode sendAuthCode = certificationService.sendJoinCode(email);
 
         // when
-        String wrongEmail = "worng@naver.com";
+        String wrongEmail = "wrong@naver.com";
 
-        AuthCode wrongAuthCode = AuthCode.builder()
-                .email(wrongEmail)
-                .code(sendAuthCode.code())
-                .build();
+        AuthCode wrongAuthCode = AuthCode.of(wrongEmail, sendAuthCode.code());
 
+        // then
         assertThrows(AuthCodeNotFoundException.class,
-                () -> certificationService.checkAuthCode(wrongAuthCode));
+                () -> certificationService.checkAuthCode(wrongAuthCode)
+        );
     }
-
 }

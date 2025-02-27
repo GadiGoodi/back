@@ -35,6 +35,10 @@ public class AuthServiceImpl implements AuthService {
         return LoginDto.of(user, token);
     }
 
+    /**
+     * 마이페이지 비밀번호 변경
+     * - 비밀번호 변경
+     */
     @Override
     public User changePassword(ChangePasswordRequest request) {
         User user = userRepository.getByEmail(securityUtils.getUserEmail());
@@ -43,6 +47,10 @@ public class AuthServiceImpl implements AuthService {
         return updatePassword(user, request.newPassword(), request.checkPassword());
     }
 
+    /**
+     * 비밀번호 찾기
+     * - 비밀번호 초기화
+     */
     @Override
     public User resetPassword(ResetPasswordRequest request) {
         User user = userRepository.getByEmail(securityUtils.getUserEmail());
@@ -50,16 +58,21 @@ public class AuthServiceImpl implements AuthService {
         return updatePassword(user, request.newPassword(), request.checkPassword());
     }
 
+    /**
+     * 비밀번호 변경 공통 로직 메서드
+     */
+    private User updatePassword(User user, String newPassword, String checkPassword) {
+        passwordService.validatePasswordMatch(newPassword, checkPassword);
+        User updateUser = user.changePassword(passwordService.encode(newPassword));
+
+        return userRepository.save(updateUser);
+    }
+
+    /**
+     * 현재 로그인한 유저 정보 반환
+     */
     @Override
     public User getUserInfo() {
         return securityUtils.getUser();
     }
-
-    private User updatePassword(User user, String newPassword, String checkPassword) {
-        passwordService.validatePasswordMatch(newPassword, checkPassword);
-        User user = user.changePassword(passwordService.encode(newPassword));
-        
-        return userRepository.save(user);
-    }
-
 }
