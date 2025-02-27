@@ -1,9 +1,9 @@
 package com.gagoo.thiscoding.domain.maria.user.domain;
 
+import com.gagoo.thiscoding.domain.auth.service.port.PasswordEncoderHolder;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Social;
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.UserCreate;
-import com.gagoo.thiscoding.domain.auth.service.port.PasswordEncoderHolder;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -36,10 +36,10 @@ public class User {
     /**
      * 회원가입
      */
-    public static User create(UserCreate userCreate, String encodedPassword) {
+    public static User create(UserCreate userCreate, PasswordEncoderHolder passwordEncoder) {
         return User.builder()
                 .email(userCreate.getEmail())
-                .password(encodedPassword)
+                .password(passwordEncoder.encode(userCreate.getPassword()))
                 .nickname(userCreate.getNickname())
                 .isActivated(true)
                 .isBanned(false)
@@ -99,11 +99,11 @@ public class User {
     /**
      * 비밀번호 변경
      */
-    public User changePassword(String newPassword) {
+    public User changePassword(User user, PasswordEncoderHolder passwordEncoder) {
         return User.builder()
                 .id(this.id)
                 .email(this.email)
-                .password(newPassword)
+                .password(passwordEncoder.encode(user.getPassword()))
                 .nickname(this.nickname)
                 .imageUrl(this.imageUrl)
                 .isActivated(this.isActivated)

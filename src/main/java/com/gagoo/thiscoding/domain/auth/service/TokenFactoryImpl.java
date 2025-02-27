@@ -29,4 +29,12 @@ public class TokenFactoryImpl implements TokenFactory {
 
         return Token.of(atk, rtk, jwtProperties.getRtkExpireTime());
     }
+
+    /**
+     * 로그아웃할 때 리프레시 토큰 삭제
+     */
+    @Override
+    public void remove(String email) {
+        refreshTokenStore.remove(email);
+    }
 }

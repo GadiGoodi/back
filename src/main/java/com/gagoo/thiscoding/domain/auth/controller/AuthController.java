@@ -7,11 +7,14 @@ import com.gagoo.thiscoding.domain.auth.controller.request.ResetPasswordRequest;
 import com.gagoo.thiscoding.domain.auth.controller.response.UserResponse;
 import com.gagoo.thiscoding.domain.auth.dto.LoginDto;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
+import com.gagoo.thiscoding.domain.maria.user.domain.dto.UserCreate;
 import com.gagoo.thiscoding.global.common.util.HttpServletUtils;
 import com.gagoo.thiscoding.global.security.aop.AuthorizationRequired;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +28,15 @@ public class AuthController {
 
     private final AuthService authService;
     private final HttpServletUtils servletUtils;
+
+    @PostMapping("/sign-up")
+    public ResponseEntity<Void> create(@RequestBody UserCreate userCreate) {
+        authService.create(userCreate);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .build();
+    }
 
     @PostMapping("/login")
     public ResponseEntity<UserResponse> login(
@@ -58,5 +70,16 @@ public class AuthController {
     @AuthorizationRequired(value = {Role.USER, Role.ADMIN}, status = OK)
     public ResponseEntity<UserResponse> getOauthUserInfo() {
         return ResponseEntity.ok(UserResponse.from(authService.getUserInfo()));
+    }
+
+    @DeleteMapping("/logout")
+    @AuthorizationRequired({Role.USER})
+    public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
+        authService.removeToken();
+
+        servletUtils.setHeader(response, AUTHORIZATION, "");
+        servletUtils.removeCookie(request, response, AUTHORIZATION);
+
+        return ResponseEntity.ok().build();
     }
 }

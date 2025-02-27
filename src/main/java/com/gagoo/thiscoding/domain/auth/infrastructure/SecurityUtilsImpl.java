@@ -24,7 +24,6 @@ public class SecurityUtilsImpl implements SecurityUtils {
     /**
      * SecurityContextHolder에 저장된 유저 정보 반환
      */
-    @Override
     public User getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
