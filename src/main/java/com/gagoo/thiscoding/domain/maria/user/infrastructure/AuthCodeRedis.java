@@ -7,7 +7,6 @@ import lombok.Getter;
 public class AuthCodeRedis {
 
     private String email;
-
     private String code;
 
     public static AuthCodeRedis from(AuthCode authCode) {
@@ -18,10 +17,7 @@ public class AuthCodeRedis {
         return authCodeRedis;
     }
 
-    public AuthCode toModel( ) {
-        return AuthCode.builder()
-                .email(email)
-                .code(code)
-                .build();
+    public AuthCode toModel() {
+        return AuthCode.of(email, code);
     }
 }
