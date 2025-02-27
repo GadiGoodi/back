@@ -31,7 +31,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException {
-        log.info("Success oauth authentication");
+        log.info("OAuth2AuthenticationSuccessHandler::onAuthenticationSuccess");
         if (response.isCommitted()) {
             return;
         }
@@ -43,7 +43,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         servletUtils.addCookie(response, AUTHORIZATION, token.getRtk(), token.getRtkExpTime());
 
         this.clearAuthenticationAttributes(request, response);
-        this.getRedirectStrategy().sendRedirect(request, response, REDIRECT_URI);
     }
 
     /**

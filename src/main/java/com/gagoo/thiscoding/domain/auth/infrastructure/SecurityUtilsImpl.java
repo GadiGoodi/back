@@ -4,14 +4,11 @@ import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.global.security.exception.AuthorizationException;
 import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SecurityUtilsImpl implements SecurityUtils {
 
     /**
@@ -27,7 +24,8 @@ public class SecurityUtilsImpl implements SecurityUtils {
     /**
      * SecurityContextHolder에 저장된 유저 정보 반환
      */
-    private static User getUser() {
+    @Override
+    public User getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null) {

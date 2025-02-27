@@ -1,6 +1,6 @@
-package com.gagoo.thiscoding.domain.auth.infrastructure;
+package com.gagoo.thiscoding.global.security.service;
 
-import com.gagoo.thiscoding.domain.auth.service.port.SecurityService;
+import com.gagoo.thiscoding.global.security.service.port.SecurityService;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.global.security.infrastructure.ThisCodingAuthentication;
 import lombok.RequiredArgsConstructor;

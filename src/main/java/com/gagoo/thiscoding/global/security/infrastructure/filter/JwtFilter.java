@@ -1,6 +1,6 @@
 package com.gagoo.thiscoding.global.security.infrastructure.filter;
 
-import com.gagoo.thiscoding.domain.auth.service.port.SecurityService;
+import com.gagoo.thiscoding.global.security.service.port.SecurityService;
 import com.gagoo.thiscoding.domain.auth.service.port.TokenProvider;
 import com.gagoo.thiscoding.global.common.util.HttpServletUtils;
 import com.gagoo.thiscoding.global.security.infrastructure.ThisCodingAuthentication;

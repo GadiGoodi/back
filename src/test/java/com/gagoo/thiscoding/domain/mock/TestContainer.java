@@ -8,7 +8,7 @@ import com.gagoo.thiscoding.domain.maria.reply.service.ReplyServiceImpl;
 import com.gagoo.thiscoding.domain.maria.reply.service.port.ReplyRepository;
 import com.gagoo.thiscoding.domain.maria.user.controller.port.CertificationService;
 import com.gagoo.thiscoding.domain.maria.user.service.CertificationServiceImpl;
-import com.gagoo.thiscoding.domain.maria.user.service.port.JoinCodeStore;
+import com.gagoo.thiscoding.domain.maria.user.service.port.AuthCodeStore;
 import com.gagoo.thiscoding.domain.maria.user.service.port.MailSender;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.domain.mongo.board.controller.port.BoardService;
@@ -21,7 +21,7 @@ import lombok.Builder;
 public class TestContainer {
 
     public final MailSender mailSender;
-    public final JoinCodeStore joinCodeStore;
+    public final AuthCodeStore authCodeStore;
     public final PasswordEncoderHolder passwordEncoderHolder;
     public final UserRepository userRepository;
     public final ReplyRepository replyRepository;
@@ -39,7 +39,7 @@ public class TestContainer {
         this.mailSender = new FakeMailSender();
         this.passwordEncoderHolder = new FakePasswordEncoder();
 
-        this.joinCodeStore = new FakeJoinCodeStore();
+        this.authCodeStore = new FakeAuthCodeStore();
         this.managerRepository = new FakeManagerRepository();
         this.userRepository = new FakeUserRepository();
         this.replyRepository = new FakeReplyRepository();
@@ -47,7 +47,7 @@ public class TestContainer {
 
         this.certificationService = CertificationServiceImpl.builder()
                 .mailSender(this.mailSender)
-                .joinCodeStore(this.joinCodeStore)
+                .authCodeStore(this.authCodeStore)
                 .build();
         this.replyService = ReplyServiceImpl.builder()
                 .replyRepository(this.replyRepository)
