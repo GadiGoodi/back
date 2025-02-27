@@ -57,7 +57,7 @@ public class AuthServiceImpl implements AuthService {
 
     private User updatePassword(User user, String newPassword, String checkPassword) {
         passwordService.validatePasswordMatch(newPassword, checkPassword);
-        USer user = user.changePassword(passwordService.encode(newPassword));
+        User user = user.changePassword(passwordService.encode(newPassword));
         
         return userRepository.save(user);
     }
