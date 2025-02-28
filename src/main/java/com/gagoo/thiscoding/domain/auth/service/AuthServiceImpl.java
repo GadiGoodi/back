@@ -41,9 +41,9 @@ public class AuthServiceImpl implements AuthService {
      * 로그인
      */
     @Override
-    public LoginDto login(LoginRequest loginRequest) {
-        User user = userRepository.getByEmail(loginRequest.getEmail());
-        passwordService.matchPassword(loginRequest.getPassword(), user.getPassword());
+    public LoginDto login(LoginRequest request) {
+        User user = userRepository.getByEmail(request.email());
+        passwordService.matchPassword(request.password(), user.getPassword());
         Token token = tokenFactory.createToken(user);
 
         return LoginDto.of(user, token);
