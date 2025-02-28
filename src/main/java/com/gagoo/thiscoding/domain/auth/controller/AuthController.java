@@ -30,7 +30,7 @@ public class AuthController {
     private final HttpServletUtils servletUtils;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<Void> create(@RequestBody UserCreate userCreate) {
+    public ResponseEntity<Void> create(@Valid @RequestBody UserCreate userCreate) {
         authService.create(userCreate);
 
         return ResponseEntity
@@ -51,7 +51,7 @@ public class AuthController {
     }
 
     @PostMapping("/change-password")
-    @AuthorizationRequired(value = Role.USER, status = OK)
+    @AuthorizationRequired(value = {Role.USER, Role.ADMIN}, status = OK)
     public ResponseEntity<String> changePassword(@Valid ChangePasswordRequest request) {
         authService.changePassword(request);
 
@@ -59,7 +59,7 @@ public class AuthController {
     }
 
     @PostMapping("/reset-password")
-    @AuthorizationRequired(value = Role.USER, status = OK)
+    @AuthorizationRequired(value = {Role.USER, Role.ADMIN}, status = OK)
     public ResponseEntity<String> resetPassword(@Valid ResetPasswordRequest request) {
         authService.resetPassword(request);
 
@@ -73,7 +73,7 @@ public class AuthController {
     }
 
     @DeleteMapping("/logout")
-    @AuthorizationRequired({Role.USER})
+    @AuthorizationRequired(value = {Role.USER, Role.ADMIN}, status = OK)
     public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
         authService.removeToken();
 
