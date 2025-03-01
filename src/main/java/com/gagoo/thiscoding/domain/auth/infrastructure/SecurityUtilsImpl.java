@@ -27,7 +27,7 @@ public class SecurityUtilsImpl implements SecurityUtils {
     public User getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication == null) {
+        if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
             throw new AuthorizationException(ErrorCode.USER_NOT_LOGIN);
         }
 

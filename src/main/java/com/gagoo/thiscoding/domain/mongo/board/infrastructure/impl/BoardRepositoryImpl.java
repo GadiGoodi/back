@@ -21,12 +21,23 @@ import java.util.stream.Collectors;
 public class BoardRepositoryImpl implements BoardRepository {
 
     private final BoardMongoRepository boardMongoRepository;
+    private final BoardCustomRepository boardCustomRepository;
 
     @Override
     public Board getById(String qnaId) {
         return findById(qnaId).orElseThrow(
                 () -> new QnaNotFoundException(ErrorCode.QNA_NOT_FOUND)
         );
+    }
+
+    @Override
+    public void incrementViewCount(String qnaId) {
+        boardCustomRepository.incrementViewCount(qnaId);
+    }
+
+    @Override
+    public List<Long> getTop10Users() {
+        return boardCustomRepository.getTop10Users();
     }
 
     /**

@@ -63,7 +63,7 @@ public class Board {
     /**
      * 답변이 작성되면 부모 게시물의 답변 갯수 증가
      */
-    public void addAnswerCount() {
+    public void increaseAnswerCount() {
         this.answerCount++;
     }
 }

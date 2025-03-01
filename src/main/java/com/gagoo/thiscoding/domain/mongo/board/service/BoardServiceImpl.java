@@ -11,9 +11,16 @@ import com.gagoo.thiscoding.domain.mongo.board.domain.dto.Search;
 import com.gagoo.thiscoding.domain.mongo.board.service.dto.QnaDetail;
 import com.gagoo.thiscoding.domain.mongo.board.service.dto.QnaList;
 import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardRepository;
+import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardViewService;
+import com.gagoo.thiscoding.global.common.util.HttpServletUtils;
+import com.gagoo.thiscoding.global.common.uuid.service.port.UuidHolder;
 import com.gagoo.thiscoding.global.paging.PageSize;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
 import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
+import com.gagoo.thiscoding.global.security.exception.AuthorizationException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Builder
@@ -33,7 +41,10 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final ReplyRepository replyRepository;
+    private final BoardViewService boardViewService;
     private final SecurityUtils securityUtils;
+    private final HttpServletUtils httpServletUtils;
+    private final UuidHolder uuidHolder;
 
     /**
      * qna 등록
@@ -55,7 +66,7 @@ public class BoardServiceImpl implements BoardService {
         User currentUser = getCurrentUser();
 
         Board parentBoard = boardRepository.getById(parentQnaId);
-        parentBoard.addAnswerCount();
+        parentBoard.increaseAnswerCount();
 
         Board answer = Board.writeAnswer(currentUser, parentQnaId, boardAnswer.content());
 
@@ -66,13 +77,16 @@ public class BoardServiceImpl implements BoardService {
      * qna 상세조회
      */
     @Override
-    public QnaDetail get(String qnaId) {
+    public QnaDetail get(String qnaId, HttpServletRequest request, HttpServletResponse response) {
+        String visitorId = getVisitorId(request, response);
+
+        boardViewService.processVisit(qnaId, visitorId);
+
         Board qnaDetail = boardRepository.getById(qnaId);
         Long replyCount = replyRepository.countByQnaId(qnaId);
 
         return QnaDetail.from(qnaDetail, replyCount);
     }
-
     /**
      * QnA 제목 + 내용 검색
      */
@@ -103,6 +117,31 @@ public class BoardServiceImpl implements BoardService {
         return CustomPageDto.of(qnaListPage);
     }
 
+    /**
+     * 방문자 정보 조회
+     */
+    private String getVisitorId(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            return securityUtils.getUserEmail();
+        } catch (AuthorizationException e) {
+            // 비로그인 사용자의 경우 쿠키에서 visitorId 가져오기
+            Optional<Cookie> visitorCookie = httpServletUtils.getCookie(request, "visitorId");
+
+            if (visitorCookie.isPresent()) {
+                return visitorCookie.get().getValue();
+            }
+
+            // 쿠키가 없으면 새로 생성
+            String visitorId = uuidHolder.random();
+            httpServletUtils.addCookie(response, "visitorId", visitorId, 60L * 60 * 24 * 365);
+
+            return visitorId;
+        }
+    }
+
+    /**
+     * 현재 로그인한 사용자 조회
+     */
     private User getCurrentUser() {
         return userRepository.getByEmail(securityUtils.getUserEmail());
     }

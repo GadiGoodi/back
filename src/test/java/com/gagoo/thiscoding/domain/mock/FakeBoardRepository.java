@@ -52,6 +52,11 @@ public class FakeBoardRepository implements BoardRepository {
     }
 
     @Override
+    public List<Long> getTop10Users() {
+        return null;
+    }
+
+    @Override
     public Page<Board> findByUserId(Long userId, Pageable pageable) {
         if (pageable.getPageSize() < 1) {
             return Page.empty(pageable);
@@ -89,6 +94,11 @@ public class FakeBoardRepository implements BoardRepository {
     @Override
     public boolean existsById(String qnaId) {
         return data.stream().anyMatch(board -> board.getId().equals(qnaId));
+    }
+
+    @Override
+    public void incrementViewCount(String boardId) {
+
     }
 
     @Override
