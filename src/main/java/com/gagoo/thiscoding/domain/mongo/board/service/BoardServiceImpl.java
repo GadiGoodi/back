@@ -4,6 +4,7 @@ import com.gagoo.thiscoding.domain.maria.reply.service.port.ReplyRepository;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.domain.mongo.board.controller.port.BoardService;
+import com.gagoo.thiscoding.domain.mongo.board.controller.request.BoardAnswer;
 import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
 import com.gagoo.thiscoding.domain.mongo.board.domain.dto.BoardCreate;
 import com.gagoo.thiscoding.domain.mongo.board.domain.dto.Search;
@@ -20,6 +21,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Builder
@@ -38,11 +41,25 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional
     public Board create(BoardCreate boardCreate) {
-        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
-
+        User currentUser = getCurrentUser();
         Board board = Board.create(currentUser, boardCreate);
 
         return boardRepository.save(board);
+    }
+
+    /**
+     * qna 답변 작성
+     */
+    @Override
+    public List<Board> writeAnswer(String parentQnaId, BoardAnswer boardAnswer) {
+        User currentUser = getCurrentUser();
+
+        Board parentBoard = boardRepository.getById(parentQnaId);
+        parentBoard.addAnswerCount();
+
+        Board answer = Board.writeAnswer(currentUser, parentQnaId, boardAnswer.content());
+
+        return boardRepository.saveAll(List.of(answer, parentBoard));
     }
 
     /**
@@ -70,7 +87,7 @@ public class BoardServiceImpl implements BoardService {
      */
     @Override
     public Page<Board> getMyPagePostQnA(Pageable pageable) {
-        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
+        User currentUser = getCurrentUser();
         return boardRepository.findByUserId(currentUser.getId(), pageable);
     }
 
@@ -79,10 +96,14 @@ public class BoardServiceImpl implements BoardService {
      */
     @Override
     public CustomPageDto<QnaList> findAll(Pageable pageable) {
-        Page<QnaList> qnaListPage = boardRepository.findByParentIdIsNull(pageable).map(
+        Page<QnaList> qnaListPage = boardRepository.findAll(pageable).map(
                 QnaList::from
         );
 
         return CustomPageDto.of(qnaListPage);
+    }
+
+    private User getCurrentUser() {
+        return userRepository.getByEmail(securityUtils.getUserEmail());
     }
 }

@@ -24,12 +24,7 @@ class BoardTest {
                 .isBanned(false)
                 .build();
 
-        BoardCreate boardCreate = BoardCreate.builder()
-                .title("테스트 게시물")
-                .content("테스트 게시물 내용")
-                .language("Java")
-                .parentId(null)
-                .build();
+        BoardCreate boardCreate = BoardCreate.of("테스트 게시물", "테스트 게시물 내용", "Java");
 
         // when
         Board board = Board.create(user, boardCreate);
@@ -39,14 +34,14 @@ class BoardTest {
         assertThat(board.getNickname()).isEqualTo(user.getNickname());
         assertThat(board.getProfileImg()).isEqualTo(user.getImageUrl());
 
-        assertThat(board.getTitle()).isEqualTo(boardCreate.getTitle());
-        assertThat(board.getContent()).isEqualTo(boardCreate.getContent());
-        assertThat(board.getLanguage()).isEqualTo(boardCreate.getLanguage());
-        assertThat(board.getParentId()).isEqualTo(boardCreate.getParentId());
+        assertThat(board.getTitle()).isEqualTo(boardCreate.title());
+        assertThat(board.getContent()).isEqualTo(boardCreate.content());
+        assertThat(board.getLanguage()).isEqualTo(boardCreate.language());
 
         assertThat(board.getLikeCount()).isEqualTo(0L);
         assertThat(board.getViewCount()).isEqualTo(0L);
         assertThat(board.getAnswerCount()).isEqualTo(0L);
+        assertThat(board.getParentId()).isEqualTo("root");
         assertThat(board.isBlind()).isEqualTo(false);
         assertThat(board.isSelected()).isEqualTo(false);
     }

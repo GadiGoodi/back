@@ -12,7 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -31,8 +33,8 @@ public class BoardRepositoryImpl implements BoardRepository {
      * qna 전체조회
      */
     @Override
-    public Page<Board> findByParentIdIsNull(Pageable pageable) {
-        return boardMongoRepository.findByParentIdIsNullOrderByCreateDateDesc(pageable).map(BoardDocument::toModel);
+    public Page<Board> findAll(Pageable pageable) {
+        return boardMongoRepository.findByParentIdOrderByCreateDateDesc("root", pageable).map(BoardDocument::toModel);
     }
 
     @Override
@@ -42,14 +44,26 @@ public class BoardRepositoryImpl implements BoardRepository {
     }
 
     @Override
+    public Page<Search> findByTitleOrContent(String title, String content, Pageable pageable) {
+        return boardMongoRepository.findByTitleContainingOrContentContaining(title, content, pageable).map(
+            Search::from);
+    }
+
+    @Override
     public Board save(Board board) {
         return boardMongoRepository.save(BoardDocument.from(board)).toModel();
     }
 
     @Override
-    public Page<Search> findByTitleOrContent(String title, String content, Pageable pageable) {
-        return boardMongoRepository.findByTitleContainingOrContentContaining(title, content, pageable).map(
-            Search::from);
+    public List<Board> saveAll(List<Board> boards) {
+        return boardMongoRepository.saveAll(
+                        boards.stream()
+                                .map(BoardDocument::from)
+                                .collect(Collectors.toList())
+                )
+                .stream()
+                .map(BoardDocument::toModel)
+                .collect(Collectors.toList());
     }
 
     @Override

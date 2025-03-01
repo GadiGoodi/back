@@ -25,20 +25,45 @@ public class Board {
     private boolean isSelected;
     private LocalDateTime createDate;
 
+    /**
+     * qna 작성
+     */
     public static Board create(User user, BoardCreate boardCreate) {
         return Board.builder()
                 .userId(user.getId())
                 .nickname(user.getNickname())
                 .profileImg(user.getImageUrl())
-                .title(boardCreate.getTitle())
-                .content(boardCreate.getContent())
-                .language(boardCreate.getLanguage())
-                .parentId(boardCreate.getParentId())
+                .title(boardCreate.title())
+                .content(boardCreate.content())
+                .language(boardCreate.language())
+                .parentId("root")
                 .likeCount(0L)
                 .viewCount(0L)
                 .answerCount(0L)
                 .isBlind(false)
+                .build();
+    }
+
+    /**
+     * 답변 작성
+     */
+    public static Board writeAnswer(User user, String parentId, String content) {
+        return Board.builder()
+                .userId(user.getId())
+                .nickname(user.getNickname())
+                .profileImg(user.getImageUrl())
+                .content(content)
+                .parentId(parentId)
+                .likeCount(0L)
+                .isBlind(false)
                 .isSelected(false)
                 .build();
+    }
+
+    /**
+     * 답변이 작성되면 부모 게시물의 답변 갯수 증가
+     */
+    public void addAnswerCount() {
+        this.answerCount++;
     }
 }

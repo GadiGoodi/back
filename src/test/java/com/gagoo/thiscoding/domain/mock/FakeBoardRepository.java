@@ -82,12 +82,17 @@ public class FakeBoardRepository implements BoardRepository {
     }
 
     @Override
+    public List<Board> saveAll(List<Board> boardList) {
+        return null;
+    }
+
+    @Override
     public boolean existsById(String qnaId) {
         return data.stream().anyMatch(board -> board.getId().equals(qnaId));
     }
 
     @Override
-    public Page<Board> findByParentIdIsNull(Pageable pageable) {
+    public Page<Board> findAll(Pageable pageable) {
         if (pageable.getPageSize() < 1) {
             return Page.empty(pageable);
         }

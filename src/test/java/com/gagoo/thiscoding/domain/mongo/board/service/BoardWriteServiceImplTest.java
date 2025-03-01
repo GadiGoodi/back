@@ -40,21 +40,16 @@ class BoardWriteServiceImplTest {
     @DisplayName("게시물 작성 단위테스트")
     void BoardCreate_request_로_게시물을_작성할_수_있다() {
         // given
-        BoardCreate boardCreate = BoardCreate.builder()
-                .title("테스트 게시물")
-                .content("테스트 게시물 내용")
-                .language("Java")
-                .parentId(null)
-                .build();
+        BoardCreate boardCreate = BoardCreate.of("테스트 게시물", "테스트 게시물 내용", "Java");
 
         // when
         Board board = boardService.create(boardCreate);
         System.out.println("board.toString() = " + board.toString());
 
         // then
-        assertThat(board.getTitle()).isEqualTo(boardCreate.getTitle());
-        assertThat(board.getContent()).isEqualTo(boardCreate.getContent());
-        assertThat(board.getLanguage()).isEqualTo(boardCreate.getLanguage());
+        assertThat(board.getTitle()).isEqualTo(boardCreate.title());
+        assertThat(board.getContent()).isEqualTo(boardCreate.content());
+        assertThat(board.getLanguage()).isEqualTo(boardCreate.language());
         assertThat(board.getParentId()).isNull();
     }
 }
