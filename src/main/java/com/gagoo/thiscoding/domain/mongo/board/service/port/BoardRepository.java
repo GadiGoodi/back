@@ -10,9 +10,11 @@ import java.util.List;
 public interface BoardRepository {
     Board save(Board board);
     Board getById(String qnaId);
-    boolean existsById(String qnaId);
+    List<Long> getTop10Users();
     Page<Board> findAll(Pageable pageable);
     Page<Board> findByUserId(Long userId, Pageable pageable);
     Page<Search> findByTitleOrContent(String title, String content, Pageable pageable);
     List<Board> saveAll(List<Board> boardList);
+    boolean existsById(String qnaId);
+    void incrementViewCount(String qnaId);
 }

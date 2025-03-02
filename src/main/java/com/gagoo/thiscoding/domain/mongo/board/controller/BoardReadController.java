@@ -6,6 +6,8 @@ import com.gagoo.thiscoding.domain.mongo.board.controller.response.SearchRespons
 import com.gagoo.thiscoding.domain.mongo.board.service.dto.QnaList;
 import com.gagoo.thiscoding.global.paging.aop.ConvertToOneBase;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,10 +26,10 @@ public class BoardReadController {
     private final BoardService boardService;
 
     @GetMapping("/{qnaId}")
-    public ResponseEntity<QnaResponse> get(@PathVariable String qnaId) {
+    public ResponseEntity<QnaResponse> get(@PathVariable String qnaId, HttpServletRequest request, HttpServletResponse response) {
         return ResponseEntity
                 .ok()
-                .body(QnaResponse.from(boardService.get(qnaId)));
+                .body(QnaResponse.from(boardService.get(qnaId, request, response)));
     }
 
     @GetMapping

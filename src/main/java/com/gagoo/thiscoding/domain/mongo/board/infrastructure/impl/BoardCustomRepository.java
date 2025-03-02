@@ -1,6 +1,6 @@
 package com.gagoo.thiscoding.domain.mongo.board.infrastructure.impl;
 
-import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardCustomRepository;
+import com.gagoo.thiscoding.domain.mongo.board.infrastructure.BoardDocument;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -8,6 +8,8 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.bson.Document;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,9 +19,10 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 
 @Repository
 @RequiredArgsConstructor
-public class BoardMongoCustomRepositoryImpl implements BoardCustomRepository {
+public class BoardCustomRepository {
 
     private final MongoTemplate mongoTemplate;
+
     public List<Long> getTop10Users() {
         Aggregation aggregation = getTop10Aggregation();
         AggregationResults<Document> results = getAggregationResults(aggregation);
@@ -53,4 +56,12 @@ public class BoardMongoCustomRepositoryImpl implements BoardCustomRepository {
                 mongoTemplate.aggregate(aggregation, "board", Document.class);
         return results;
     }
+
+    public void incrementViewCount(String qnaId) {
+        Query query = new Query(Criteria.where("_id").is(qnaId));
+        Update update = new Update().inc("viewCount", 1);
+
+        mongoTemplate.updateFirst(query, update, BoardDocument.class);
+    }
+
 }
