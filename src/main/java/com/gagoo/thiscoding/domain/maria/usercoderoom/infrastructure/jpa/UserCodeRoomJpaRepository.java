@@ -4,5 +4,6 @@ import com.gagoo.thiscoding.domain.maria.usercoderoom.infrastructure.UserCodeRoo
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserCodeRoomJpaRepository extends JpaRepository<UserCodeRoomEntity, Long> {
+    boolean existsByCodeRoomIdAndUserId(Long codeRoomId, Long userId);
 }
 

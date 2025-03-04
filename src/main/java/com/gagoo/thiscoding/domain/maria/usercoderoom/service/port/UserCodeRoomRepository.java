@@ -10,5 +10,7 @@ public interface UserCodeRoomRepository {
 
     UserCodeRoom save(UserCodeRoom userCodeRoom);
 
-    void delete(UserCodeRoom userCodeRoom);
+    void deleteById(Long userCodeRoomId);
+
+    boolean existByCodeRoomIdAndUserId(Long codeRoomId, Long userId);
 }
