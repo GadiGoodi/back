@@ -9,7 +9,7 @@ import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
 import com.gagoo.thiscoding.domain.maria.alarm.service.exception.AlarmNotFoundException;
 import com.gagoo.thiscoding.domain.maria.alarm.service.port.AlarmRepository;
 import com.gagoo.thiscoding.domain.maria.coderoom.controller.port.InvitationService;
-import com.gagoo.thiscoding.domain.maria.coderoom.controller.response.InvitedCodeRoomResponse;
+import com.gagoo.thiscoding.domain.maria.coderoom.controller.response.InvitationCodeRoomResponse;
 import com.gagoo.thiscoding.domain.maria.coderoom.domain.CodeRoom;
 import com.gagoo.thiscoding.domain.maria.coderoom.service.exception.AlreadyJoinedCodeRoomException;
 import com.gagoo.thiscoding.domain.maria.coderoom.service.exception.CodeRoomNotFoundException;
@@ -43,12 +43,12 @@ public class InvitationServiceImpl implements InvitationService {
      * 초대된 코드방 조회
      */
     @Override
-    public CustomPageDto<InvitedCodeRoomResponse> getInvitationCodeRoomList(Pageable pageable) {
+    public CustomPageDto<InvitationCodeRoomResponse> getInvitationCodeRoomList(Pageable pageable) {
         User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
         Pageable customPageable = PageRequest.of(pageable.getPageNumber(), CODEROOM);
         return CustomPageDto.of(
             codeRoomRepository.findInvitedCodeRoomsByUser(currentUser, customPageable)
-                .map(InvitedCodeRoomResponse::from)
+                .map(InvitationCodeRoomResponse::from)
         );
     }
 

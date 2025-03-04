@@ -2,7 +2,7 @@ package com.gagoo.thiscoding.domain.maria.coderoom.service.port;
 
 import com.gagoo.thiscoding.domain.maria.coderoom.domain.CodeRoom;
 
-import com.gagoo.thiscoding.domain.maria.coderoom.domain.dto.InvitedCodeRoom;
+import com.gagoo.thiscoding.domain.maria.coderoom.domain.dto.InvitationCodeRoom;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -13,5 +13,5 @@ public interface CodeRoomRepository {
     Optional<CodeRoom> findByUuid(String uuid);
     Optional<CodeRoom> findById(Long id);
     void deleteById(Long id);
-    Page<InvitedCodeRoom> findInvitedCodeRoomsByUser(User user, Pageable pageable);
+    Page<InvitationCodeRoom> findInvitedCodeRoomsByUser(User user, Pageable pageable);
 }

@@ -1,7 +1,7 @@
 package com.gagoo.thiscoding.domain.maria.coderoom.infrastructure.Impl;
 
 import com.gagoo.thiscoding.domain.maria.coderoom.domain.CodeRoom;
-import com.gagoo.thiscoding.domain.maria.coderoom.domain.dto.InvitedCodeRoom;
+import com.gagoo.thiscoding.domain.maria.coderoom.domain.dto.InvitationCodeRoom;
 import com.gagoo.thiscoding.domain.maria.coderoom.infrastructure.CodeRoomEntity;
 import com.gagoo.thiscoding.domain.maria.coderoom.infrastructure.jpa.CodeRoomCustomRepository;
 import com.gagoo.thiscoding.domain.maria.coderoom.infrastructure.jpa.CodeRoomJpaRepository;
@@ -37,7 +37,7 @@ public class CodeRoomRepositoryImpl implements CodeRoomRepository {
     }
 
     @Override
-    public Page<InvitedCodeRoom> findInvitedCodeRoomsByUser(User user, Pageable pageable) {
+    public Page<InvitationCodeRoom> findInvitedCodeRoomsByUser(User user, Pageable pageable) {
         return codeRoomCustomRepository.findInvitedCodeRoomsByUser(user, pageable);
     }
 

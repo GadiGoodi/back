@@ -5,7 +5,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 import com.gagoo.thiscoding.domain.maria.coderoom.controller.port.InvitationService;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
-import com.gagoo.thiscoding.domain.maria.coderoom.controller.response.InvitedCodeRoomResponse;
+import com.gagoo.thiscoding.domain.maria.coderoom.controller.response.InvitationCodeRoomResponse;
 import com.gagoo.thiscoding.global.paging.aop.ConvertToOneBase;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
 import com.gagoo.thiscoding.global.security.aop.AuthorizationRequired;
@@ -29,7 +29,7 @@ public class InvitationController {
     @GetMapping
     @ConvertToOneBase
     @AuthorizationRequired(value = Role.USER, status = OK)
-    public ResponseEntity<CustomPageDto<InvitedCodeRoomResponse>> CodeRoomInviteListView(Pageable pageable) {
+    public ResponseEntity<CustomPageDto<InvitationCodeRoomResponse>> CodeRoomInviteListView(Pageable pageable) {
         return ResponseEntity
             .ok(invitationService.getInvitationCodeRoomList(pageable));
     }
