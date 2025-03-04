@@ -1,5 +1,7 @@
 package com.gagoo.thiscoding.domain.maria.alarm.infrastructure.impl;
 
+import static org.springframework.transaction.annotation.Propagation.REQUIRES_NEW;
+
 import com.gagoo.thiscoding.domain.maria.alarm.domain.Alarm;
 import com.gagoo.thiscoding.domain.maria.alarm.domain.AlarmType;
 import com.gagoo.thiscoding.domain.maria.alarm.infrastructure.AlarmEntity;
@@ -10,7 +12,6 @@ import com.gagoo.thiscoding.global.exception.ErrorCode;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
@@ -36,7 +37,7 @@ public class AlarmRepositoryImpl implements AlarmRepository {
         return alarmJpaRepository.save(AlarmEntity.from(alarm)).toModel();
     }
 
-    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    @Transactional(propagation = REQUIRES_NEW)
     @Override
     public void deleteById(Long alarmId) {
         alarmJpaRepository.deleteById(alarmId);
