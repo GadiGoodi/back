@@ -7,6 +7,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface BoardMongoRepository extends MongoRepository<BoardDocument, String> {
     Page<BoardDocument> findByUserId(Long userId, Pageable pageable);
     Page<BoardDocument> findByTitleContainingOrContentContaining(String title, String content, Pageable pageable);
-    Page<BoardDocument> findByParentIdOrderByCreateDateDesc(String parentId, Pageable pageable);
+    Page<BoardDocument> findByParentIdAndIsBlindFalseOrderByCreateDateDesc(String parentId, Pageable pageable);
 }
 

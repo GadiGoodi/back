@@ -26,7 +26,7 @@ public class BoardWriteController {
         return ResponseEntity.created(null).build();
     }
 
-    @PostMapping("/{qnaId}")
+    @PostMapping("/{qnaId}/answer")
     @AuthorizationRequired(value = {Role.USER, Role.ADMIN}, status = OK)
     public ResponseEntity<Void> writeAnswer(@PathVariable String qnaId, @RequestBody BoardAnswer boardAnswer) {
         boardService.writeAnswer(qnaId, boardAnswer);

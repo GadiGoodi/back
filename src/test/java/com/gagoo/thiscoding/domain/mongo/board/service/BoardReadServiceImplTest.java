@@ -42,12 +42,11 @@ class BoardReadServiceImplTest {
 
         this.boardService = testContainer.boardService;
 
-        Board board = Board.create(user, BoardCreate.builder()
-                .title("테스트 게시물")
-                .content("테스트 게시물 내용")
-                .language("Java")
-                .parentId(null)
-                .build());
+        Board board = Board.create(user, BoardCreate.of(
+                "테스트 게시물",
+                "테스트 게시물 내용",
+                "Java")
+        );
 
         this.testBoard = testContainer.boardRepository.save(board);
     }
@@ -92,12 +91,11 @@ class BoardReadServiceImplTest {
         @BeforeEach
         void init() {
             for (int i = 1; i <= 27; i++) {
-                boardService.create(BoardCreate.builder()
-                        .title("테스트 게시물 " + i)
-                        .content("테스트 내용 " + i)
-                        .language("Java")
-                        .parentId(null)
-                        .build());
+                boardService.create(BoardCreate.of(
+                        "테스트 게시물" + i,
+                        "테스트 게시물 내용" + i,
+                        "Java" + i)
+                );
             }
         }
 
@@ -131,9 +129,9 @@ class BoardReadServiceImplTest {
             LocalDateTime prevCreateDate = null;
             for (QnaList board : result.getContent()) {
                 if (prevCreateDate != null) {
-                    assertThat(board.getCreateDate()).isBeforeOrEqualTo(prevCreateDate);
+                    assertThat(board.createDate()).isBeforeOrEqualTo(prevCreateDate);
                 }
-                prevCreateDate = board.getCreateDate();
+                prevCreateDate = board.createDate();
             }
         }
 

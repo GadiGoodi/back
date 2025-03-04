@@ -1,8 +1,10 @@
 package com.gagoo.thiscoding.domain.mongo.board.controller;
 
 import com.gagoo.thiscoding.domain.mongo.board.controller.port.BoardService;
+import com.gagoo.thiscoding.domain.mongo.board.controller.response.AnswerListResponse;
 import com.gagoo.thiscoding.domain.mongo.board.controller.response.QnaResponse;
 import com.gagoo.thiscoding.domain.mongo.board.controller.response.SearchResponse;
+import com.gagoo.thiscoding.domain.mongo.board.service.dto.AnswerList;
 import com.gagoo.thiscoding.domain.mongo.board.service.dto.QnaList;
 import com.gagoo.thiscoding.global.paging.aop.ConvertToOneBase;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
@@ -37,6 +39,15 @@ public class BoardReadController {
     public ResponseEntity<CustomPageDto<QnaList>> getAll(Pageable pageable) {
         return ResponseEntity.ok(boardService.findAll(pageable));
     }
+
+    @GetMapping("/{qnaId}/answer")
+    @ConvertToOneBase
+    public ResponseEntity<CustomPageDto<AnswerListResponse>> getAnswersByQnaId(
+            @PathVariable String qnaId, Pageable pageable) {
+        Page<AnswerList> answerPage = boardService.findAnswersByQnaId(qnaId, pageable);
+        return ResponseEntity.ok(CustomPageDto.of(answerPage.map(AnswerListResponse::from)));
+    }
+
 
     @GetMapping("/search")
     @ConvertToOneBase

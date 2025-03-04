@@ -8,6 +8,7 @@ import com.gagoo.thiscoding.domain.mongo.board.controller.request.BoardAnswer;
 import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
 import com.gagoo.thiscoding.domain.mongo.board.domain.dto.BoardCreate;
 import com.gagoo.thiscoding.domain.mongo.board.domain.dto.Search;
+import com.gagoo.thiscoding.domain.mongo.board.service.dto.AnswerList;
 import com.gagoo.thiscoding.domain.mongo.board.service.dto.QnaDetail;
 import com.gagoo.thiscoding.domain.mongo.board.service.dto.QnaList;
 import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardRepository;
@@ -115,6 +116,14 @@ public class BoardServiceImpl implements BoardService {
         );
 
         return CustomPageDto.of(qnaListPage);
+    }
+
+    /**
+     * 특정 qna에 대한 답변 조회
+     */
+    @Override
+    public Page<AnswerList> findAnswersByQnaId(String qnaId, Pageable pageable) {
+        return boardRepository.findAnswerByQnaId(qnaId, pageable).map(AnswerList::from);
     }
 
     /**
