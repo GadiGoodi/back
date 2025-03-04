@@ -9,8 +9,8 @@ import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
 import com.gagoo.thiscoding.domain.maria.alarm.service.exception.AlarmNotFoundException;
 import com.gagoo.thiscoding.domain.maria.alarm.service.port.AlarmRepository;
 import com.gagoo.thiscoding.domain.maria.coderoom.controller.port.InvitationService;
-import com.gagoo.thiscoding.domain.maria.coderoom.controller.response.InvitationCodeRoomResponse;
 import com.gagoo.thiscoding.domain.maria.coderoom.domain.CodeRoom;
+import com.gagoo.thiscoding.domain.maria.coderoom.domain.dto.InvitationCodeRoom;
 import com.gagoo.thiscoding.domain.maria.coderoom.service.exception.AlreadyJoinedCodeRoomException;
 import com.gagoo.thiscoding.domain.maria.coderoom.service.exception.CodeRoomNotFoundException;
 import com.gagoo.thiscoding.domain.maria.coderoom.service.port.CodeRoomRepository;
@@ -20,7 +20,7 @@ import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.UserCodeRoom;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.service.port.UserCodeRoomRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
-import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
+import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -43,13 +43,10 @@ public class InvitationServiceImpl implements InvitationService {
      * 초대된 코드방 조회
      */
     @Override
-    public CustomPageDto<InvitationCodeRoomResponse> getInvitationCodeRoomList(Pageable pageable) {
+    public Page<InvitationCodeRoom> getInvitationCodeRoomList(Pageable pageable) {
         User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
         Pageable customPageable = PageRequest.of(pageable.getPageNumber(), CODEROOM);
-        return CustomPageDto.of(
-            codeRoomRepository.findInvitedCodeRoomsByUser(currentUser, customPageable)
-                .map(InvitationCodeRoomResponse::from)
-        );
+        return codeRoomRepository.findInvitedCodeRoomsByUser(currentUser, customPageable);
     }
 
     /**
@@ -104,27 +101,27 @@ public class InvitationServiceImpl implements InvitationService {
     private void validateCapacity(Long codeRoomId) {
         int currentHeadCount = getByCodeRoomId(codeRoomId).getHeadCount();
 
-        if(!(currentHeadCount >= MIN_CAPACITY && currentHeadCount < MAX_CAPACITY)){
+        if (!(currentHeadCount >= MIN_CAPACITY && currentHeadCount < MAX_CAPACITY)) {
             throw new CapacityOutOfBoundsException(ErrorCode.CAPACITY_CODE_ROOM);
         }
     }
 
     /**
      * 코드룸 알람 유효 검증
-     * */
+     */
     private void validateCodeRoomAlarm(Long codeRoomId, Long alarmId) {
-        if(!alarmRepository.existsByIdAndTypeAndTargetId(alarmId, CODE,
-            codeRoomId)){
+        if (!alarmRepository.existsByIdAndTypeAndTargetId(alarmId, CODE,
+            codeRoomId)) {
             throw new AlarmNotFoundException(ErrorCode.ALARM_NOT_FOUND);
         }
     }
 
     /**
      * 이미 참여한 코드룸인지 검증
-     * */
+     */
     private void validateJoinCodeRoom(Long codeRoomId, Long userId) {
-        if(userCodeRoomRepository.existByCodeRoomIdAndUserId(codeRoomId,
-            userId)){
+        if (userCodeRoomRepository.existByCodeRoomIdAndUserId(codeRoomId,
+            userId)) {
             throw new AlreadyJoinedCodeRoomException(ErrorCode.ALREADY_CODE_ROOM);
         }
     }

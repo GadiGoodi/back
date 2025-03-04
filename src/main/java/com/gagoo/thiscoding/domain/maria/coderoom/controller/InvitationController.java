@@ -10,6 +10,7 @@ import com.gagoo.thiscoding.global.paging.aop.ConvertToOneBase;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
 import com.gagoo.thiscoding.global.security.aop.AuthorizationRequired;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,8 +31,10 @@ public class InvitationController {
     @ConvertToOneBase
     @AuthorizationRequired(value = Role.USER, status = OK)
     public ResponseEntity<CustomPageDto<InvitationCodeRoomResponse>> CodeRoomInviteListView(Pageable pageable) {
+        Page<InvitationCodeRoomResponse> codeRooms = invitationService.getInvitationCodeRoomList(pageable).map(InvitationCodeRoomResponse::from);
         return ResponseEntity
-            .ok(invitationService.getInvitationCodeRoomList(pageable));
+            .ok()
+            .body(CustomPageDto.of(codeRooms));
     }
 
     @PutMapping("/alarms/{alarmId}/codeRooms/{codeRoomId}")
