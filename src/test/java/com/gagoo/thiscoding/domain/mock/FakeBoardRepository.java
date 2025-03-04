@@ -87,6 +87,11 @@ public class FakeBoardRepository implements BoardRepository {
     }
 
     @Override
+    public Page<Board> findAnswerByQnaId(String qnaId, Pageable pageable) {
+        return null;
+    }
+
+    @Override
     public List<Board> saveAll(List<Board> boardList) {
         return null;
     }

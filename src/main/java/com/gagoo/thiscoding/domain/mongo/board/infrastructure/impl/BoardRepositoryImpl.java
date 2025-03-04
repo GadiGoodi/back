@@ -45,7 +45,7 @@ public class BoardRepositoryImpl implements BoardRepository {
      */
     @Override
     public Page<Board> findAll(Pageable pageable) {
-        return boardMongoRepository.findByParentIdOrderByCreateDateDesc("root", pageable).map(BoardDocument::toModel);
+        return boardMongoRepository.findByParentIdAndIsBlindFalseOrderByCreateDateDesc("root", pageable).map(BoardDocument::toModel);
     }
 
     @Override
@@ -58,6 +58,11 @@ public class BoardRepositoryImpl implements BoardRepository {
     public Page<Search> findByTitleOrContent(String title, String content, Pageable pageable) {
         return boardMongoRepository.findByTitleContainingOrContentContaining(title, content, pageable).map(
             Search::from);
+    }
+
+    @Override
+    public Page<Board> findAnswerByQnaId(String qnaId, Pageable pageable) {
+        return boardMongoRepository.findByParentIdAndIsBlindFalseOrderByCreateDateDesc(qnaId, pageable).map(BoardDocument::toModel);
     }
 
     @Override
