@@ -15,6 +15,7 @@ public enum ErrorCode {
     INVALID_PAGE_SIZE(HttpStatus.BAD_REQUEST, "페이지가 유효하지 않습니다."),
     SOCIAL_ACCOUNT_CONFLICT(HttpStatus.CONFLICT, "이미 해당 이메일로 가입된 아이디가 있습니다."),
     ALREADY_CREATE_EMAIL(HttpStatus.CONFLICT, "이미 가입된 이메일입니다."),
+    ALREADY_CODE_ROOM(HttpStatus.CONFLICT, "이미 참여중인 코드방입니다."),
     ALREADY_FRIEND(HttpStatus.CONFLICT, "이미 친구목록에 존재하는 회원입니다."),
     ALREADY_USER_CODE_ROOM(HttpStatus.CONFLICT, "이미 참여중인 코드방입니다."),
     EXIST_MEMBER_NICKNAME(HttpStatus.CONFLICT, "이미 존재하는 닉네임입니다."),
