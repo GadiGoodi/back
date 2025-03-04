@@ -60,7 +60,7 @@ public class ParticipationServiceImpl implements ParticipationService {
     @Override
     public void leaveUserCodeRoom(Long id) {
         UserCodeRoom userCodeRoom = userCodeRoomRepository.getById(id);
-        userCodeRoomRepository.delete(userCodeRoom);
+        userCodeRoomRepository.deleteById(id);
 
         CodeRoom codeRoom = codeRoomRepository.findById(userCodeRoom.getCodeRoom().getId()).orElseThrow(
                 () -> new CodeNotFoundException(ErrorCode.CODE_NOT_FOUND)

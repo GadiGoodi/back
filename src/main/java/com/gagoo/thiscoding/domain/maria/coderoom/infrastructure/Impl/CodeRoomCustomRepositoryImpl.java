@@ -6,7 +6,7 @@ import com.gagoo.thiscoding.domain.maria.coderoom.infrastructure.QCodeRoomEntity
 import com.gagoo.thiscoding.domain.maria.coderoom.infrastructure.jpa.CodeRoomCustomRepository;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.user.infrastructure.QUserEntity;
-import com.gagoo.thiscoding.domain.maria.coderoom.domain.dto.InvitedCodeRoom;
+import com.gagoo.thiscoding.domain.maria.coderoom.domain.dto.InvitationCodeRoom;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.UserCodeRoom;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.infrastructure.UserCodeRoomEntity;
 import com.querydsl.core.types.Projections;
@@ -32,13 +32,13 @@ public class CodeRoomCustomRepositoryImpl implements CodeRoomCustomRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<InvitedCodeRoom> findInvitedCodeRoomsByUser(User user, Pageable pageable) {
+    public Page<InvitationCodeRoom> findInvitedCodeRoomsByUser(User user, Pageable pageable) {
         QCodeRoomEntity codeRoomEntity = QCodeRoomEntity.codeRoomEntity;
         QAlarmEntity alarmEntity = QAlarmEntity.alarmEntity;
         QUserEntity userEntity = QUserEntity.userEntity;
 
-        List<InvitedCodeRoom> results = queryFactory
-            .select(Projections.constructor(InvitedCodeRoom.class,
+        List<InvitationCodeRoom> results = queryFactory
+            .select(Projections.constructor(InvitationCodeRoom.class,
                 alarmEntity.id,
                 codeRoomEntity.id,
                 codeRoomEntity.title,
@@ -52,7 +52,9 @@ public class CodeRoomCustomRepositoryImpl implements CodeRoomCustomRepository {
             .join(codeRoomEntity).on(alarmEntity.targetId.eq(codeRoomEntity.id))
             .join(userEntity).on(alarmEntity.sender.id.eq(userEntity.id))
             .where(alarmEntity.receiver.id.eq(user.getId())
-                .and(alarmEntity.type.eq(AlarmType.CODE)))
+                .and(alarmEntity.type.eq(AlarmType.CODE))
+                .and(codeRoomEntity.headCount.goe(1))
+                .and(codeRoomEntity.headCount.lt(6)))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();

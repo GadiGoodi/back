@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 
-public class InvitedCodeRoom {
+public class InvitationCodeRoom {
 
     private final Long alarmId;
     private final Long codeRoomId;
@@ -17,7 +17,7 @@ public class InvitedCodeRoom {
     private final String imageUrl;
 
     @Builder
-    public InvitedCodeRoom(Long alarmId, Long codeRoomId, String title, String content,
+    public InvitationCodeRoom(Long alarmId, Long codeRoomId, String title, String content,
         int headCount, String language, String nickname, String imageUrl) {
         this.alarmId = alarmId;
         this.codeRoomId = codeRoomId;
