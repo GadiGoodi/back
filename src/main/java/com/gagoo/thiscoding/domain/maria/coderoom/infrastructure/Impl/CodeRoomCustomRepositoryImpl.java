@@ -52,7 +52,9 @@ public class CodeRoomCustomRepositoryImpl implements CodeRoomCustomRepository {
             .join(codeRoomEntity).on(alarmEntity.targetId.eq(codeRoomEntity.id))
             .join(userEntity).on(alarmEntity.sender.id.eq(userEntity.id))
             .where(alarmEntity.receiver.id.eq(user.getId())
-                .and(alarmEntity.type.eq(AlarmType.CODE)))
+                .and(alarmEntity.type.eq(AlarmType.CODE))
+                .and(codeRoomEntity.headCount.goe(1))
+                .and(codeRoomEntity.headCount.lt(6)))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
