@@ -34,7 +34,13 @@ public class UserCodeRoomRepositoryImpl implements UserCodeRoomRepository {
     }
 
     @Override
-    public void delete(UserCodeRoom userCodeRoom) {
-        userCodeRoomJpaRepository.delete(UserCodeRoomEntity.from(userCodeRoom));
+    public void deleteById(Long userCodeRoomId) {
+        userCodeRoomJpaRepository.deleteById(userCodeRoomId);
+    }
+
+    @Override
+    public boolean existByCodeRoomIdAndUserId(Long codeRoomId, Long userId){
+        return userCodeRoomJpaRepository.existsByCodeRoomIdAndUserId(codeRoomId, userId);
     }
 }
+
