@@ -4,10 +4,13 @@ import com.gagoo.thiscoding.domain.maria.coderoom.controller.port.ParticipationS
 import com.gagoo.thiscoding.domain.maria.coderoom.controller.response.ParticipatingCodeRoomResponse;
 import com.gagoo.thiscoding.domain.maria.coderoom.domain.CodeRoom;
 import com.gagoo.thiscoding.domain.maria.coderoom.infrastructure.jpa.CodeRoomCustomRepository;
+import com.gagoo.thiscoding.domain.maria.coderoom.service.exception.CodeRoomNotFoundException;
 import com.gagoo.thiscoding.domain.maria.coderoom.service.port.CodeRoomRepository;
+import com.gagoo.thiscoding.domain.maria.user.domain.User;
+import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.UserCodeRoom;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.service.port.UserCodeRoomRepository;
-import com.gagoo.thiscoding.domain.mongo.code.service.exception.CodeNotFoundException;
+import com.gagoo.thiscoding.domain.maria.usercoderoom.service.exception.NotUserCodeRoomParticipantException;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.global.paging.PageSize;
 import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
@@ -26,6 +29,7 @@ public class ParticipationServiceImpl implements ParticipationService {
     private final CodeRoomRepository codeRoomRepository;
     private final UserCodeRoomRepository userCodeRoomRepository;
     private final CodeRoomCustomRepository codeRoomCustomRepository;
+    private final UserRepository userRepository;
     private final SecurityUtils securityUtils;
 
     /**
@@ -47,10 +51,16 @@ public class ParticipationServiceImpl implements ParticipationService {
      * @param id
      */
     @Override
-    public void accessUserCodeRoom(Long id) {
+    public boolean accessUserCodeRoom(Long id) {
         UserCodeRoom userCodeRoom = userCodeRoomRepository.getById(id);
 
-        userCodeRoomRepository.save(userCodeRoom.access());
+        validateUser(userCodeRoom);
+
+        if(userCodeRoomRepository.save(userCodeRoom.access()) == null) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -58,18 +68,33 @@ public class ParticipationServiceImpl implements ParticipationService {
      * @param id
      */
     @Override
-    public void leaveUserCodeRoom(Long id) {
+    public boolean leaveUserCodeRoom(Long id) {
         UserCodeRoom userCodeRoom = userCodeRoomRepository.getById(id);
-        userCodeRoomRepository.deleteById(id);
+
+        validateUser(userCodeRoom);
+
+        userCodeRoomRepository.deleteById(userCodeRoom.getId());
 
         CodeRoom codeRoom = codeRoomRepository.findById(userCodeRoom.getCodeRoom().getId()).orElseThrow(
-                () -> new CodeNotFoundException(ErrorCode.CODE_NOT_FOUND)
+                () -> new CodeRoomNotFoundException(ErrorCode.CODE_ROOM_NOT_FOUND)
         );
 
         if(codeRoom.getHeadCount() > MIN_CAPACITY) {
             codeRoomRepository.save(codeRoom.exit());
         } else {
             codeRoomRepository.deleteById(codeRoom.getId());
+        }
+
+        return true;
+    }
+
+    /**
+     * 코드방 참여자 여부 확인
+     */
+    private void validateUser(UserCodeRoom userCodeRoom) {
+        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
+        if(!userCodeRoom.getUser().equals(currentUser)) {
+            throw new NotUserCodeRoomParticipantException(ErrorCode.NOT_USER_CODE_ROOM_PARTICIPANT);
         }
     }
 }
