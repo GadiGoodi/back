@@ -14,14 +14,11 @@ public class UserCodeRoomCreate {
     private final CodeRoom codeRoom;
     @NotBlank
     private final boolean isActivated;
-    @NotBlank
-    private final boolean isAccepted;
 
     @Builder
-    public UserCodeRoomCreate(User user, CodeRoom codeRoom, boolean isActivated, boolean isAccepted) {
+    public UserCodeRoomCreate(User user, CodeRoom codeRoom, boolean isActivated) {
         this.user = user;
         this.codeRoom = codeRoom;
         this.isActivated = isActivated;
-        this.isAccepted = isAccepted;
     }
 }
