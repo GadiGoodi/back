@@ -9,6 +9,7 @@ import com.gagoo.thiscoding.global.security.aop.AuthorizationRequired;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,20 +35,18 @@ public class ParticipationController {
     // 참여 중인 코드방 입/퇴장
     @PatchMapping("/{id}/access")
     @AuthorizationRequired(value = Role.USER, status = OK)
-    public ResponseEntity<?> accessParticipation(@PathVariable Long id) {
-        participationService.accessUserCodeRoom(id);
+    public ResponseEntity<Boolean> accessParticipation(@PathVariable Long id) {
         return ResponseEntity
-                .ok()
-                .body("코드방 입/퇴장 성공");
+                .status(HttpStatus.OK)
+                .body(participationService.accessUserCodeRoom(id));
     }
 
     // 참여 중인 코드방 탈퇴
     @DeleteMapping("/{id}/leave")
     @AuthorizationRequired(value = Role.USER, status = OK)
-    public ResponseEntity<?> leaveParticipation(@PathVariable Long id) {
-        participationService.leaveUserCodeRoom(id);
+    public ResponseEntity<Boolean> leaveParticipation(@PathVariable Long id) {
         return ResponseEntity
-                .ok()
-                .body("코드방 탈퇴 성공");
+                .status(HttpStatus.OK)
+                .body(participationService.leaveUserCodeRoom(id));
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 public interface ParticipationService {
     Page<ParticipatingCodeRoomResponse> getParticipations(Pageable pageable);
 
-    void accessUserCodeRoom(Long id);
+    boolean accessUserCodeRoom(Long id);
 
-    void leaveUserCodeRoom(Long id);
+    boolean leaveUserCodeRoom(Long id);
 }

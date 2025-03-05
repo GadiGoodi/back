@@ -90,15 +90,14 @@ public class CodeRoomCustomRepositoryImpl implements CodeRoomCustomRepository {
                 .fetch();
     }
 
-    public Page<UserCodeRoom> findAllByEmailAndIsActivatedTrue(String email, Pageable pageable) {
-        BooleanExpression emailCondition = userEntity.email.eq(email);
-        BooleanExpression isActivatedCondition = userCodeRoomEntity.isActivated.isTrue();
+    public Page<UserCodeRoom> findAllUserCodeRoomByUser(User user, Pageable pageable) {
+        BooleanExpression userIdCondition = userEntity.id.eq(user.getId());
 
         List<UserCodeRoom> result = queryFactory
                 .selectFrom(userCodeRoomEntity)
                 .join(userCodeRoomEntity.codeRoom, codeRoomEntity).fetchJoin()
                 .join(userCodeRoomEntity.user, userEntity).fetchJoin()
-                .where(emailCondition.and(isActivatedCondition))
+                .where(userIdCondition)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch()
@@ -111,7 +110,7 @@ public class CodeRoomCustomRepositoryImpl implements CodeRoomCustomRepository {
                 .from(userCodeRoomEntity)
                 .join(userCodeRoomEntity.codeRoom, codeRoomEntity)
                 .join(userCodeRoomEntity.user, userEntity)
-                .where(emailCondition.and(isActivatedCondition));
+                .where(userIdCondition);
 
         return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
     }

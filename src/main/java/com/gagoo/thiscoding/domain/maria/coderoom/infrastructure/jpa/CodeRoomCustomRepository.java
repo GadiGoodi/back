@@ -11,5 +11,5 @@ import java.util.List;
 public interface CodeRoomCustomRepository {
     Page<InvitationCodeRoom> findInvitedCodeRoomsByUser(User user, Pageable pageable);
     List<User> findUserListByUserCodeRoom(UserCodeRoom userCodeRoom);
-    Page<UserCodeRoom> findAllByEmailAndIsActivatedTrue(String email, Pageable pageable);
+    Page<UserCodeRoom> findAllUserCodeRoomByUser(User user, Pageable pageable);
 }
