@@ -14,6 +14,7 @@ import com.gagoo.thiscoding.domain.maria.usercoderoom.service.exception.NotUserC
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.global.paging.PageSize;
 import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import static com.gagoo.thiscoding.domain.maria.coderoom.domain.contants.Capacity.MIN_CAPACITY;
 
 @Service
+@Builder
 @RequiredArgsConstructor
 public class ParticipationServiceImpl implements ParticipationService {
 

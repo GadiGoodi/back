@@ -70,7 +70,7 @@ public class FakeCodeRoomRepository implements CodeRoomRepository {
 
     @Override
     public Optional<CodeRoom> findByUuid(String uuid) {
-        return Optional.empty();
+        return codeRooms.stream().filter(item -> item.getUuid().equals(uuid)).findAny();
     }
 
     @Override

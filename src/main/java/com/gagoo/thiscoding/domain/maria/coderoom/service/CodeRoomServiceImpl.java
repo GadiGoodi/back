@@ -11,10 +11,12 @@ import com.gagoo.thiscoding.domain.mongo.code.service.exception.CodeNotFoundExce
 import com.gagoo.thiscoding.domain.mongo.code.service.port.CodeRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.global.common.uuid.service.port.UuidHolder;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@Builder
 @RequiredArgsConstructor
 public class CodeRoomServiceImpl implements CodeRoomService {
 

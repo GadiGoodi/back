@@ -1,8 +1,12 @@
 package com.gagoo.thiscoding.domain.mock;
 
 import com.gagoo.thiscoding.domain.maria.alarm.service.port.AlarmRepository;
+import com.gagoo.thiscoding.domain.maria.coderoom.controller.port.CodeRoomService;
 import com.gagoo.thiscoding.domain.maria.coderoom.controller.port.InvitationService;
+import com.gagoo.thiscoding.domain.maria.coderoom.controller.port.ParticipationService;
+import com.gagoo.thiscoding.domain.maria.coderoom.service.CodeRoomServiceImpl;
 import com.gagoo.thiscoding.domain.maria.coderoom.service.InvitationServiceImpl;
+import com.gagoo.thiscoding.domain.maria.coderoom.service.ParticipationServiceImpl;
 import com.gagoo.thiscoding.domain.maria.coderoom.service.port.CodeRoomRepository;
 import com.gagoo.thiscoding.domain.maria.manager.controller.port.ManagerService;
 import com.gagoo.thiscoding.domain.maria.manager.service.ManagerServiceImpl;
@@ -15,12 +19,16 @@ import com.gagoo.thiscoding.domain.maria.user.service.CertificationServiceImpl;
 import com.gagoo.thiscoding.domain.maria.user.service.port.AuthCodeStore;
 import com.gagoo.thiscoding.domain.maria.user.service.port.MailSender;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
+import com.gagoo.thiscoding.domain.maria.usercoderoom.controller.port.UserCodeRoomService;
+import com.gagoo.thiscoding.domain.maria.usercoderoom.service.UserCodeRoomServiceImpl;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.service.port.UserCodeRoomRepository;
 import com.gagoo.thiscoding.domain.mongo.board.controller.port.BoardService;
 import com.gagoo.thiscoding.domain.mongo.board.service.BoardServiceImpl;
 import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardRepository;
 import com.gagoo.thiscoding.domain.auth.service.port.PasswordEncoderHolder;
 import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
+import com.gagoo.thiscoding.domain.mongo.code.service.port.CodeRepository;
+import com.gagoo.thiscoding.global.common.uuid.service.port.UuidHolder;
 import lombok.Builder;
 
 public class TestContainer {
@@ -28,32 +36,37 @@ public class TestContainer {
     public final MailSender mailSender;
     public final AuthCodeStore authCodeStore;
     public final PasswordEncoderHolder passwordEncoderHolder;
+    public final UuidHolder uuidHolder;
     public final UserRepository userRepository;
     public final ReplyRepository replyRepository;
     public final BoardRepository boardRepository;
+    public final ManagerRepository managerRepository;
+    public final AlarmRepository alarmRepository;
+    public final CodeRepository codeRepository;
+    public final CodeRoomRepository codeRoomRepository;
+    public final UserCodeRoomRepository userCodeRoomRepository;
     public final CertificationService certificationService;
     public final ReplyService replyService;
     public final BoardService boardService;
-    public final ManagerRepository managerRepository;
     public final ManagerService managerService;
     public final InvitationService invitationService;
-    public final AlarmRepository alarmRepository;
-    public final CodeRoomRepository codeRoomRepository;
-    public final UserCodeRoomRepository userCodeRoomRepository;
-
-
+    public final CodeRoomService codeRoomService;
+    public final ParticipationService participationService;
+    public final UserCodeRoomService userCodeRoomService;
 
     @Builder
     public TestContainer(SecurityUtils securityUtils) {
         this.mailSender = new FakeMailSender();
-        this.passwordEncoderHolder = new FakePasswordEncoder();
-
         this.authCodeStore = new FakeAuthCodeStore();
-        this.managerRepository = new FakeManagerRepository();
+        this.passwordEncoderHolder = new FakePasswordEncoder();
+        this.uuidHolder = new FakeUuidHolder("test-uuid");
+
         this.userRepository = new FakeUserRepository();
         this.replyRepository = new FakeReplyRepository();
         this.boardRepository = new FakeBoardRepository();
+        this.managerRepository = new FakeManagerRepository();
         this.alarmRepository = new FakeAlarmRepository();
+        this.codeRepository = new FakeCodeRepository();
         this.codeRoomRepository = new FakeCodeRoomRepository();
         this.userCodeRoomRepository = new FakeUserCodeRoomRepository();
 
@@ -83,6 +96,21 @@ public class TestContainer {
             .userCodeRoomRepository(userCodeRoomRepository)
             .securityUtils(securityUtils)
             .build();
-
+        this.codeRoomService = CodeRoomServiceImpl.builder()
+                .codeRoomRepository(this.codeRoomRepository)
+                .codeRepository(this.codeRepository)
+                .uuidHolder(this.uuidHolder)
+                .build();
+        this.participationService = ParticipationServiceImpl.builder()
+                .codeRoomRepository(this.codeRoomRepository)
+                .userCodeRoomRepository(this.userCodeRoomRepository)
+                .userRepository(this.userRepository)
+                .securityUtils(securityUtils)
+                .build();
+        this.userCodeRoomService = UserCodeRoomServiceImpl.builder()
+                .userRepository(this.userRepository)
+                .codeRoomRepository(this.codeRoomRepository)
+                .userCodeRoomRepository(this.userCodeRoomRepository)
+                .build();
     }
 }
