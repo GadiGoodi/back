@@ -39,9 +39,10 @@ public class ParticipationServiceImpl implements ParticipationService {
     @Override
     public Page<ParticipatingCodeRoomResponse> getParticipations(Pageable pageable) {
         Pageable customPageable = PageRequest.of(pageable.getPageNumber(), PageSize.CODEROOM);
+        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
 
         Page<UserCodeRoom> userCodeRoomPage = codeRoomCustomRepository
-                .findAllByEmailAndIsActivatedTrue(securityUtils.getUserEmail(), customPageable);
+                .findAllUserCodeRoomByUser(currentUser, customPageable);
 
         return userCodeRoomPage.map(userCodeRoom -> ParticipatingCodeRoomResponse.from(userCodeRoom, codeRoomCustomRepository.findUserListByUserCodeRoom(userCodeRoom)));
     }
