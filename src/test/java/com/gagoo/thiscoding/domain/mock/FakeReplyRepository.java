@@ -8,10 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class FakeReplyRepository implements ReplyRepository {
@@ -83,7 +80,6 @@ public class FakeReplyRepository implements ReplyRepository {
                 () -> (long) findAllReply.size()
         );
     }
-
 
     @Override
     public Long countByQnaId(String qnaId) {

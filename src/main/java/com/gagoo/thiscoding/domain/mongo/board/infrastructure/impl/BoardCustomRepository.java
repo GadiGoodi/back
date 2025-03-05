@@ -57,6 +57,9 @@ public class BoardCustomRepository {
         return results;
     }
 
+    /**
+     * 조회수 1 증가
+     */
     public void incrementViewCount(String qnaId) {
         Query query = new Query(Criteria.where("_id").is(qnaId));
         Update update = new Update().inc("viewCount", 1);
@@ -64,4 +67,23 @@ public class BoardCustomRepository {
         mongoTemplate.updateFirst(query, update, BoardDocument.class);
     }
 
+    /**
+     * 답변 갯수 1 증가
+     */
+    public void incrementAnswerCount(String parentQnaId) {
+        Query query = new Query(Criteria.where("id").is(parentQnaId));
+        Update update = new Update().inc("answerCount", 1);
+
+        mongoTemplate.updateFirst(query, update, BoardDocument.class);
+    }
+
+    /**
+     * 댓글 갯수 1 증가
+     */
+    public void incrementReplyCount(String parentQnaId) {
+        Query query = new Query(Criteria.where("id").is(parentQnaId));
+        Update update = new Update().inc("replyCount", 1);
+
+        mongoTemplate.updateFirst(query, update, BoardDocument.class);
+    }
 }

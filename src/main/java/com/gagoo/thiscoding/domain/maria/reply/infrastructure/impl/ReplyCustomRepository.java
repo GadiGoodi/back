@@ -1,6 +1,7 @@
 package com.gagoo.thiscoding.domain.maria.reply.infrastructure.impl;
 
 import com.gagoo.thiscoding.domain.maria.reply.domain.Reply;
+import com.gagoo.thiscoding.domain.maria.reply.infrastructure.QReplyEntity;
 import com.gagoo.thiscoding.domain.maria.reply.service.dto.ReplyList;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -13,9 +14,11 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.gagoo.thiscoding.domain.maria.reply.infrastructure.QReplyEntity.*;
 import static com.gagoo.thiscoding.domain.maria.user.infrastructure.QUserEntity.*;
+import static com.querydsl.core.group.GroupBy.groupBy;
 
 @Repository
 @RequiredArgsConstructor
@@ -23,6 +26,9 @@ public class ReplyCustomRepository {
 
     private final JPAQueryFactory query;
 
+    /**
+     * qna에 달린 댓글 조회
+     */
     public Page<ReplyList> findByQnaId(String qnaId, Pageable pageable) {
 
         List<ReplyList> results = query.select(Projections.constructor(ReplyList.class,
@@ -74,7 +80,6 @@ public class ReplyCustomRepository {
 
     return PageableExecutionUtils.getPage(results,pageable, countQuery::fetchOne);
     }
-
     public void deleteRepliesAndParent(Reply reply) {
         query.delete(replyEntity)
             .where(replyEntity.parent.id.eq(reply.getId())
@@ -96,6 +101,7 @@ public class ReplyCustomRepository {
     private  BooleanExpression parentIdIsNotNull(){
         return replyEntity.parent.id.isNotNull();
     }
+
     private  BooleanExpression parentIdEq(Long parentId){
         return replyEntity.parent.id.eq(parentId);
     }

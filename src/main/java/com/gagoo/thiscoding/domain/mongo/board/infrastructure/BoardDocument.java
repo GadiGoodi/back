@@ -38,6 +38,9 @@ public class BoardDocument extends BaseTimeDocument {
     @Field(name = "answer_count")
     private Long answerCount;
 
+    @Field(name = "reply_count")
+    private Long replyCount;
+
     private boolean isBlind;
 
     private boolean isSelected;
@@ -55,6 +58,7 @@ public class BoardDocument extends BaseTimeDocument {
         boardDocument.likeCount = board.getLikeCount();
         boardDocument.viewCount = board.getViewCount();
         boardDocument.answerCount = board.getAnswerCount();
+        boardDocument.replyCount = board.getReplyCount();
         boardDocument.isBlind = board.isBlind();
         boardDocument.isSelected = board.isSelected();
 
@@ -74,6 +78,7 @@ public class BoardDocument extends BaseTimeDocument {
                 .likeCount(likeCount)
                 .viewCount(viewCount)
                 .answerCount(answerCount)
+                .replyCount(replyCount)
                 .isBlind(isBlind)
                 .isSelected(isSelected)
                 .createDate(createDate)

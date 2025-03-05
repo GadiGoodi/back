@@ -4,7 +4,7 @@ import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
 
 import java.time.LocalDateTime;
 
-public record AnswerList(String qnaId, String nickname, String profileImage, String content, Long likeCount, Long answerCount, LocalDateTime createDate) {
+public record AnswerList(String answerId, String nickname, String profileImage, String content, Long likeCount, Long replyCount, LocalDateTime createDate) {
 
     public static AnswerList from(Board board) {
         return new AnswerList(
@@ -13,7 +13,7 @@ public record AnswerList(String qnaId, String nickname, String profileImage, Str
                 board.getProfileImg(),
                 board.getContent(),
                 board.getLikeCount(),
-                board.getAnswerCount(),
+                board.getReplyCount(),
                 board.getCreateDate()
         );
     }

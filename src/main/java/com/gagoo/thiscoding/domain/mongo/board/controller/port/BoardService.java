@@ -18,7 +18,7 @@ import java.util.List;
 public interface BoardService {
     Board create(BoardCreate boardCreate);
     QnaDetail get(String qnaId, HttpServletRequest request, HttpServletResponse response);
-    List<Board> writeAnswer(String qnaId, BoardAnswer boardAnswer);
+    Board writeAnswer(String qnaId, BoardAnswer boardAnswer);
     Page<Search> searchByKeyword(String keyword, Pageable pageable);
     Page<Board> getMyPagePostQnA(Pageable pageable);
     CustomPageDto<QnaList> findAll(Pageable pageable);

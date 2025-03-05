@@ -21,6 +21,7 @@ public class Board {
     private Long likeCount;
     private Long viewCount;
     private Long answerCount;
+    private Long replyCount;
     private boolean isBlind;
     private boolean isSelected;
     private LocalDateTime createDate;
@@ -40,6 +41,7 @@ public class Board {
                 .likeCount(0L)
                 .viewCount(0L)
                 .answerCount(0L)
+                .replyCount(0L)
                 .isBlind(false)
                 .build();
     }
@@ -55,15 +57,9 @@ public class Board {
                 .content(content)
                 .parentId(parentId)
                 .likeCount(0L)
+                .replyCount(0L)
                 .isBlind(false)
                 .isSelected(false)
                 .build();
-    }
-
-    /**
-     * 답변이 작성되면 부모 게시물의 답변 갯수 증가
-     */
-    public void increaseAnswerCount() {
-        this.answerCount++;
     }
 }
