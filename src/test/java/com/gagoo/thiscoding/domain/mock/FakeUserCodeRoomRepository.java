@@ -1,7 +1,10 @@
 package com.gagoo.thiscoding.domain.mock;
 
 import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.UserCodeRoom;
+import com.gagoo.thiscoding.domain.maria.usercoderoom.service.exception.UserCodeRoomNotFoundException;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.service.port.UserCodeRoomRepository;
+import com.gagoo.thiscoding.global.exception.ErrorCode;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,12 +19,14 @@ public class FakeUserCodeRoomRepository implements UserCodeRoomRepository {
 
     @Override
     public UserCodeRoom getById(Long codeRoomId) {
-        return null;
+        return findById(codeRoomId).orElseThrow(
+                () -> new UserCodeRoomNotFoundException(ErrorCode.USER_CODE_ROOM_NOT_FOUND)
+        );
     }
 
     @Override
     public Optional<UserCodeRoom> findById(Long codeRoomId) {
-        return Optional.empty();
+        return data.stream().filter(item -> item.getCodeRoom().getId().equals(codeRoomId)).findAny();
     }
 
     @Override
@@ -32,7 +37,6 @@ public class FakeUserCodeRoomRepository implements UserCodeRoomRepository {
                 .user(userCodeRoom.getUser())
                 .codeRoom(userCodeRoom.getCodeRoom())
                 .isActivated(userCodeRoom.isActivated())
-                .isAccepted(userCodeRoom.isAccepted())
                 .build();
             data.add(newUserCodeRoom);
             return newUserCodeRoom;
@@ -48,7 +52,6 @@ public class FakeUserCodeRoomRepository implements UserCodeRoomRepository {
     public void deleteById(Long userCodeRoomId) {
         data.removeIf(item -> Objects.equals(item.getId(), userCodeRoomId));
     }
-
 
     @Override
     public boolean existByCodeRoomIdAndUserId(Long codeRoomId, Long userId) {

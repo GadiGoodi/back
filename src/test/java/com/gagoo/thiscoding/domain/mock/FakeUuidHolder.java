@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class FakeUuidHolder implements UuidHolder {
-    private String uuid;
+    private final String uuid;
 
     @Override
     public String random() {
