@@ -11,10 +11,12 @@ import com.gagoo.thiscoding.domain.mongo.board.domain.dto.Search;
 import com.gagoo.thiscoding.domain.mongo.board.service.dto.AnswerList;
 import com.gagoo.thiscoding.domain.mongo.board.service.dto.QnaDetail;
 import com.gagoo.thiscoding.domain.mongo.board.service.dto.QnaList;
+import com.gagoo.thiscoding.domain.mongo.board.service.exception.QnaNotFoundException;
 import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardRepository;
 import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardViewService;
 import com.gagoo.thiscoding.global.common.util.HttpServletUtils;
 import com.gagoo.thiscoding.global.common.uuid.service.port.UuidHolder;
+import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.global.paging.PageSize;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
 import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
@@ -63,15 +65,14 @@ public class BoardServiceImpl implements BoardService {
      * qna 답변 작성
      */
     @Override
-    public List<Board> writeAnswer(String parentQnaId, BoardAnswer boardAnswer) {
+    public Board writeAnswer(String parentQnaId, BoardAnswer boardAnswer) {
         User currentUser = getCurrentUser();
-
-        Board parentBoard = boardRepository.getById(parentQnaId);
-        parentBoard.increaseAnswerCount();
+        validateParentQnaExists(parentQnaId);
 
         Board answer = Board.writeAnswer(currentUser, parentQnaId, boardAnswer.content());
+        boardRepository.incrementAnswerCount(parentQnaId);
 
-        return boardRepository.saveAll(List.of(answer, parentBoard));
+        return boardRepository.save(answer);
     }
 
     /**
@@ -88,6 +89,7 @@ public class BoardServiceImpl implements BoardService {
 
         return QnaDetail.from(qnaDetail, replyCount);
     }
+
     /**
      * QnA 제목 + 내용 검색
      */
@@ -96,7 +98,6 @@ public class BoardServiceImpl implements BoardService {
         Pageable customPageable = PageRequest.of(pageable.getPageNumber(), PageSize.QNA);
         return boardRepository.findByTitleOrContent(keyword, keyword, customPageable);
     }
-
     /**
      * 마이페이지 내가 작성한 Qna 조회
      */
@@ -145,6 +146,15 @@ public class BoardServiceImpl implements BoardService {
             httpServletUtils.addCookie(response, "visitorId", visitorId, 60L * 60 * 24 * 365);
 
             return visitorId;
+        }
+    }
+
+    /**
+     * 부모 게시물이 있는지 확인
+     */
+    private void validateParentQnaExists(String parentQnaId) {
+        if (!boardRepository.existsById(parentQnaId)) {
+            throw new QnaNotFoundException(ErrorCode.QNA_NOT_FOUND);
         }
     }
 

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -30,11 +29,33 @@ public class BoardRepositoryImpl implements BoardRepository {
         );
     }
 
+    /**
+     * 조회수 증가
+     */
     @Override
     public void incrementViewCount(String qnaId) {
         boardCustomRepository.incrementViewCount(qnaId);
     }
 
+    /**
+     * 댓글 갯수 증가
+     */
+    @Override
+    public void incrementReplyCount(String qnaId) {
+        boardCustomRepository.incrementReplyCount(qnaId);
+    }
+
+    /**
+     * 답변 갯수 증가
+     */
+    @Override
+    public void incrementAnswerCount(String parentQnaId) {
+        boardCustomRepository.incrementAnswerCount(parentQnaId);
+    }
+
+    /**
+     * 채택 많이 된 상위 10명 조회
+     */
     @Override
     public List<Long> getTop10Users() {
         return boardCustomRepository.getTop10Users();
@@ -68,18 +89,6 @@ public class BoardRepositoryImpl implements BoardRepository {
     @Override
     public Board save(Board board) {
         return boardMongoRepository.save(BoardDocument.from(board)).toModel();
-    }
-
-    @Override
-    public List<Board> saveAll(List<Board> boards) {
-        return boardMongoRepository.saveAll(
-                        boards.stream()
-                                .map(BoardDocument::from)
-                                .collect(Collectors.toList())
-                )
-                .stream()
-                .map(BoardDocument::toModel)
-                .collect(Collectors.toList());
     }
 
     @Override

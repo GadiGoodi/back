@@ -92,17 +92,22 @@ public class FakeBoardRepository implements BoardRepository {
     }
 
     @Override
-    public List<Board> saveAll(List<Board> boardList) {
-        return null;
-    }
-
-    @Override
     public boolean existsById(String qnaId) {
         return data.stream().anyMatch(board -> board.getId().equals(qnaId));
     }
 
     @Override
     public void incrementViewCount(String boardId) {
+
+    }
+
+    @Override
+    public void incrementAnswerCount(String parentQnaId) {
+
+    }
+
+    @Override
+    public void incrementReplyCount(String qnaId) {
 
     }
 

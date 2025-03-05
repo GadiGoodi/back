@@ -6,6 +6,8 @@ import com.gagoo.thiscoding.domain.maria.reply.infrastructure.ReplyEntity;
 import com.gagoo.thiscoding.domain.maria.reply.infrastructure.jpa.ReplyJpaRepository;
 import com.gagoo.thiscoding.domain.maria.reply.service.dto.ReplyList;
 import com.gagoo.thiscoding.domain.maria.reply.service.port.ReplyRepository;
+
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

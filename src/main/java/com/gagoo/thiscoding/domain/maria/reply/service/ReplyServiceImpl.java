@@ -52,6 +52,7 @@ public class ReplyServiceImpl implements ReplyService {
 
         Reply reply = Reply.create(currentUser, qnaId, replyCreate, parentComment);
 
+        boardRepository.incrementReplyCount(qnaId);
         return replyRepository.save(reply);
     }
 
@@ -72,6 +73,7 @@ public class ReplyServiceImpl implements ReplyService {
      * 댓글 아이디로 대댓글 조회
      */
     @Override
+    @Transactional(readOnly = true)
     public CustomPageDto<ReplyList> getReplies(String qnaId, Long parentId, Pageable pageable) {
         validateReplyId(parentId);
 
