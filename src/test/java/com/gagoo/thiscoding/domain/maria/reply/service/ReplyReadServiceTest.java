@@ -24,7 +24,7 @@ public class ReplyReadServiceTest {
     public ReplyService replyService;
     public User testUser;
     public Board testBoard;
-
+    public Reply parentReply;
     @BeforeEach
     void init() {
         User user = User.builder()
@@ -43,12 +43,11 @@ public class ReplyReadServiceTest {
         this.testUser = testContainer.userRepository.save(user);
         this.replyService = testContainer.replyService;
 
-        Board board = Board.create(testUser, BoardCreate.builder()
-                .title("테스트 게시물")
-                .content("테스트 게시물 내용")
-                .language("Java")
-                .parentId(null)
-                .build());
+        Board board = Board.create(testUser, BoardCreate.of(
+                "테스트 게시물",
+                "테스트 게시물 내용",
+                "Java")
+        );
 
         this.testBoard = testContainer.boardRepository.save(board);
 
@@ -60,6 +59,24 @@ public class ReplyReadServiceTest {
                             .build()
             ,null);
             testContainer.replyRepository.save(reply);
+        }
+
+        Reply parentReply = Reply.create(testUser,testBoard.getId(),
+                ReplyCreate.builder()
+                        .content("테스트 부모 댓글")
+                        .parentId(null)
+                        .build()
+        ,null);
+
+        this.parentReply = testContainer.replyRepository.save(parentReply);
+
+        for (long i = 1L; i <= 27; i++) {
+            Reply replies = Reply.create(testUser, testBoard.getId(),
+                    ReplyCreate.builder()
+                            .content("테스트 대댓글 " + i)
+                            .build()
+                    ,this.parentReply);
+            testContainer.replyRepository.save(replies);
         }
     }
 
@@ -78,8 +95,8 @@ public class ReplyReadServiceTest {
             // then
             assertThat(result).isNotNull();
             assertThat(result.getContent()).isNotEmpty();
-            assertThat(result.getTotalElements()).isEqualTo(27);
-            assertThat(result.getTotalPage()).isEqualTo(3);
+            assertThat(result.getTotalElements()).isEqualTo(55);
+            assertThat(result.getTotalPage()).isEqualTo(6);
             assertThat(result.getContent().size()).isLessThanOrEqualTo(10);
         }
 
@@ -113,6 +130,23 @@ public class ReplyReadServiceTest {
                 }
                 prevCreateDate = reply.getCreateDate();
             }
+        }
+
+        @Test
+        @DisplayName("게시물 대댓글 조회")
+        void getQnAReplies_페이징_조회_성공() {
+            //given
+            Pageable pageable = PageRequest.of(0, 10);
+
+            //when
+            CustomPageDto<ReplyList> result = replyService.getReplies(testBoard.getId(), parentReply.getId(), pageable);
+
+            //then
+            assertThat(result).isNotNull();
+            assertThat(result.getContent()).isNotEmpty();
+            assertThat(result.getTotalElements()).isEqualTo(27);
+            assertThat(result.getTotalPage()).isEqualTo(3);
+            assertThat(result.getContent().size()).isLessThanOrEqualTo(10);
         }
     }
 }
