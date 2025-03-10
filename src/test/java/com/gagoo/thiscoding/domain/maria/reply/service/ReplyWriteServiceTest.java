@@ -45,13 +45,11 @@ class ReplyWriteServiceTest {
         this.replyService = testContainer.replyService;
         this.testUser = testContainer.userRepository.save(user);
 
-        Board board = Board.create(testUser, BoardCreate.builder()
-                .title("테스트 게시물")
-                .content("테스트 게시물 내용")
-                .language("Java")
-                .parentId(null)
-                .build());
-
+        Board board = Board.create(testUser, BoardCreate.of(
+                "테스트 게시물",
+                "테스트 게시물 내용",
+                "Java")
+        );
         this.testBoard = testContainer.boardRepository.save(board);
 
     }

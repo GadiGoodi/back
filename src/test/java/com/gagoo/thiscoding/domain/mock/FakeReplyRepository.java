@@ -24,7 +24,7 @@ public class FakeReplyRepository implements ReplyRepository {
                     .qnaId(reply.getQnaId())
                     .user(reply.getUser())
                     .content(reply.getContent())
-                    .parent(reply.getParent())
+                    .parent(reply.getParent() != null ? findById(reply.getParent().getId()).orElse(null) : null)
                     .isBlinded(reply.isBlinded())
                     .createDate(LocalDateTime.now())
                     .build();
@@ -57,7 +57,7 @@ public class FakeReplyRepository implements ReplyRepository {
                 .sorted(Comparator.comparing(Reply::getCreateDate).reversed())
                 .map(reply -> ReplyList.builder()
                         .replyId(reply.getId())
-                        .parentId(reply.getParent().getId())
+                        .parentId(reply.getParent() != null ? reply.getParent().getId() : null)
                         .nickname(reply.getUser().getNickname())
                         .profileImage(reply.getUser().getImageUrl())
                         .content(reply.getContent())
@@ -89,7 +89,9 @@ public class FakeReplyRepository implements ReplyRepository {
     @Override
     public boolean existsById(Long parentId) {
         return data.stream()
-                .anyMatch(reply -> reply.getParent() != null &&  reply.getParent().getId().equals(parentId));
+                .anyMatch(reply -> reply.getParent() != null &&
+                        reply.getParent().getId() != null &&
+                        reply.getParent().getId().equals(parentId));
     }
 
     @Override
@@ -99,6 +101,34 @@ public class FakeReplyRepository implements ReplyRepository {
 
     @Override
     public Page<ReplyList> findRepliesByParentId(String qnaId, Long parentId, Pageable pageable) {
-        return null;
+        List<ReplyList> replies = data.stream()
+                .filter(reply -> reply.getQnaId().equals(qnaId) &&
+                        reply.getParent() != null &&
+                        reply.getParent().getId().equals(parentId))
+                .sorted(Comparator.comparing(Reply::getCreateDate).reversed())
+                .map(reply -> ReplyList.builder()
+                        .replyId(reply.getId())
+                        .parentId(reply.getParent().getId())
+                        .nickname(reply.getUser().getNickname())
+                        .profileImage(reply.getUser().getImageUrl())
+                        .content(reply.getContent())
+                        .createDate(reply.getCreateDate())
+                        .build())
+                .toList();
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), replies.size());
+
+        if (start >= replies.size()) {
+            return Page.empty(pageable);
+        }
+
+        List<ReplyList> pagedReplies = replies.subList(start, end);
+
+        return PageableExecutionUtils.getPage(
+                pagedReplies,
+                pageable,
+                () -> (long) replies.size()
+        );
     }
 }

@@ -23,14 +23,12 @@ public class ReplyReadController {
 
     @GetMapping("/{qnaId}/reply")
     @ConvertToOneBase
-    @AuthorizationRequired(value = {Role.USER, Role.ADMIN}, status = OK)
     public ResponseEntity<CustomPageDto<ReplyList>> getQnAReply(@PathVariable String qnaId, Pageable pageable) {
         return ResponseEntity.ok(replyService.getQnAReply(qnaId, pageable));
     }
 
     @GetMapping("/{qnaId}/reply/{parentId}")
     @ConvertToOneBase
-    @AuthorizationRequired(value = {Role.USER,Role.ADMIN},status =OK)
     public ResponseEntity<CustomPageDto<ReplyList>> getReplies(@PathVariable String qnaId,
                                                                @PathVariable Long parentId,Pageable pageable){
         return ResponseEntity.ok(replyService.getReplies(qnaId,parentId, pageable));
