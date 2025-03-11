@@ -13,20 +13,6 @@ pipeline {
             }
         }
 
-        stage('Check Branch') {
-            steps {
-                script {
-                    def branchName = env.BRANCH_NAME
-                    echo "Current branch: ${branchName}"
-                    if (!branchName.contains("dev")) {
-                        echo "Not on dev branch, skipping build."
-                        currentBuild.result = 'ABORTED'
-                        error("Stopping the build because it's not on the dev branch.")
-                    }
-                }
-            }
-        }
-
         stage('Build') {
             steps {
                 sh 'chmod +x gradlew'
