@@ -1,0 +1,30 @@
+name: Deploy Pipeline
+
+on:
+  workflow_run:
+    workflows: ["Docker Pipeline"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: SSH into Server and Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            docker pull jaew0n/thiscoding:latest
+            docker rm -f thiscoding-container || true
+            docker run -d \
+              --name thiscoding-container \
+              --restart unless-stopped \
+              -p 80:8080 \
+              -v thiscoding-data:/app/data \
+              -e SPRING_PROFILES_ACTIVE=prod \
+              jaew0n/thiscoding:latest
+            docker ps | grep thiscoding-container
