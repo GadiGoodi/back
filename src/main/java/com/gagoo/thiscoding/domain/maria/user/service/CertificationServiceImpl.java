@@ -5,6 +5,9 @@ import com.gagoo.thiscoding.domain.maria.user.domain.dto.AuthCode;
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.Certification;
 import com.gagoo.thiscoding.domain.maria.user.service.port.AuthCodeStore;
 import com.gagoo.thiscoding.domain.maria.user.service.port.MailSender;
+import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
+import com.gagoo.thiscoding.global.exception.ErrorCode;
+import com.gagoo.thiscoding.global.security.exception.UserNotFoundException;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class CertificationServiceImpl implements CertificationService {
 
     private final MailSender mailSender;
+    private final UserRepository userRepository;
     private final AuthCodeStore authCodeStore;
 
     /**
@@ -35,6 +39,8 @@ public class CertificationServiceImpl implements CertificationService {
      */
     @Override
     public AuthCode sendTemporaryPassword(String email) {
+        validateExistsUser(email);
+
         Certification certification = mailSender.sendResetPasswordCode(email);
         AuthCode authCode = AuthCode.of(certification.getEmail(), certification.getCode());
 
@@ -49,6 +55,12 @@ public class CertificationServiceImpl implements CertificationService {
     public AuthCode checkAuthCode(AuthCode authCode) {
         return authCodeStore.
                 checkAuthCode(authCode);
+    }
+
+    private void validateExistsUser(String email) {
+        if (!userRepository.existsByEmail(email)) {
+            throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
+        }
     }
 
 }
