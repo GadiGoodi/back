@@ -70,8 +70,14 @@ public class BoardRepositoryImpl implements BoardRepository {
     }
 
     @Override
-    public Page<Board> findByUserId(Long userId, Pageable pageable) {
-        return boardMongoRepository.findByUserId(userId, pageable)
+    public Page<Board> findByUserId(Long userId,Pageable pageable) {
+        return boardMongoRepository.findByUserIdAndParentIdOrderByCreateDateDesc(userId,pageable,"root")
+                .map(BoardDocument::toModel);
+    }
+
+    @Override
+    public Page<Board> findByUserIdAndParentIdIsNotRoot(Long userId, Pageable pageable) {
+        return boardMongoRepository.findByUserIdAndAnswerCountIsNull(userId,pageable)
                 .map(BoardDocument::toModel);
     }
 
