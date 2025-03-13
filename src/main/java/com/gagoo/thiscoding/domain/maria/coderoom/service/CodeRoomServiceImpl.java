@@ -52,11 +52,12 @@ public class CodeRoomServiceImpl implements CodeRoomService {
      */
     @Override
     public CodeRoomEnter enterCodeRoom(String uuid) {
+        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
+
         CodeRoom codeRoom = codeRoomRepository.findByUuid(uuid).orElseThrow(
                 () -> new CodeRoomNotFoundException(ErrorCode.CODE_ROOM_NOT_FOUND)
         );
 
-        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
 
         UserCodeRoom userCodeRoom = userCodeRoomRepository.findByCodeRoomIdAndUserId(codeRoom.getId(), currentUser.getId()).orElseThrow(
                 () -> new UserCodeRoomNotFoundException(ErrorCode.USER_CODE_ROOM_NOT_FOUND)

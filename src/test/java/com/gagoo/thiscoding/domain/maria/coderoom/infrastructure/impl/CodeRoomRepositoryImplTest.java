@@ -29,8 +29,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 @ActiveProfiles(profiles = {"test"})
 @Sql(scripts = "/sql/coderoom-test-data.sql")
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@TestPropertySource(locations = "classpath:config/application-test.yml")
+//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+//@TestPropertySource(locations = "classpath:config/application-test.yml")
 class CodeRoomRepositoryImplTest {
     @Autowired
     private CodeRoomCustomRepository codeRoomCustomRepository;
