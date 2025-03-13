@@ -39,10 +39,9 @@ class CodeRoomServiceTest {
         Code code = Code.create(CodeCreate.builder()
                 .id("test-code-id")
                 .roomId(1L)
-                .writerId(1L)
                 .value("/* Java */\\n\\nclass Main {\\n\\tstatic public void main(String []args) {\\n\\t\\tSystem.out.println(\"Hello, World!\");\\n\\t}\\n}")
                 .fileName("main")
-                .build());
+                .build(), 1L);
 
         this.testCode = testContainer.codeRepository.save(code);
     }

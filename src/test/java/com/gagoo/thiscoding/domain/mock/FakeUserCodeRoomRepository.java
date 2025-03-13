@@ -59,4 +59,9 @@ public class FakeUserCodeRoomRepository implements UserCodeRoomRepository {
             .anyMatch(userCodeRoom -> userCodeRoom.getCodeRoom().equals(codeRoomId)
                 && userCodeRoom.getUser().getId().equals(userId));
     }
+
+    @Override
+    public Optional<UserCodeRoom> findByCodeRoomIdAndUserId(Long codeRoomId, Long userId) {
+        return data.stream().filter(item -> item.getCodeRoom().getId().equals(codeRoomId) && item.getUser().getId().equals(userId)).findAny();
+    }
 }
