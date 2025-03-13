@@ -10,17 +10,14 @@ public class CodeCreate {
     @NotBlank
     private final Long roomId;
     @NotBlank
-    private final Long writerId;
-    @NotBlank
     private final String value;
     @NotBlank
     private final String fileName;
 
     @Builder
-    public CodeCreate(String id, Long roomId, Long writerId, String fileName, String value) {
+    public CodeCreate(String id, Long roomId, String fileName, String value) {
         this.id = id;
         this.roomId = roomId;
-        this.writerId = writerId;
         this.value = value;
         this.fileName = fileName;
     }
