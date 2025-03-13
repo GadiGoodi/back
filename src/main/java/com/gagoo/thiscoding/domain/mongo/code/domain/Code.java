@@ -25,21 +25,21 @@ public class Code {
         this.saveDate = saveDate;
     }
 
-    public static Code create(CodeCreate codeCreate) {
+    public static Code create(CodeCreate codeCreate, Long userId) {
         return Code.builder()
                 .roomId(codeCreate.getRoomId())
-                .writerId(codeCreate.getWriterId())
+                .writerId(userId)
                 .fileName(codeCreate.getFileName())
                 .value(codeCreate.getValue())
                 .saveDate(LocalDateTime.now())
                 .build();
     }
 
-    public static Code save(CodeCreate codeCreate) {
+    public static Code save(CodeCreate codeCreate, Long userId) {
         return Code.builder()
                 .id(codeCreate.getId())
                 .roomId(codeCreate.getRoomId())
-                .writerId(codeCreate.getWriterId())
+                .writerId(userId)
                 .fileName(codeCreate.getFileName())
                 .value(codeCreate.getValue())
                 .saveDate(LocalDateTime.now())

@@ -13,4 +13,6 @@ public interface UserCodeRoomRepository {
     void deleteById(Long userCodeRoomId);
 
     boolean existByCodeRoomIdAndUserId(Long codeRoomId, Long userId);
+
+    Optional<UserCodeRoom> findByCodeRoomIdAndUserId(Long codeRoomId, Long userId);
 }

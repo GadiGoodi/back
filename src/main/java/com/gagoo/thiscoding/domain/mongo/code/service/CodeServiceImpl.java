@@ -1,5 +1,8 @@
 package com.gagoo.thiscoding.domain.mongo.code.service;
 
+import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
+import com.gagoo.thiscoding.domain.maria.user.domain.User;
+import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.domain.mongo.code.controller.port.CodeService;
 import com.gagoo.thiscoding.domain.mongo.code.domain.Code;
 import com.gagoo.thiscoding.domain.mongo.code.domain.dto.CodeCreate;
@@ -14,6 +17,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CodeServiceImpl implements CodeService {
     private final CodeRepository codeRepository;
+    private final UserRepository userRepository;
+    private final SecurityUtils securityUtils;
 
     /**
      * 코드 생성(저장)
@@ -22,7 +27,7 @@ public class CodeServiceImpl implements CodeService {
      */
     @Override
     public Code createCode(CodeCreate codeCreate) {
-        Code code = Code.create(codeCreate);
+        Code code = Code.create(codeCreate, getCurrentUserId());
 
         return codeRepository.save(code);
     }
@@ -42,7 +47,7 @@ public class CodeServiceImpl implements CodeService {
             validateRoomIdAndFileNameExists(codeCreate.getRoomId(), codeCreate.getFileName());
             return createCode(codeCreate);
         } else {
-            code = Code.save(codeCreate);
+            code = Code.save(codeCreate, getCurrentUserId());
             return codeRepository.save(code);
         }
     }
@@ -71,4 +76,11 @@ public class CodeServiceImpl implements CodeService {
         }
     }
 
+    /**
+     * 로그인 사용자 아이디 조회
+     * @return id
+     */
+    private Long getCurrentUserId() {
+        return userRepository.getByEmail(securityUtils.getUserEmail()).getId();
+    }
 }
