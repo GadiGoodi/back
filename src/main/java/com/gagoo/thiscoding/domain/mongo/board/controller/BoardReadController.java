@@ -6,6 +6,7 @@ import com.gagoo.thiscoding.domain.mongo.board.controller.response.QnaResponse;
 import com.gagoo.thiscoding.domain.mongo.board.controller.response.SearchResponse;
 import com.gagoo.thiscoding.domain.mongo.board.service.dto.AnswerList;
 import com.gagoo.thiscoding.domain.mongo.board.service.dto.QnaList;
+import com.gagoo.thiscoding.domain.mongo.board.controller.port.VisitorIdProvider;
 import com.gagoo.thiscoding.global.paging.aop.ConvertToOneBase;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,12 +27,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class BoardReadController {
 
     private final BoardService boardService;
+    private final VisitorIdProvider visitorIdProvider;
 
     @GetMapping("/{qnaId}")
     public ResponseEntity<QnaResponse> get(@PathVariable String qnaId, HttpServletRequest request, HttpServletResponse response) {
+        String visitorId = visitorIdProvider.getVisitorId(request, response);
+
         return ResponseEntity
                 .ok()
-                .body(QnaResponse.from(boardService.get(qnaId, request, response)));
+                .body(QnaResponse.from(boardService.get(qnaId, visitorId)));
     }
 
     @GetMapping
