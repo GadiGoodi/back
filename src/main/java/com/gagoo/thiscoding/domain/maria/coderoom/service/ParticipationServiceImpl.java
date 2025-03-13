@@ -78,9 +78,7 @@ public class ParticipationServiceImpl implements ParticipationService {
 
         userCodeRoomRepository.deleteById(userCodeRoom.getId());
 
-        CodeRoom codeRoom = codeRoomRepository.findById(userCodeRoom.getCodeRoom().getId()).orElseThrow(
-                () -> new CodeRoomNotFoundException(ErrorCode.CODE_ROOM_NOT_FOUND)
-        );
+        CodeRoom codeRoom = getByCodeRoomId(userCodeRoom.getCodeRoom().getId());
 
         if(codeRoom.getHeadCount() > MIN_CAPACITY) {
             codeRoomRepository.save(codeRoom.exit());
@@ -93,11 +91,25 @@ public class ParticipationServiceImpl implements ParticipationService {
 
     /**
      * 코드방 참여자 여부 확인
+     * @param userCodeRoom
      */
     private void validateUser(UserCodeRoom userCodeRoom) {
-        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
-        if(!userCodeRoom.getUser().equals(currentUser)) {
+        String currentUser = securityUtils.getUserEmail();
+        String participatedUser = userCodeRoom.getUser().getEmail();
+
+        if(!participatedUser.equals(currentUser)) {
             throw new NotUserCodeRoomParticipantException(ErrorCode.NOT_USER_CODE_ROOM_PARTICIPANT);
         }
     }
+
+    /**
+     * 코드방 값 조회
+     * @param codeRoomId
+     */
+    private CodeRoom getByCodeRoomId(Long codeRoomId) {
+        return codeRoomRepository.findById(codeRoomId).orElseThrow(
+                () -> new CodeRoomNotFoundException(ErrorCode.CODE_ROOM_NOT_FOUND)
+        );
+    }
+
 }
