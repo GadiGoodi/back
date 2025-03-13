@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class BoardReadServiceImplTest {
 
     private BoardService boardService;
+    private User testUser;
     private Board testBoard;
 
     @BeforeEach
@@ -38,7 +39,7 @@ class BoardReadServiceImplTest {
         TestContainer testContainer = TestContainer.builder()
                 .securityUtils(new FakeSecurityUtils(user.getEmail()))
                 .build();
-        testContainer.userRepository.save(user);
+        this.testUser = testContainer.userRepository.save(user);
 
         this.boardService = testContainer.boardService;
 
@@ -62,7 +63,7 @@ class BoardReadServiceImplTest {
             String qnaId = testBoard.getId();
 
             // when
-            QnaDetail qnaDetail = boardService.get(qnaId);
+            QnaDetail qnaDetail = boardService.get(qnaId, testUser.getEmail());
 
             // then
             assertThat(qnaDetail.getTitle()).isEqualTo(testBoard.getTitle());
@@ -79,7 +80,7 @@ class BoardReadServiceImplTest {
 
             // when & then
             assertThrows(QnaNotFoundException.class,
-                    () -> boardService.get(qnaId)
+                    () -> boardService.get(qnaId, testUser.getEmail())
             );
         }
     }
@@ -91,7 +92,7 @@ class BoardReadServiceImplTest {
         @BeforeEach
         void init() {
             for (int i = 1; i <= 27; i++) {
-                boardService.create(BoardCreate.of(
+                Board board = boardService.create(BoardCreate.of(
                         "테스트 게시물" + i,
                         "테스트 게시물 내용" + i,
                         "Java" + i)
