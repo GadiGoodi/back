@@ -4,10 +4,12 @@ import com.gagoo.thiscoding.domain.mongo.board.domain.BoardView;
 import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardRepository;
 import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardViewRepository;
 import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardViewService;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@Builder
 @RequiredArgsConstructor
 public class BoardViewServiceImpl implements BoardViewService {
 

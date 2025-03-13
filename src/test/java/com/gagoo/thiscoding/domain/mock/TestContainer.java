@@ -24,9 +24,12 @@ import com.gagoo.thiscoding.domain.maria.usercoderoom.service.UserCodeRoomServic
 import com.gagoo.thiscoding.domain.maria.usercoderoom.service.port.UserCodeRoomRepository;
 import com.gagoo.thiscoding.domain.mongo.board.controller.port.BoardService;
 import com.gagoo.thiscoding.domain.mongo.board.service.BoardServiceImpl;
+import com.gagoo.thiscoding.domain.mongo.board.service.BoardViewServiceImpl;
 import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardRepository;
 import com.gagoo.thiscoding.domain.auth.service.port.PasswordEncoderHolder;
 import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
+import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardViewRepository;
+import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardViewService;
 import com.gagoo.thiscoding.domain.mongo.code.service.port.CodeRepository;
 import com.gagoo.thiscoding.global.common.uuid.service.port.UuidHolder;
 import lombok.Builder;
@@ -40,6 +43,7 @@ public class TestContainer {
     public final UserRepository userRepository;
     public final ReplyRepository replyRepository;
     public final BoardRepository boardRepository;
+    public final BoardViewRepository boardViewRepository;
     public final ManagerRepository managerRepository;
     public final AlarmRepository alarmRepository;
     public final CodeRepository codeRepository;
@@ -48,6 +52,7 @@ public class TestContainer {
     public final CertificationService certificationService;
     public final ReplyService replyService;
     public final BoardService boardService;
+    public final BoardViewService boardViewService;
     public final ManagerService managerService;
     public final InvitationService invitationService;
     public final CodeRoomService codeRoomService;
@@ -64,6 +69,7 @@ public class TestContainer {
         this.userRepository = new FakeUserRepository();
         this.replyRepository = new FakeReplyRepository();
         this.boardRepository = new FakeBoardRepository();
+        this.boardViewRepository = new FakeBoardViewRepository();
         this.managerRepository = new FakeManagerRepository();
         this.alarmRepository = new FakeAlarmRepository();
         this.codeRepository = new FakeCodeRepository();
@@ -80,10 +86,15 @@ public class TestContainer {
                 .boardRepository(this.boardRepository)
                 .securityUtils(securityUtils)
                 .build();
+        this.boardViewService = BoardViewServiceImpl.builder()
+                .boardRepository(this.boardRepository)
+                .boardViewRepository(this.boardViewRepository)
+                .build();
         this.boardService = BoardServiceImpl.builder()
                 .userRepository(this.userRepository)
                 .boardRepository(this.boardRepository)
                 .replyRepository(this.replyRepository)
+                .boardViewService(this.boardViewService)
                 .securityUtils(securityUtils)
                 .build();
         this.managerService = ManagerServiceImpl.builder()
