@@ -21,11 +21,11 @@ public class UserCodeRoomCreateController {
     private final UserCodeRoomService userCodeRoomService;
 
     // 코드방 참여 생성
-    @PostMapping("/{userId}/{roomId}")
+    @PostMapping("/{codeRoomId}")
     @AuthorizationRequired(value = Role.USER, status = OK)
-    public ResponseEntity<Boolean> createUserCodeRoom(@PathVariable Long userId, @PathVariable Long roomId) {
+    public ResponseEntity<Boolean> createUserCodeRoom(@PathVariable Long codeRoomId) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(userCodeRoomService.createUserCodeRoom(userId, roomId));
+                .body(userCodeRoomService.createUserCodeRoom(codeRoomId));
     }
 }

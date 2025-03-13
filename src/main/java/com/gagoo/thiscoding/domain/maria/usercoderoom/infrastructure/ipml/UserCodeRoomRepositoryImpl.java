@@ -17,8 +17,8 @@ public class UserCodeRoomRepositoryImpl implements UserCodeRoomRepository {
     private final UserCodeRoomJpaRepository userCodeRoomJpaRepository;
 
     @Override
-    public UserCodeRoom getById(Long codeRoomId) {
-        return findById(codeRoomId).orElseThrow(
+    public UserCodeRoom getById(Long id) {
+        return findById(id).orElseThrow(
                 () -> new UserCodeRoomNotFoundException(ErrorCode.USER_CODE_ROOM_NOT_FOUND)
         );
     }
@@ -41,6 +41,11 @@ public class UserCodeRoomRepositoryImpl implements UserCodeRoomRepository {
     @Override
     public boolean existByCodeRoomIdAndUserId(Long codeRoomId, Long userId){
         return userCodeRoomJpaRepository.existsByCodeRoomIdAndUserId(codeRoomId, userId);
+    }
+
+    @Override
+    public Optional<UserCodeRoom> findByCodeRoomIdAndUserId(Long codeRoomId, Long userId) {
+        return userCodeRoomJpaRepository.findByCodeRoomIdAndUserId(codeRoomId, userId).map(UserCodeRoomEntity::toModel);
     }
 }
 
