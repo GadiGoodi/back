@@ -59,7 +59,6 @@ public class AuthController {
     }
 
     @PostMapping("/reset-password")
-    @AuthorizationRequired(value = {Role.USER, Role.ADMIN}, status = OK)
     public ResponseEntity<String> resetPassword(@Valid ResetPasswordRequest request) {
         authService.resetPassword(request);
 
