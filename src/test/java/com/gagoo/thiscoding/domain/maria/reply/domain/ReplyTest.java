@@ -20,7 +20,6 @@ class ReplyTest {
             // given
             String qnaId = "test-qna-id";
             String content = "테스트 댓글";
-            Long parentId = 10L;
 
             User user = User.builder()
                     .id(1L)
@@ -34,7 +33,6 @@ class ReplyTest {
 
             ReplyCreate replyCreate = ReplyCreate.builder()
                     .content(content)
-                    .parentId(parentId)
                     .build();
 
             // when
@@ -44,7 +42,7 @@ class ReplyTest {
             assertThat(reply.getQnaId()).isEqualTo(qnaId);
             assertThat(reply.getUser()).isEqualTo(user);
             assertThat(reply.getContent()).isEqualTo(content);
-            assertThat(reply.getParent()).isEqualTo(parentId);
+            assertThat(reply.getParent()).isNull();
             assertThat(reply.isBlinded()).isFalse();
             assertThat(reply.getCreateDate()).isNull();
         }

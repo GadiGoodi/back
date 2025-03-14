@@ -40,7 +40,7 @@ class BoardServiceImplTest {
         this.boardService = testContainer.boardService;
         this.testUser = testContainer.userRepository.save(user);
 
-        Board board = Board.create(testUser, BoardCreate.of("testTitle1, ", "testContent1", "Java"));
+        Board board = Board.create(testUser, BoardCreate.of("testTitle1", "testContent1", "Java"));
 
         this.testBoard = testContainer.boardRepository.save(board);
 

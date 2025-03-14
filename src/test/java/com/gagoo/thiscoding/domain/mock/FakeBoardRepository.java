@@ -30,6 +30,7 @@ public class FakeBoardRepository implements BoardRepository {
                     .likeCount(board.getLikeCount())
                     .viewCount(board.getViewCount())
                     .answerCount(board.getAnswerCount())
+                    .replyCount(board.getReplyCount())
                     .isSelected(board.isSelected())
                     .userId(board.getUserId())
                     .createDate(LocalDateTime.now())
