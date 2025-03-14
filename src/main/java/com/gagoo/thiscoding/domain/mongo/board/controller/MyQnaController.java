@@ -29,9 +29,9 @@ public class MyQnaController {
     @GetMapping("/qna")
     @ConvertToOneBase
     public ResponseEntity<CustomPageDto<MyPageQnA>> getMyPageQnA(Pageable pageable) {
-        return ResponseEntity
-                .ok()
-                .body(boardService.getMyPagePostQnA(pageable));
+
+        Page<MyPageQnA> qnaResult = boardService.getMyPagePostQnA(pageable).map(MyPageQnA::from);
+        return ResponseEntity.ok(CustomPageDto.of(qnaResult));
 
     }
 

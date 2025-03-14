@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 public record MyPageAnswerList(String answerId, String nickname,String profileImage, String content, String parentId,
                                Long likeCount, Long replyCount,Boolean isSelected, LocalDateTime createDate) {
 
-    public static MyPageAnswerList from(Board board) {
+    public static MyPageAnswerList of(Board board) {
         return new MyPageAnswerList(
                 board.getId(),
                 board.getNickname(),
