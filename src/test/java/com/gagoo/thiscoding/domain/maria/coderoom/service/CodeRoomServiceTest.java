@@ -5,11 +5,15 @@ import com.gagoo.thiscoding.domain.maria.coderoom.domain.CodeRoom;
 import com.gagoo.thiscoding.domain.maria.coderoom.domain.dto.CodeRoomCreate;
 import com.gagoo.thiscoding.domain.maria.coderoom.domain.dto.CodeRoomEnter;
 import com.gagoo.thiscoding.domain.maria.coderoom.service.exception.CodeRoomNotFoundException;
+import com.gagoo.thiscoding.domain.maria.user.domain.User;
+import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.UserCodeRoom;
 import com.gagoo.thiscoding.domain.mock.TestContainer;
 import com.gagoo.thiscoding.domain.mongo.code.domain.Code;
 import com.gagoo.thiscoding.domain.mongo.code.domain.dto.CodeCreate;
 import com.gagoo.thiscoding.domain.mongo.code.service.exception.CodeNotFoundException;
 import com.gagoo.thiscoding.global.common.uuid.service.port.UuidHolder;
+import com.gagoo.thiscoding.global.security.exception.AuthorizationException;
+import com.gagoo.thiscoding.global.security.infrastructure.FakeSecurityUtils;
 import org.junit.jupiter.api.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,12 +21,28 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CodeRoomServiceTest {
     private CodeRoomService codeRoomService;
     private CodeRoom testCodeRoom;
+    private UserCodeRoom testUserCodeRoom;
     private Code testCode;
+    private User testUser;
     private UuidHolder uuidHolder;
 
     @BeforeEach
     void init() {
-        TestContainer testContainer = TestContainer.builder().build();
+        User user = User.builder()
+                .id(1L)
+                .email("test01@test.com")
+                .password("encoded-password")
+                .nickname("test01")
+                .imageUrl("test-image-url")
+                .isActivated(true)
+                .isBanned(false)
+                .build();
+
+        TestContainer testContainer = TestContainer.builder()
+                .securityUtils(new FakeSecurityUtils(user.getEmail()))
+                .build();
+
+        this.testUser = testContainer.userRepository.save(user);
 
         this.codeRoomService = testContainer.codeRoomService;
         this.uuidHolder = testContainer.uuidHolder;
@@ -35,6 +55,15 @@ class CodeRoomServiceTest {
                 uuidHolder);
 
         this.testCodeRoom = testContainer.codeRoomRepository.save(codeRoom);
+
+        UserCodeRoom userCodeRoom = UserCodeRoom.builder()
+                .id(1L)
+                .user(testUser)
+                .codeRoom(testCodeRoom)
+                .isActivated(false)
+                .build();
+
+        this.testUserCodeRoom = testContainer.userCodeRoomRepository.save(userCodeRoom);
 
         Code code = Code.create(CodeCreate.builder()
                 .id("test-code-id")
@@ -90,6 +119,21 @@ class CodeRoomServiceTest {
             // when & then
             Assertions.assertThrows(CodeRoomNotFoundException.class,
                     () -> codeRoomService.enterCodeRoom("invalid-uuid"));
+        }
+
+        @Test
+        @DisplayName("로그인하지 않은 사용자는 코드방을 조회할 수 없다.")
+        void enterCodeRoom_로그인하지_않은_사용자_코드방_조회() {
+            // given
+            TestContainer testContainer = TestContainer.builder()
+                    .securityUtils(new FakeSecurityUtils(null))
+                    .build();
+
+            CodeRoomService unauthenticatedCodeRoomService = testContainer.codeRoomService;
+
+            // when & then
+            Assertions.assertThrows(AuthorizationException.class,
+                    () -> unauthenticatedCodeRoomService.enterCodeRoom("invalid-uuid"));
         }
     }
 

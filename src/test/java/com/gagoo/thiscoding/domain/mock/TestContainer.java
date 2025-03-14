@@ -108,8 +108,11 @@ public class TestContainer {
             .securityUtils(securityUtils)
             .build();
         this.codeRoomService = CodeRoomServiceImpl.builder()
+                .userRepository(this.userRepository)
+                .userCodeRoomRepository(this.userCodeRoomRepository)
                 .codeRoomRepository(this.codeRoomRepository)
                 .codeRepository(this.codeRepository)
+                .securityUtils(securityUtils)
                 .uuidHolder(this.uuidHolder)
                 .build();
         this.participationService = ParticipationServiceImpl.builder()
@@ -122,6 +125,7 @@ public class TestContainer {
                 .userRepository(this.userRepository)
                 .codeRoomRepository(this.codeRoomRepository)
                 .userCodeRoomRepository(this.userCodeRoomRepository)
+                .securityUtils(securityUtils)
                 .build();
     }
 }
