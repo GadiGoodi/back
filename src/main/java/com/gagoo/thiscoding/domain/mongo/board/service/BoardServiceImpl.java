@@ -5,10 +5,13 @@ import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.domain.mongo.board.controller.port.BoardService;
 import com.gagoo.thiscoding.domain.mongo.board.controller.request.BoardAnswer;
+import com.gagoo.thiscoding.domain.mongo.board.controller.response.MyPageAnswer;
+import com.gagoo.thiscoding.domain.mongo.board.controller.response.MyPageQnA;
 import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
 import com.gagoo.thiscoding.domain.mongo.board.domain.dto.BoardCreate;
 import com.gagoo.thiscoding.domain.mongo.board.domain.dto.Search;
 import com.gagoo.thiscoding.domain.mongo.board.service.dto.AnswerList;
+import com.gagoo.thiscoding.domain.mongo.board.service.dto.MyPageAnswerList;
 import com.gagoo.thiscoding.domain.mongo.board.service.dto.QnaDetail;
 import com.gagoo.thiscoding.domain.mongo.board.service.dto.QnaList;
 import com.gagoo.thiscoding.domain.mongo.board.service.exception.QnaNotFoundException;
@@ -89,9 +92,19 @@ public class BoardServiceImpl implements BoardService {
      * 마이페이지 내가 작성한 Qna 조회
      */
     @Override
-    public Page<Board> getMyPagePostQnA(Pageable pageable) {
+    public CustomPageDto<MyPageQnA> getMyPagePostQnA(Pageable pageable) {
         User currentUser = getCurrentUser();
-        return boardRepository.findByUserId(currentUser.getId(), pageable);
+        Page<MyPageQnA> myPageWriteQnaList = boardRepository.findByUserId(currentUser.getId(),pageable).map(
+                MyPageQnA::from
+        );
+        return CustomPageDto.of(myPageWriteQnaList);
+    }
+
+    @Override
+    public Page<MyPageAnswerList> getMyPagePostAnswer(Pageable pageable) {
+        User currentUser = getCurrentUser();
+        return boardRepository.findByUserIdAndParentIdIsNotRoot(currentUser.getId(),pageable)
+                .map(MyPageAnswerList::from);
     }
 
     /**
