@@ -3,11 +3,10 @@ package com.gagoo.thiscoding.domain.mongo.board.service;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.mock.TestContainer;
 import com.gagoo.thiscoding.domain.mongo.board.controller.port.BoardService;
-import com.gagoo.thiscoding.domain.mongo.board.controller.response.MyPageQnA;
 import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
 
 import com.gagoo.thiscoding.domain.mongo.board.domain.dto.BoardCreate;
-import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
+import com.gagoo.thiscoding.domain.mongo.board.service.dto.MyPageQnAList;
 import com.gagoo.thiscoding.global.security.infrastructure.FakeSecurityUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,10 +54,10 @@ class BoardServiceImplTest {
         Pageable pageable = PageRequest.of(0, 10);
 
         //when
-        CustomPageDto<MyPageQnA> result = boardService.getMyPagePostQnA(pageable);
+        Page<MyPageQnAList> result = boardService.getMyPagePostQnA(pageable);
 
         //then
-        assertThat(result.getContent().get(0).getTitle()).isEqualTo("testTitle1");
-        assertThat(result.getContent().get(0).getContent()).isEqualTo("testContent1");
+        assertThat(result.getContent().get(0).title()).isEqualTo("testTitle1");
+        assertThat(result.getContent().get(0).content()).isEqualTo("testContent1");
     }
 }
