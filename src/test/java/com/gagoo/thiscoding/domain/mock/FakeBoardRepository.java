@@ -81,6 +81,11 @@ public class FakeBoardRepository implements BoardRepository {
                 findUserId::size);
     }
 
+    @Override
+    public Page<Board> findByUserIdAndParentIdIsNotRoot(Long userId, Pageable pageable) {
+        return null;
+    }
+
 
     @Override
     public Page<Search> findByTitleOrContent(String title, String content, Pageable pageable) {
