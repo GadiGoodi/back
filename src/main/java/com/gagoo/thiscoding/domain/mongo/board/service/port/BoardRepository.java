@@ -13,6 +13,7 @@ public interface BoardRepository {
     List<Long> getTop10Users();
     Page<Board> findAll(Pageable pageable);
     Page<Board> findByUserId(Long userId, Pageable pageable);
+    Page<Board> findByUserIdAndParentIdIsNotRoot(Long userId, Pageable pageable);
     Page<Search> findByTitleOrContent(String title, String content, Pageable pageable);
     Page<Board> findAnswerByQnaId(String qnaId, Pageable pageable);
     boolean existsById(String qnaId);

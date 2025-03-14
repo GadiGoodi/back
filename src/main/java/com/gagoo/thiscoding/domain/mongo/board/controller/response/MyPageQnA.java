@@ -1,6 +1,7 @@
 package com.gagoo.thiscoding.domain.mongo.board.controller.response;
 
 import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
+import com.gagoo.thiscoding.domain.mongo.board.service.dto.MyPageQnAList;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,27 +16,24 @@ import java.time.LocalDateTime;
 public class MyPageQnA {
 
     private String id;
-    private Long userId;
     private String title;
     private String content;
+    private String nickname;
     private String language;
-    private Long likeCount;
     private Long viewCount;
-    private String parentId;
-    private boolean isSelected;
+    private Long answerCount;
+    private LocalDateTime createDate;
 
-
-    public static MyPageQnA from(Board board){
+    public static MyPageQnA from(MyPageQnAList myPageQnAList){
         return MyPageQnA.builder()
-                .id(board.getId())
-                .userId(board.getUserId())
-                .title(board.getTitle())
-                .content(board.getContent())
-                .language(board.getLanguage())
-                .likeCount(board.getLikeCount())
-                .viewCount(board.getViewCount())
-                .parentId(board.getParentId())
-                .isSelected(board.isSelected())
+                .id(myPageQnAList.id())
+                .title(myPageQnAList.title())
+                .content(myPageQnAList.content())
+                .nickname(myPageQnAList.nickname())
+                .language(myPageQnAList.language())
+                .viewCount(myPageQnAList.viewCount())
+                .answerCount(myPageQnAList.answerCount())
+                .createDate(myPageQnAList.createDate())
                 .build();
     }
 }

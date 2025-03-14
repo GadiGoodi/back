@@ -52,15 +52,14 @@ public class AuthController {
 
     @PostMapping("/change-password")
     @AuthorizationRequired(value = {Role.USER, Role.ADMIN}, status = OK)
-    public ResponseEntity<String> changePassword(@Valid ChangePasswordRequest request) {
+    public ResponseEntity<String> changePassword(@Valid @RequestBody ChangePasswordRequest request) {
         authService.changePassword(request);
 
         return ResponseEntity.ok().body("비밀번호 변경이 완료되었습니다.");
     }
 
     @PostMapping("/reset-password")
-    @AuthorizationRequired(value = {Role.USER, Role.ADMIN}, status = OK)
-    public ResponseEntity<String> resetPassword(@Valid ResetPasswordRequest request) {
+    public ResponseEntity<String> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
         authService.resetPassword(request);
 
         return ResponseEntity.ok().body("비밀번호 변경이 완료되었습니다.");

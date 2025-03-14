@@ -6,6 +6,7 @@ import com.gagoo.thiscoding.domain.mongo.board.controller.port.BoardService;
 import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
 
 import com.gagoo.thiscoding.domain.mongo.board.domain.dto.BoardCreate;
+import com.gagoo.thiscoding.domain.mongo.board.service.dto.MyPageQnAList;
 import com.gagoo.thiscoding.global.security.infrastructure.FakeSecurityUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,12 +41,7 @@ class BoardServiceImplTest {
         this.boardService = testContainer.boardService;
         this.testUser = testContainer.userRepository.save(user);
 
-        Board board = Board.create(testUser, BoardCreate.builder()
-                .title("testTitle1")
-                .content("testContent1")
-                .language("Java")
-                .parentId(null)
-                .build());
+        Board board = Board.create(testUser, BoardCreate.of("testTitle1", "testContent1", "Java"));
 
         this.testBoard = testContainer.boardRepository.save(board);
 
@@ -58,11 +54,10 @@ class BoardServiceImplTest {
         Pageable pageable = PageRequest.of(0, 10);
 
         //when
-        Page<Board> result = boardService.getMyPagePostQnA(pageable);
+        Page<MyPageQnAList> result = boardService.getMyPagePostQnA(pageable);
 
         //then
-        assertThat(result.getContent().get(0).getTitle()).isEqualTo("testTitle1");
-        assertThat(result.getContent().get(0).getContent()).isEqualTo("testContent1");
-        assertThat(result.getContent().get(0).getUserId()).isEqualTo(1L);
+        assertThat(result.getContent().get(0).title()).isEqualTo("testTitle1");
+        assertThat(result.getContent().get(0).content()).isEqualTo("testContent1");
     }
 }

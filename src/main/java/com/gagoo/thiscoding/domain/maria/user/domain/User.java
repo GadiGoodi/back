@@ -99,14 +99,31 @@ public class User {
     /**
      * 비밀번호 변경
      */
-    public User changePassword(User user, PasswordEncoderHolder passwordEncoder) {
+    public User changePassword(String newPassword, PasswordEncoderHolder passwordEncoder) {
         return User.builder()
                 .id(this.id)
                 .email(this.email)
-                .password(passwordEncoder.encode(user.getPassword()))
+                .password(passwordEncoder.encode(newPassword))
                 .nickname(this.nickname)
                 .imageUrl(this.imageUrl)
                 .isActivated(this.isActivated)
+                .isBanned(this.isBanned)
+                .role(this.role)
+                .social(this.social)
+                .build();
+    }
+
+    /**
+     * 회원 탈퇴
+     */
+    public User withdraw() {
+        return User.builder()
+                .id(this.id)
+                .email(this.email)
+                .password(this.password)
+                .nickname(this.nickname)
+                .imageUrl(this.imageUrl)
+                .isActivated(false)
                 .isBanned(this.isBanned)
                 .role(this.role)
                 .social(this.social)

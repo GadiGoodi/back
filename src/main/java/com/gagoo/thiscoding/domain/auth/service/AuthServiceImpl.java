@@ -12,6 +12,8 @@ import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.domain.auth.domain.Token;
 import com.gagoo.thiscoding.domain.auth.dto.LoginDto;
 import com.gagoo.thiscoding.domain.auth.service.port.TokenFactory;
+import com.gagoo.thiscoding.global.exception.ErrorCode;
+import com.gagoo.thiscoding.global.security.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +45,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public LoginDto login(LoginRequest request) {
         User user = userRepository.getByEmail(request.email());
+
+        validateUserActivation(user);
         passwordService.matchPassword(request.password(), user.getPassword());
         Token token = tokenFactory.createToken(user);
 
@@ -66,8 +70,7 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public User resetPassword(ResetPasswordRequest request) {
-        User user = getCurrentUser();
-
+        User user = userRepository.getByEmail(request.email());
         return updatePassword(user, request.newPassword(), request.checkPassword());
     }
 
@@ -84,7 +87,7 @@ public class AuthServiceImpl implements AuthService {
      */
     private User updatePassword(User user, String newPassword, String checkPassword) {
         passwordService.validatePasswordMatch(newPassword, checkPassword);
-        User updateUser = user.changePassword(user, passwordService.getPasswordEncoder());
+        User updateUser = user.changePassword(newPassword, passwordService.getPasswordEncoder());
 
         return userRepository.save(updateUser);
     }
@@ -114,6 +117,15 @@ public class AuthServiceImpl implements AuthService {
      */
     private void preparePassword(String password, String checkPassword) {
         passwordService.validatePasswordMatch(password, checkPassword);
+    }
+
+    /**
+     * 탈퇴한 회원인지 확인
+     */
+    private static void validateUserActivation(User user) {
+        if (!user.isActivated()) {
+            throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
+        }
     }
 
 }

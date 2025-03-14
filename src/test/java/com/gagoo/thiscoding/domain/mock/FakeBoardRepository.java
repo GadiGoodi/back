@@ -30,6 +30,7 @@ public class FakeBoardRepository implements BoardRepository {
                     .likeCount(board.getLikeCount())
                     .viewCount(board.getViewCount())
                     .answerCount(board.getAnswerCount())
+                    .replyCount(board.getReplyCount())
                     .isSelected(board.isSelected())
                     .userId(board.getUserId())
                     .createDate(LocalDateTime.now())
@@ -80,6 +81,11 @@ public class FakeBoardRepository implements BoardRepository {
                 findUserId::size);
     }
 
+    @Override
+    public Page<Board> findByUserIdAndParentIdIsNotRoot(Long userId, Pageable pageable) {
+        return null;
+    }
+
 
     @Override
     public Page<Search> findByTitleOrContent(String title, String content, Pageable pageable) {
@@ -98,17 +104,69 @@ public class FakeBoardRepository implements BoardRepository {
 
     @Override
     public void incrementViewCount(String boardId) {
+        findById(boardId).ifPresent(board -> {
+            Board updatedBoard = Board.builder()
+                    .id(board.getId())
+                    .title(board.getTitle())
+                    .language(board.getLanguage())
+                    .content(board.getContent())
+                    .parentId(board.getParentId())
+                    .likeCount(board.getLikeCount())
+                    .viewCount(board.getViewCount() + 1)
+                    .answerCount(board.getAnswerCount())
+                    .isSelected(board.isSelected())
+                    .userId(board.getUserId())
+                    .createDate(board.getCreateDate())
+                    .build();
 
+            data.removeIf(item -> item.getId().equals(boardId));
+            data.add(updatedBoard);
+        });
     }
 
     @Override
     public void incrementAnswerCount(String parentQnaId) {
+        findById(parentQnaId).ifPresent(board -> {
+            Board updatedBoard = Board.builder()
+                    .id(board.getId())
+                    .title(board.getTitle())
+                    .language(board.getLanguage())
+                    .content(board.getContent())
+                    .parentId(board.getParentId())
+                    .likeCount(board.getLikeCount())
+                    .viewCount(board.getViewCount())
+                    .answerCount(board.getAnswerCount() + 1)
+                    .isSelected(board.isSelected())
+                    .userId(board.getUserId())
+                    .createDate(board.getCreateDate())
+                    .build();
 
+            data.removeIf(item -> item.getId().equals(parentQnaId));
+            data.add(updatedBoard);
+        });
     }
 
     @Override
     public void incrementReplyCount(String qnaId) {
+        findById(qnaId).ifPresent(board -> {
+            Board updatedBoard = Board.builder()
+                    .id(board.getId())
+                    .title(board.getTitle())
+                    .language(board.getLanguage())
+                    .content(board.getContent())
+                    .parentId(board.getParentId())
+                    .likeCount(board.getLikeCount())
+                    .viewCount(board.getViewCount())
+                    .answerCount(board.getAnswerCount())
+                    .replyCount(board.getReplyCount() + 1)
+                    .isSelected(board.isSelected())
+                    .userId(board.getUserId())
+                    .createDate(board.getCreateDate())
+                    .build();
 
+            data.removeIf(item -> item.getId().equals(qnaId));
+            data.add(updatedBoard);
+        });
     }
 
     @Override
@@ -118,7 +176,7 @@ public class FakeBoardRepository implements BoardRepository {
         }
 
         List<Board> findAllBoard = data.stream()
-                .filter(board -> Objects.isNull(board.getParentId()))
+                .filter(board -> Objects.equals("root", board.getParentId()))
                 .sorted(Comparator.comparing(Board::getCreateDate).reversed())
                 .collect(Collectors.toList());
 
