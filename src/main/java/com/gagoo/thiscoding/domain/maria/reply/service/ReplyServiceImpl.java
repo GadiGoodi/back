@@ -3,7 +3,6 @@ package com.gagoo.thiscoding.domain.maria.reply.service;
 import com.gagoo.thiscoding.domain.maria.reply.controller.port.ReplyService;
 import com.gagoo.thiscoding.domain.maria.reply.domain.Reply;
 import com.gagoo.thiscoding.domain.maria.reply.domain.dto.ReplyCreate;
-import com.gagoo.thiscoding.domain.maria.reply.infrastructure.ReplyEntity;
 import com.gagoo.thiscoding.domain.maria.reply.infrastructure.exception.NotReplyAuthorException;
 import com.gagoo.thiscoding.domain.maria.reply.infrastructure.exception.ReplyNotFoundException;
 import com.gagoo.thiscoding.domain.maria.reply.service.dto.ReplyList;

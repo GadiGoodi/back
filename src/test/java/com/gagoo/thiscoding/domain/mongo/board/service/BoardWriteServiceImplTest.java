@@ -50,6 +50,6 @@ class BoardWriteServiceImplTest {
         assertThat(board.getTitle()).isEqualTo(boardCreate.title());
         assertThat(board.getContent()).isEqualTo(boardCreate.content());
         assertThat(board.getLanguage()).isEqualTo(boardCreate.language());
-        assertThat(board.getParentId()).isNull();
+        assertThat(board.getParentId()).isEqualTo("root");
     }
 }
