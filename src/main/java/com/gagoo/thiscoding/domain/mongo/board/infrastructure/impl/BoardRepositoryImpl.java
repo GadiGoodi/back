@@ -66,7 +66,8 @@ public class BoardRepositoryImpl implements BoardRepository {
      */
     @Override
     public Page<Board> findAll(Pageable pageable) {
-        return boardMongoRepository.findByParentIdAndIsBlindFalseOrderByCreateDateDesc("root", pageable).map(BoardDocument::toModel);
+        return boardMongoRepository.findByParentIdAndIsBlindFalseOrderByCreateDateDesc("root", pageable)
+                .map(BoardDocument::toModel);
     }
 
     @Override

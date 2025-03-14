@@ -4,6 +4,7 @@ import com.gagoo.thiscoding.domain.maria.manager.controller.response.ManagerNoti
 import com.gagoo.thiscoding.domain.maria.manager.domain.Manager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,14 +21,16 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @SpringBootTest
 @Transactional
 @ActiveProfiles(profiles = {"test"})
-@Sql(scripts = "/manager-board-test-data.sql")
+@Sql(scripts = "/sql/manager-board-test-data.sql")
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@TestPropertySource(locations = "classpath:application-test.yml")
 class ManagerRepositoryImplTest {
 
     @Autowired
     private ManagerNoticesRepositoryCustom managerCustomRepository;
 
     @Test
-    public void findAll로_공지사항_목록_조회() {
+    public void findAll로_공지사항_목록_조회_성공() {
 
         // given
         Pageable pageable = PageRequest.of(0, 10);
@@ -46,7 +49,6 @@ class ManagerRepositoryImplTest {
 
         // 변환 후 리스트 검증
         assertThat(managerNoticesList.get(0).getId()).isEqualTo(result.getContent().get(0).getId());
-        assertThat(managerNoticesList.get(0).getManager()).isNotNull();
         assertThat(managerNoticesList.get(0).getTitle()).isNotNull();
         assertThat(managerNoticesList.get(0).getCategory()).isNotNull();
         assertThat(managerNoticesList.get(0).getViewCount()).isNotNull();

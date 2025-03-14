@@ -5,15 +5,10 @@ import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.domain.mongo.board.controller.port.BoardService;
 import com.gagoo.thiscoding.domain.mongo.board.controller.request.BoardAnswer;
-import com.gagoo.thiscoding.domain.mongo.board.controller.response.MyPageAnswer;
-import com.gagoo.thiscoding.domain.mongo.board.controller.response.MyPageQnA;
 import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
 import com.gagoo.thiscoding.domain.mongo.board.domain.dto.BoardCreate;
 import com.gagoo.thiscoding.domain.mongo.board.domain.dto.Search;
-import com.gagoo.thiscoding.domain.mongo.board.service.dto.AnswerList;
-import com.gagoo.thiscoding.domain.mongo.board.service.dto.MyPageAnswerList;
-import com.gagoo.thiscoding.domain.mongo.board.service.dto.QnaDetail;
-import com.gagoo.thiscoding.domain.mongo.board.service.dto.QnaList;
+import com.gagoo.thiscoding.domain.mongo.board.service.dto.*;
 import com.gagoo.thiscoding.domain.mongo.board.service.exception.QnaNotFoundException;
 import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardRepository;
 import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardViewService;
@@ -89,22 +84,23 @@ public class BoardServiceImpl implements BoardService {
         return boardRepository.findByTitleOrContent(keyword, keyword, customPageable);
     }
     /**
-     * 마이페이지 내가 작성한 Qna 조회
+     * 마이페이지 내가 작성한 QnA 질문 조회
      */
     @Override
-    public CustomPageDto<MyPageQnA> getMyPagePostQnA(Pageable pageable) {
+    public Page<MyPageQnAList> getMyPagePostQnA(Pageable pageable) {
         User currentUser = getCurrentUser();
-        Page<MyPageQnA> myPageWriteQnaList = boardRepository.findByUserId(currentUser.getId(),pageable).map(
-                MyPageQnA::from
-        );
-        return CustomPageDto.of(myPageWriteQnaList);
+        return boardRepository.findByUserId(currentUser.getId(),pageable)
+                .map(MyPageQnAList::of);
     }
 
+    /**
+     * 마이페이지 내가 작성한 QnA 답변 조회
+    */
     @Override
     public Page<MyPageAnswerList> getMyPagePostAnswer(Pageable pageable) {
         User currentUser = getCurrentUser();
         return boardRepository.findByUserIdAndParentIdIsNotRoot(currentUser.getId(),pageable)
-                .map(MyPageAnswerList::from);
+                .map(MyPageAnswerList::of);
     }
 
     /**

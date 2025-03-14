@@ -1,6 +1,7 @@
 package com.gagoo.thiscoding.domain.mongo.board.controller.response;
 
 import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
+import com.gagoo.thiscoding.domain.mongo.board.service.dto.MyPageQnAList;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,16 +24,16 @@ public class MyPageQnA {
     private Long answerCount;
     private LocalDateTime createDate;
 
-    public static MyPageQnA from(Board board){
+    public static MyPageQnA from(MyPageQnAList myPageQnAList){
         return MyPageQnA.builder()
-                .id(board.getId())
-                .title(board.getTitle())
-                .content(board.getContent())
-                .nickname(board.getNickname())
-                .language(board.getLanguage())
-                .viewCount(board.getViewCount())
-                .answerCount(board.getAnswerCount())
-                .createDate(board.getCreateDate())
+                .id(myPageQnAList.id())
+                .title(myPageQnAList.title())
+                .content(myPageQnAList.content())
+                .nickname(myPageQnAList.nickname())
+                .language(myPageQnAList.language())
+                .viewCount(myPageQnAList.viewCount())
+                .answerCount(myPageQnAList.answerCount())
+                .createDate(myPageQnAList.createDate())
                 .build();
     }
 }
