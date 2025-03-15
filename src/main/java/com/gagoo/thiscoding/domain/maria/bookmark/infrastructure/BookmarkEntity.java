@@ -1,5 +1,6 @@
 package com.gagoo.thiscoding.domain.maria.bookmark.infrastructure;
 
+import com.gagoo.thiscoding.domain.maria.bookmark.domain.Bookmark;
 import com.gagoo.thiscoding.domain.maria.user.infrastructure.UserEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -18,5 +19,21 @@ public class BookmarkEntity {
     private UserEntity user;
 
     @Column(name = "qna_id")
-    private Long qnaId;
+    private String qnaId;
+
+    public Bookmark toModel() {
+        return Bookmark.builder()
+                .id(this.id)
+                .user(this.user.toModel())
+                .qnaId(this.qnaId)
+                .build();
+    }
+
+    public static BookmarkEntity from(Bookmark bookmark) {
+        BookmarkEntity entity = new BookmarkEntity();
+        entity.id = bookmark.getId();
+        entity.user = UserEntity.from(bookmark.getUser());
+        entity.qnaId = bookmark.getQnaId();
+        return entity;
+    }
 }
