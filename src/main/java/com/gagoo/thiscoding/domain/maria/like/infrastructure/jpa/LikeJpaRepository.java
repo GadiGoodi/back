@@ -7,6 +7,5 @@ import java.util.Optional;
 
 public interface LikeJpaRepository extends JpaRepository<LikeEntity, Long> {
     Optional<LikeEntity> findByQnaIdAndUserId(String qnaId, Long userId);
-
     boolean existsByQnaIdAndUserId(String qnaId, Long userId);
 }
