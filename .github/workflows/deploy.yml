@@ -27,6 +27,9 @@ jobs:
       - name: Gradle 권한 설정
         run: chmod +x gradlew
 
+      - name: Gradle 캐시 삭제
+        run: ./gradlew clean --no-build-cache
+
       - name: 테스트 진행
         run: ./gradlew test -Dspring.profiles.active=test
 
