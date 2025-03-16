@@ -1,11 +1,11 @@
-package com.gagoo.thiscoding.domain.maria.like.service;
+package com.gagoo.thiscoding.domain.maria.bookmark.service;
 
 import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
-import com.gagoo.thiscoding.domain.maria.like.controller.port.LikeService;
-import com.gagoo.thiscoding.domain.maria.like.domain.Like;
-import com.gagoo.thiscoding.domain.maria.like.service.exception.ExistLike;
-import com.gagoo.thiscoding.domain.maria.like.service.exception.LikeNotFoundException;
-import com.gagoo.thiscoding.domain.maria.like.service.port.LikeRepository;
+import com.gagoo.thiscoding.domain.maria.bookmark.controller.port.BookmarkService;
+import com.gagoo.thiscoding.domain.maria.bookmark.domain.Bookmark;
+import com.gagoo.thiscoding.domain.maria.bookmark.service.exception.BookmarkNotFoundException;
+import com.gagoo.thiscoding.domain.maria.bookmark.service.exception.ExistBookmark;
+import com.gagoo.thiscoding.domain.maria.bookmark.service.port.BookmarkRepository;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
@@ -17,53 +17,51 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class LikeServiceImpl implements LikeService {
+public class BookmarkServiceImpl implements BookmarkService {
 
-    private final LikeRepository likeRepository;
+    private final BookmarkRepository bookmarkRepository;
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final SecurityUtils securityUtils;
 
     /**
-     * 답변 추천
+     * 게시글 북마크
      * @param qnaId
      * @return
      */
     @Override
-    public Like likeAnswer(String qnaId) {
-        validateQnaAndAnswer(qnaId);
-        validateLikeExists(qnaId);
+    public Bookmark bookmarkQna(String qnaId) {
+        validateQna(qnaId);
+        validateBookmarkExists(qnaId);
 
         User currentUser = getCurrentUser();
 
-        Like like = Like.create(currentUser, qnaId);
+        Bookmark bookmark = Bookmark.create(currentUser, qnaId);
 
-        return likeRepository.save(like);
+        return bookmarkRepository.save(bookmark);
     }
 
     /**
-     * 답변 추천 취소
+     * 게시글 북마크 취소
      * @param qnaId
      */
     @Override
-    public void cancelAnswerLike(String qnaId) {
-        validateQnaAndAnswer(qnaId);
+    public void cancelQnaBookmark(String qnaId) {
+        validateQna(qnaId);
 
-        Like like = getLikeByQnaIdAndUserId(qnaId, getCurrentUser().getId());
+        Bookmark bookmark = getBookmarkByQnaIdAndUserId(qnaId, getCurrentUser().getId());
 
-        likeRepository.deleteById(like.getId());
+        bookmarkRepository.deleteById(bookmark.getId());
     }
 
     /**
-     * 원본 게시글 및 답변 존재, isBlind 여부 검증
+     * 원본 게시글 존재, isBlind 여부 검증
      * @param qnaId
      */
-    private void validateQnaAndAnswer(String qnaId) {
+    private void validateQna(String qnaId) {
         Board board = getBoardById(qnaId);
-        Board parentBoard = getBoardById(board.getParentId());
 
         validateIsBlind(board);
-        validateIsBlind(parentBoard);
     }
 
     /**
@@ -77,24 +75,24 @@ public class LikeServiceImpl implements LikeService {
     }
 
     /**
-     * 답변 추천 여부 검증
+     * 게시글 북마크 여부 검증
      * @param qnaId
      */
-    private void validateLikeExists(String qnaId) {
-        if(likeRepository.existsByQnaIdAndUserId(qnaId, getCurrentUser().getId())) {
-            throw new ExistLike(ErrorCode.ALREADY_LIKE);
+    private void validateBookmarkExists(String qnaId) {
+        if(bookmarkRepository.existsByQnaIdAndUserId(qnaId, getCurrentUser().getId())) {
+            throw new ExistBookmark(ErrorCode.ALREADY_BOOKMARK);
         }
     }
 
     /**
-     * 추천 조회
+     * 북마크 조회
      * @param qnaId
      * @param userId
      * @return
      */
-    private Like getLikeByQnaIdAndUserId(String qnaId, Long userId) {
-        return likeRepository.findByQnaIdAndUserId(qnaId, userId).orElseThrow(
-                () -> new LikeNotFoundException(ErrorCode.LIKE_NOT_FOUND)
+    private Bookmark getBookmarkByQnaIdAndUserId(String qnaId, Long userId) {
+        return bookmarkRepository.findByQnaIdAndUserId(qnaId, userId).orElseThrow(
+                () -> new BookmarkNotFoundException(ErrorCode.BOOKMARK_NOT_FOUND)
         );
     }
 
