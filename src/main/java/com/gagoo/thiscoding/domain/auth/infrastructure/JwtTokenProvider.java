@@ -116,7 +116,7 @@ public class JwtTokenProvider implements TokenProvider {
             Jwts.parser()
                     .verifyWith(secretKey)
                     .build()
-                    .parseClaimsJws(token);
+                    .parseSignedClaims(token);
 
         } catch (SecurityException | MalformedJwtException e) {
             throw new GlobalException(ErrorCode.INVALID_SIGNATURE);
