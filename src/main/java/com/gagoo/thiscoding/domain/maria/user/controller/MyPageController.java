@@ -32,7 +32,7 @@ public class MyPageController {
     @AuthorizationRequired(value = {Role.USER}, status = OK)
     public ResponseEntity<String> updateProfileNickname(@RequestBody UpdateProfileNicknameRequest request) {
         userService.updateNickname(request);
-        return ResponseEntity.ok().body("닉네임 사진 변경 완료");
+        return ResponseEntity.ok().body("닉네임 변경 완료");
     }
 
     @PatchMapping("/me/profile/image")
