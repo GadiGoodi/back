@@ -1,6 +1,9 @@
+-- 이미 테이블 삭제
+DROP TABLE IF EXISTS manager_board;
+
 -- 테이블 생성
 CREATE TABLE manager_board (
-                                id BIGINT PRIMARY KEY,
+                                manager_board_id BIGINT PRIMARY KEY,
                                 manager VARCHAR(255),
                                 title VARCHAR(255),
                                 category VARCHAR(255),
@@ -9,7 +12,7 @@ CREATE TABLE manager_board (
 );
 
 -- 더미 데이터 삽입
-INSERT INTO manager_board (id, manager, title, category, view_count, create_date)
+INSERT INTO manager_board (manager_board_id, manager, title, category, view_count, create_date)
 VALUES
     (1, 'Manager 1', 'Notice Title 1', 'Category A', 10, '2025-01-01 09:00:00'),
     (2, 'Manager 2', 'Notice Title 2', 'Category B', 20, '2025-01-02 10:00:00'),
