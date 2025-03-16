@@ -22,8 +22,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @Transactional
 @ActiveProfiles(profiles = {"test"})
 @Sql(scripts = "/sql/manager-board-test-data.sql")
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@TestPropertySource(locations = "classpath:application-test.yml")
 class ManagerRepositoryImplTest {
 
     @Autowired
