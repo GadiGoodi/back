@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateNickname(UpdateProfileNicknameRequest request) {
         User currentUser = userRepository.getByEmail(getCurUserEmail());
-        validateNicknameExists(currentUser.getNickname());
+        validateNicknameExists(request.nickname());
 
         User updateUser = currentUser.updateNickname(request.nickname());
 
