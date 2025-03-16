@@ -14,11 +14,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Log in to Docker Hub
+      - name: CI Pipeline에서 저장한 아티팩트 다운로드
+        uses: actions/download-artifact@v2
+        with:
+          name: app-jar
+          path: build/libs
+
+      - name: 도커 허브 로그인
         run: echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
 
-      - name: Build Docker Image
+      - name: 도커 이미지 빌드
         run: docker build -t jaew0n/thiscoding:latest .
 
-      - name: Push Docker Image
+      - name: 도커 허브에 이미지 푸시
         run: docker push jaew0n/thiscoding:latest
