@@ -6,7 +6,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @SpringBootApplication
-@EnableJpaRepositories
+@EnableJpaRepositories(
+        basePackages = {"com.gagoo.thiscoding.domain.maria", "com.gagoo.thiscoding.domain.auth"}
+)
 @EnableMongoRepositories(basePackages = "com.gagoo.thiscoding.domain.mongo")
 public class ThiscodingApplication {
 
