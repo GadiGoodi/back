@@ -83,6 +83,14 @@ clean {
     delete file(generated)
 }
 
+task copyPrivate(type: Copy) {
+    copy {
+        from './server-yml'
+        include "*.yaml"
+        into 'src/main/resources'
+    }
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }
