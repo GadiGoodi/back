@@ -447,3 +447,5 @@ gradle-app.setting
 build/
 .idea/
 .gradle/
+src/main/resources/*.yml
+src/main/resources/*.properties
