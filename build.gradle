@@ -85,8 +85,8 @@ clean {
 
 task copyPrivate(type: Copy) {
     copy {
-        from './server-yml'
-        include "*.yaml"
+        from './config'
+        include "*.yml", "*.properties"
         into 'src/main/resources'
     }
 }
