@@ -1,7 +1,9 @@
--- SET REFERENTIAL_INTEGRITY TRUE;
-DROP TABLE users CASCADE;
-DROP TABLE user_code_room CASCADE;
-DROP TABLE code_room CASCADE;
+-- 외래키 제약 조건 비활성화 후 테이블 삭제
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS user_code_room;
+DROP TABLE IF EXISTS code_room;
+DROP TABLE IF EXISTS users;
+SET FOREIGN_KEY_CHECKS = 1;
 
 -- 테이블 생성
 CREATE TABLE users (

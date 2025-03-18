@@ -1,6 +1,5 @@
 package com.gagoo.thiscoding.domain.maria.coderoom.infrastructure.impl;
 
-import com.gagoo.thiscoding.ThiscodingApplication;
 import com.gagoo.thiscoding.domain.maria.coderoom.domain.CodeRoom;
 import com.gagoo.thiscoding.domain.maria.coderoom.infrastructure.jpa.CodeRoomCustomRepository;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
@@ -11,13 +10,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +22,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = ThiscodingApplication.class)
+@SpringBootTest
 @Transactional
 @ActiveProfiles(profiles = {"test"})
 @Sql(scripts = "/sql/coderoom-test-data.sql")
