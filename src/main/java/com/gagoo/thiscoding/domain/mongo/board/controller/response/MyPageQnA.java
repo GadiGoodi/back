@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class MyPageQnA {
 
-    private String id;
+    private String qnaId;
     private String title;
     private String content;
     private String nickname;
@@ -26,7 +26,7 @@ public class MyPageQnA {
 
     public static MyPageQnA from(MyPageQnAList myPageQnAList){
         return MyPageQnA.builder()
-                .id(myPageQnAList.id())
+                .qnaId(myPageQnAList.qnaId())
                 .title(myPageQnAList.title())
                 .content(myPageQnAList.content())
                 .nickname(myPageQnAList.nickname())
