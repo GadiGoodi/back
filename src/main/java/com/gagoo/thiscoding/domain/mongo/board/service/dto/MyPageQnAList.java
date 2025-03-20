@@ -4,7 +4,7 @@ import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
 
 import java.time.LocalDateTime;
 
-public record MyPageQnAList(String id, String title, String content, String nickname, String language,
+public record MyPageQnAList(String qnaId, String title, String content, String nickname, String language,
                             Long viewCount, Long answerCount, LocalDateTime createDate) {
 
     public static MyPageQnAList of(Board board) {
