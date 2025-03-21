@@ -33,4 +33,14 @@ public class BoardWriteController {
 
         return ResponseEntity.created(null).build();
     }
+
+    @PostMapping("/{qnaId}/adopt")
+    @AuthorizationRequired(value = {Role.USER, Role.ADMIN}, status = OK)
+    public ResponseEntity<String> adoptAnswer(@PathVariable String qnaId) {
+        boardService.adoptAnswer(qnaId);
+
+        return ResponseEntity
+                .ok()
+                .body("답변이 채택되었습니다.");
+    }
 }

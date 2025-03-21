@@ -19,4 +19,5 @@ public interface BoardService {
     Page<MyPageAnswerList> getMyPagePostAnswer(Pageable pageable);
     CustomPageDto<QnaList> findAll(Pageable pageable);
     Page<AnswerList> findAnswersByQnaId(String qnaId, Pageable pageable);
+    void adoptAnswer(String qnaId);
 }
