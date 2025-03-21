@@ -73,7 +73,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./Dockerfile
+          file: ./Dockerfile-prod
           push: true
           tags: |
             jaew0n/thiscoding:latest
@@ -90,8 +90,7 @@ jobs:
             docker run -d \
               --name thiscoding-container \
               --restart unless-stopped \
-              -p 80:8080 \
+              -p 8080:8080 \
               -v thiscoding-data:/app/data \
-              -e SPRING_PROFILES_ACTIVE=prod \
               jaew0n/thiscoding:latest
             docker ps | grep thiscoding-container
