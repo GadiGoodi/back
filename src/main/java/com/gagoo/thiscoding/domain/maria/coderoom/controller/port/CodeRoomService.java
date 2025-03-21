@@ -8,5 +8,4 @@ import com.gagoo.thiscoding.domain.mongo.code.domain.Code;
 public interface CodeRoomService {
     CodeRoom createCodeRoom(CodeRoomCreate codeRoomCreate);
     CodeRoomEnter enterCodeRoom(String uuid);
-    Code getCodeByRoomIdAndFileName(Long roomId, String fileName);
 }
