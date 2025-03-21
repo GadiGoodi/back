@@ -1,6 +1,7 @@
 package com.gagoo.thiscoding.domain.maria.like.service;
 
 import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
+import com.gagoo.thiscoding.domain.maria.coderoom.service.exception.LikeCountUnderFlowException;
 import com.gagoo.thiscoding.domain.maria.like.controller.port.LikeService;
 import com.gagoo.thiscoding.domain.maria.like.domain.Like;
 import com.gagoo.thiscoding.domain.maria.like.service.exception.ExistLike;
@@ -38,6 +39,7 @@ public class LikeServiceImpl implements LikeService {
 
         Like like = Like.create(currentUser, qnaId);
 
+        boardRepository.incrementLikeCount(qnaId);
         return likeRepository.save(like);
     }
 
@@ -48,9 +50,11 @@ public class LikeServiceImpl implements LikeService {
     @Override
     public void cancelAnswerLike(String qnaId) {
         validateQnaAndAnswer(qnaId);
+        validateLikeCount(qnaId);
 
         Like like = getLikeByQnaIdAndUserId(qnaId, getCurrentUser().getId());
 
+        boardRepository.decrementLikeCount(qnaId);
         likeRepository.deleteById(like.getId());
     }
 
@@ -83,6 +87,16 @@ public class LikeServiceImpl implements LikeService {
     private void validateLikeExists(String qnaId) {
         if(likeRepository.existsByQnaIdAndUserId(qnaId, getCurrentUser().getId())) {
             throw new ExistLike(ErrorCode.ALREADY_LIKE);
+        }
+    }
+
+    /**
+     * 추천 개수 검증
+     * @param qnaId
+     */
+    private void validateLikeCount(String qnaId) {
+        if(boardRepository.getById(qnaId).getLikeCount() == 0) {
+            throw new LikeCountUnderFlowException(ErrorCode.INVALID_LIKE_COUNT);
         }
     }
 

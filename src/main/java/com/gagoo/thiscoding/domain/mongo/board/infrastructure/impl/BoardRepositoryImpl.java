@@ -54,6 +54,22 @@ public class BoardRepositoryImpl implements BoardRepository {
     }
 
     /**
+     * 추천 개수 증가
+     */
+    @Override
+    public void incrementLikeCount(String qnaId) {
+        boardCustomRepository.incrementLikeCount(qnaId);
+    }
+
+    /**
+     * 추천 개수 감소
+     */
+    @Override
+    public void decrementLikeCount(String qnaId) {
+        boardCustomRepository.decrementLikeCount(qnaId);
+    }
+
+    /**
      * 채택 많이 된 상위 10명 조회
      */
     @Override
