@@ -16,6 +16,8 @@ public class AnswerListResponse {
     private final String content;
     private final Long replyCount;
     private final Long likeCount;
+    private final Boolean isSelected;
+    private final Boolean isLike;
 
     public static AnswerListResponse from(AnswerList answer) {
         return AnswerListResponse.builder()
@@ -26,6 +28,8 @@ public class AnswerListResponse {
                 .content(answer.content())
                 .replyCount(answer.replyCount())
                 .likeCount(answer.likeCount())
+                .isSelected(answer.isSelected())
+                .isLike(answer.isLike())
                 .build();
     }
 }

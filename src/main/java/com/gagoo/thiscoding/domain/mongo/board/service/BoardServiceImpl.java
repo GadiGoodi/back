@@ -1,5 +1,8 @@
 package com.gagoo.thiscoding.domain.mongo.board.service;
 
+import com.gagoo.thiscoding.domain.maria.like.domain.Like;
+import com.gagoo.thiscoding.domain.maria.like.service.exception.LikeNotFoundException;
+import com.gagoo.thiscoding.domain.maria.like.service.port.LikeRepository;
 import com.gagoo.thiscoding.domain.maria.reply.service.port.ReplyRepository;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
@@ -33,6 +36,7 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final ReplyRepository replyRepository;
+    private final LikeRepository likeRepository;
     private final BoardViewService boardViewService;
     private final SecurityUtils securityUtils;
 
@@ -95,7 +99,7 @@ public class BoardServiceImpl implements BoardService {
 
     /**
      * 마이페이지 내가 작성한 QnA 답변 조회
-    */
+     */
     @Override
     public Page<MyPageAnswerList> getMyPagePostAnswer(Pageable pageable) {
         User currentUser = getCurrentUser();
@@ -120,7 +124,13 @@ public class BoardServiceImpl implements BoardService {
      */
     @Override
     public Page<AnswerList> findAnswersByQnaId(String qnaId, Pageable pageable) {
-        return boardRepository.findAnswerByQnaId(qnaId, pageable).map(AnswerList::from);
+        Long currentUserId = getCurrentUser().getId();
+
+        return boardRepository.findAnswerByQnaId(qnaId, pageable)
+                .map(board -> {
+                    boolean isLike = getIsLikeByQnaIdAndUserId(board.getId(), currentUserId);
+                    return AnswerList.from(board, isLike);
+                });
     }
 
     /**
@@ -137,5 +147,15 @@ public class BoardServiceImpl implements BoardService {
      */
     private User getCurrentUser() {
         return userRepository.getByEmail(securityUtils.getUserEmail());
+    }
+
+    /**
+     * 좋아요 여부 조회
+     * @param qnaId
+     * @param userId
+     * @return
+     */
+    private boolean getIsLikeByQnaIdAndUserId(String qnaId, Long userId) {
+        return likeRepository.findByQnaIdAndUserId(qnaId, userId).isPresent();
     }
 }
