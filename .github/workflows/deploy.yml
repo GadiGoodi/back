@@ -85,12 +85,5 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            docker pull jaew0n/thiscoding:latest
-            docker rm -f thiscoding-container || true
-            docker run -d \
-              --name thiscoding-container \
-              --restart unless-stopped \
-              -p 8080:8080 \
-              -v thiscoding-data:/app/data \
-              jaew0n/thiscoding:latest
-            docker ps | grep thiscoding-container
+            chmod +x /home/ubuntu/deploy.sh # 실행 권한 부여
+            bash /home/ubuntu/deploy/deploy.sh
