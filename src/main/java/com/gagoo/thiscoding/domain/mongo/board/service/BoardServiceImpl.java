@@ -49,9 +49,8 @@ public class BoardServiceImpl implements BoardService {
     public Board create(BoardCreate boardCreate) {
         User currentUser = getCurrentUser();
         Board board = Board.create(currentUser, boardCreate);
-        Board saveBoard = boardRepository.save(board);
-        System.out.println("saveBoard.getCreateDate() = " + saveBoard.getCreateDate());
-        return saveBoard;
+
+        return boardRepository.save(board);
     }
 
     /**
