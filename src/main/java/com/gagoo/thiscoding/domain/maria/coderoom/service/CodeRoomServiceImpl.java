@@ -52,16 +52,11 @@ public class CodeRoomServiceImpl implements CodeRoomService {
      */
     @Override
     public CodeRoomEnter enterCodeRoom(String uuid) {
-        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
+        User currentUser = getCurrentUser();
 
-        CodeRoom codeRoom = codeRoomRepository.findByUuid(uuid).orElseThrow(
-                () -> new CodeRoomNotFoundException(ErrorCode.CODE_ROOM_NOT_FOUND)
-        );
+        CodeRoom codeRoom = getCodeRoomByUuid(uuid);
 
-
-        UserCodeRoom userCodeRoom = userCodeRoomRepository.findByCodeRoomIdAndUserId(codeRoom.getId(), currentUser.getId()).orElseThrow(
-                () -> new UserCodeRoomNotFoundException(ErrorCode.USER_CODE_ROOM_NOT_FOUND)
-        );
+        UserCodeRoom userCodeRoom = getUserCodeRoomByCodeRoomIdAndUserId(codeRoom.getId(), currentUser.getId());
 
         userCodeRoomRepository.save(userCodeRoom.access());
 
@@ -76,11 +71,40 @@ public class CodeRoomServiceImpl implements CodeRoomService {
      * @param fileName
      * @return 조회한 Code
      */
-    @Override
-    public Code getCodeByRoomIdAndFileName(Long roomId, String fileName) {
+    private Code getCodeByRoomIdAndFileName(Long roomId, String fileName) {
         return codeRepository.findByRoomIdAndFileName(roomId, fileName).orElseThrow(
                 () -> new CodeNotFoundException(ErrorCode.CODE_NOT_FOUND)
         );
     }
 
+    /**
+     * 코드방 조회
+     * @param uuid
+     * @return 코드방
+     */
+    private CodeRoom getCodeRoomByUuid(String uuid) {
+        return codeRoomRepository.findByUuid(uuid).orElseThrow(
+                () -> new CodeRoomNotFoundException(ErrorCode.CODE_ROOM_NOT_FOUND)
+        );
+    }
+
+    /**
+     * 참여 코드방 조회
+     * @param codeRoomId
+     * @param userId
+     * @return 참여 코드방
+     */
+    private UserCodeRoom getUserCodeRoomByCodeRoomIdAndUserId(Long codeRoomId, Long userId) {
+        return userCodeRoomRepository.findByCodeRoomIdAndUserId(codeRoomId, userId).orElseThrow(
+                () -> new UserCodeRoomNotFoundException(ErrorCode.USER_CODE_ROOM_NOT_FOUND)
+        );
+    }
+
+    /**
+     * 로그인 사용자 조회
+     * @return 로그인 사용자
+     */
+    private User getCurrentUser() {
+        return userRepository.getByEmail(securityUtils.getUserEmail());
+    }
 }
