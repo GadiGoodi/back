@@ -61,6 +61,7 @@ public class BoardDocument extends BaseTimeDocument {
         boardDocument.replyCount = board.getReplyCount();
         boardDocument.isBlind = board.isBlind();
         boardDocument.isSelected = board.isSelected();
+        boardDocument.createDate = board.getCreateDate();
 
         return boardDocument;
     }
