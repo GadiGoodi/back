@@ -139,17 +139,8 @@ public class BoardServiceImpl implements BoardService {
      * 답변 채택
      */
     @Override
-    public void adoptAnswer(String qnaId) {
-        validateParentQnaExists(qnaId);
-
-        Board currentAnswer = boardRepository.getById(qnaId);
-        Long parentUserId = boardRepository.getById(currentAnswer.getParentId()).getUserId();
-
-        User currentUser = getCurrentUser();
-
-        validateParentAndCurrentUserIsEqual(parentUserId, currentUser.getId());
-        validateParentAndAnswerUserIsEqual(parentUserId, currentAnswer.getUserId());
-        validateIsSelectedAnswerExists(currentAnswer.getParentId());
+    public void adoptAnswer(String qnaId) 
+        validateAllAdopt(qnaId);
 
         boardRepository.adoptAnswer(qnaId);
     }
@@ -175,6 +166,22 @@ public class BoardServiceImpl implements BoardService {
      */
     private boolean getIsLikeByQnaIdAndUserId(String qnaId, Long userId) {
         return likeRepository.findByQnaIdAndUserId(qnaId, userId).isPresent();
+    }
+
+    /**
+     * 채택 관련 검증 메서드 모음
+     */
+    private void validateAllAdopt(String qnaId) {
+        validateParentQnaExists(qnaId);
+
+        Board currentAnswer = boardRepository.getById(qnaId);
+        Long parentUserId = boardRepository.getById(currentAnswer.getParentId()).getUserId();
+
+        User currentUser = getCurrentUser();
+
+        validateIsSelectedAnswerExists(currentAnswer.getParentId());
+        validateParentAndCurrentUserIsEqual(parentUserId, currentUser.getId());
+        validateParentAndAnswerUserIsEqual(parentUserId, currentAnswer.getUserId());
     }
 
     /**
