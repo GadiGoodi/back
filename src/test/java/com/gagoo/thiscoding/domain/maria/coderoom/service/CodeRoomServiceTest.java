@@ -99,11 +99,11 @@ class CodeRoomServiceTest {
     }
 
     @Nested
-    @DisplayName("코드방 조회")
+    @DisplayName("코드방 입장")
     class CodeRoomGetUnitTest {
         @Test
-        @DisplayName("특정 코드방을 조회할 수 있다.")
-        void enterCodeRoom_코드방_조회_성공() {
+        @DisplayName("특정 코드방에 입장할 수 있다.")
+        void enterCodeRoom_코드방_입장_성공() {
             // when
             CodeRoomEnter codeRoomEnter = codeRoomService.enterCodeRoom(testCodeRoom.getUuid());
 
@@ -114,16 +114,16 @@ class CodeRoomServiceTest {
         }
 
         @Test
-        @DisplayName("존재하지 않는 코드방의 조회 에러가 발생한다.")
-        void enterCodeRoom_존재하지_않는_코드방_조회() {
+        @DisplayName("존재하지 않는 코드방의 입장 시 에러가 발생한다.")
+        void enterCodeRoom_존재하지_않는_코드방_입장() {
             // when & then
             Assertions.assertThrows(CodeRoomNotFoundException.class,
                     () -> codeRoomService.enterCodeRoom("invalid-uuid"));
         }
 
         @Test
-        @DisplayName("로그인하지 않은 사용자는 코드방을 조회할 수 없다.")
-        void enterCodeRoom_로그인하지_않은_사용자_코드방_조회() {
+        @DisplayName("로그인하지 않은 사용자는 코드방을 입장할 수 없다.")
+        void enterCodeRoom_로그인하지_않은_사용자_코드방_입장() {
             // given
             TestContainer testContainer = TestContainer.builder()
                     .securityUtils(new FakeSecurityUtils(null))
@@ -134,65 +134,6 @@ class CodeRoomServiceTest {
             // when & then
             Assertions.assertThrows(AuthorizationException.class,
                     () -> unauthenticatedCodeRoomService.enterCodeRoom("invalid-uuid"));
-        }
-    }
-
-    @Nested
-    @DisplayName("코드방 코드 조회")
-    class CodeRoomCodeGetUnitTest {
-        @Test
-        @DisplayName("특정 코드방의 특정 코드를 조회할 수 있다.")
-        void getCodeByRoomIdAndFileName_특정_코드방_특정_코드_조회_성공() {
-            // given
-            Long id = 1L;
-            String fileName = "main";
-
-            // when
-            Code newCode = codeRoomService.getCodeByRoomIdAndFileName(id, fileName);
-
-            // then
-            assertThat(newCode.getId()).isEqualTo(testCode.getId());
-            assertThat(newCode.getRoomId()).isEqualTo(testCode.getRoomId());
-            assertThat(newCode.getWriterId()).isEqualTo(testCode.getWriterId());
-            assertThat(newCode.getFileName()).isEqualTo(testCode.getFileName());
-            assertThat(newCode.getValue()).isEqualTo(testCode.getValue());
-            assertThat(newCode.getSaveDate()).isEqualTo(testCode.getSaveDate());
-        }
-
-        @Test
-        @DisplayName("존재하지 않는 코드방의 특정 코드 조회 에러가 발생한다.")
-        void getCodeByRoomIdAndFileName_존재하지_않는_코드방_특정_코드_조회() {
-            // given
-            Long id = 0L;
-            String fileName = "main";
-
-            // when & then
-            Assertions.assertThrows(CodeNotFoundException.class,
-                    () -> codeRoomService.getCodeByRoomIdAndFileName(id, fileName));
-        }
-
-        @Test
-        @DisplayName("특정 코드방의 존재하지 않는 코드 조회 에러가 발생한다.")
-        void getCodeByRoomIdAndFileName_특정_코드방_존재하지_않는_코드_조회() {
-            // given
-            Long id = 1L;
-            String fileName = "invalid-file-name";
-
-            // when & then
-            Assertions.assertThrows(CodeNotFoundException.class,
-                    () -> codeRoomService.getCodeByRoomIdAndFileName(id, fileName));
-        }
-
-        @Test
-        @DisplayName("존재하지 않는 코드방의 존재하지 않는 코드 조회 에러가 발생한다.")
-        void getCodeByRoomIdAndFileName_존재하지_않는_코드방_존재하지_않는_코드_조회() {
-            // given
-            Long id = 0L;
-            String fileName = "invalid-file-name";
-
-            // when & then
-            Assertions.assertThrows(CodeNotFoundException.class,
-                    () -> codeRoomService.getCodeByRoomIdAndFileName(id, fileName));
         }
     }
 
