@@ -88,6 +88,26 @@ public class BoardCustomRepository {
     }
 
     /**
+     * 추천 개수 1 증가
+     */
+    public void incrementLikeCount(String qnaId) {
+        Query query = new Query(Criteria.where("_id").is(qnaId));
+        Update update = new Update().inc("likeCount", 1);
+
+        mongoTemplate.updateFirst(query, update, BoardDocument.class);
+    }
+
+    /**
+     * 추천 개수 1 감소
+     */
+    public void decrementLikeCount(String qnaId) {
+        Query query = new Query(Criteria.where("_id").is(qnaId));
+        Update update = new Update().inc("likeCount", -1);
+        
+        mongoTemplate.updateFirst(query, update, BoardDocument.class);
+    }
+    
+    /**
      * 답변 채택
      */
     public void adoptAnswer(String qnaId) {

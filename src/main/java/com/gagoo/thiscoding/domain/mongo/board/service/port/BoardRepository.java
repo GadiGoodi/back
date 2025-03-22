@@ -21,5 +21,7 @@ public interface BoardRepository {
     void incrementViewCount(String qnaId);
     void incrementAnswerCount(String parentQnaId);
     void incrementReplyCount(String qnaId);
+    void incrementLikeCount(String qnaId);
+    void decrementLikeCount(String qnaId);
     void adoptAnswer(String qnaId);
 }
