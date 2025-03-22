@@ -86,4 +86,14 @@ public class BoardCustomRepository {
 
         mongoTemplate.updateFirst(query, update, BoardDocument.class);
     }
+
+    /**
+     * 답변 채택
+     */
+    public void adoptAnswer(String qnaId) {
+        Query query = new Query(Criteria.where("_id").is(qnaId));
+        Update update = new Update().set("isSelected", true);
+
+        mongoTemplate.updateFirst(query, update, BoardDocument.class);
+    }
 }

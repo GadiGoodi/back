@@ -1,7 +1,5 @@
 package com.gagoo.thiscoding.domain.mongo.board.service;
 
-import com.gagoo.thiscoding.domain.maria.like.domain.Like;
-import com.gagoo.thiscoding.domain.maria.like.service.exception.LikeNotFoundException;
 import com.gagoo.thiscoding.domain.maria.like.service.port.LikeRepository;
 import com.gagoo.thiscoding.domain.maria.reply.service.port.ReplyRepository;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
@@ -12,6 +10,9 @@ import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
 import com.gagoo.thiscoding.domain.mongo.board.domain.dto.BoardCreate;
 import com.gagoo.thiscoding.domain.mongo.board.domain.dto.Search;
 import com.gagoo.thiscoding.domain.mongo.board.service.dto.*;
+import com.gagoo.thiscoding.domain.mongo.board.service.exception.ExistAdoptedAnswer;
+import com.gagoo.thiscoding.domain.mongo.board.service.exception.InvalidAnswerUserException;
+import com.gagoo.thiscoding.domain.mongo.board.service.exception.NotQnaUserException;
 import com.gagoo.thiscoding.domain.mongo.board.service.exception.QnaNotFoundException;
 import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardRepository;
 import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardViewService;
@@ -87,6 +88,7 @@ public class BoardServiceImpl implements BoardService {
         Pageable customPageable = PageRequest.of(pageable.getPageNumber(), PageSize.QNA);
         return boardRepository.findByTitleOrContent(keyword, keyword, customPageable);
     }
+
     /**
      * 마이페이지 내가 작성한 QnA 질문 조회
      */
@@ -134,6 +136,16 @@ public class BoardServiceImpl implements BoardService {
     }
 
     /**
+     * 답변 채택
+     */
+    @Override
+    public void adoptAnswer(String qnaId) 
+        validateAllAdopt(qnaId);
+
+        boardRepository.adoptAnswer(qnaId);
+    }
+
+    /**
      * 부모 게시물이 있는지 확인
      */
     private void validateParentQnaExists(String parentQnaId) {
@@ -151,11 +163,51 @@ public class BoardServiceImpl implements BoardService {
 
     /**
      * 좋아요 여부 조회
-     * @param qnaId
-     * @param userId
-     * @return
      */
     private boolean getIsLikeByQnaIdAndUserId(String qnaId, Long userId) {
         return likeRepository.findByQnaIdAndUserId(qnaId, userId).isPresent();
+    }
+
+    /**
+     * 채택 관련 검증 메서드 모음
+     */
+    private void validateAllAdopt(String qnaId) {
+        validateParentQnaExists(qnaId);
+
+        Board currentAnswer = boardRepository.getById(qnaId);
+        Long parentUserId = boardRepository.getById(currentAnswer.getParentId()).getUserId();
+
+        User currentUser = getCurrentUser();
+
+        validateIsSelectedAnswerExists(currentAnswer.getParentId());
+        validateParentAndCurrentUserIsEqual(parentUserId, currentUser.getId());
+        validateParentAndAnswerUserIsEqual(parentUserId, currentAnswer.getUserId());
+    }
+
+    /**
+     * 부모글 작성자 및 로그인 사용자 동일 여부 검증 (로그인한 사용자가 질문자인지)
+     */
+    private void validateParentAndCurrentUserIsEqual(Long parentUserId, Long currentUserId) {
+        if(!(parentUserId.equals(currentUserId))) {
+            throw new NotQnaUserException(ErrorCode.NOT_QNA_USER);
+        }
+    }
+
+    /**
+     * 부모글 작성자 및 답변 작성자 동일 여부 검증 (질문자가 본인 답변에 채택하는지)
+     */
+    private void validateParentAndAnswerUserIsEqual(Long parentUserId, Long answerUserId) {
+        if(parentUserId.equals(answerUserId)) {
+            throw new InvalidAnswerUserException(ErrorCode.INVALID_ANSWER_USER);
+        }
+    }
+
+    /**
+     * 이미 채택된 답변이 존재하는지 검증
+     */
+    private void validateIsSelectedAnswerExists(String parentId) {
+        if(boardRepository.existsByParentIdAndIsSelectedIsTrue(parentId)) {
+            throw new ExistAdoptedAnswer(ErrorCode.EXIST_ADOPTED_ANSWER);
+        }
     }
 }
