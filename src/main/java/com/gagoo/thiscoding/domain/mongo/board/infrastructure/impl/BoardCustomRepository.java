@@ -103,7 +103,10 @@ public class BoardCustomRepository {
     public void decrementLikeCount(String qnaId) {
         Query query = new Query(Criteria.where("_id").is(qnaId));
         Update update = new Update().inc("likeCount", -1);
-
+        
+        mongoTemplate.updateFirst(query, update, BoardDocument.class);
+    }
+    
     /**
      * 답변 채택
      */
