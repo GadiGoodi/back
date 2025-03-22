@@ -9,5 +9,6 @@ public interface BoardMongoRepository extends MongoRepository<BoardDocument, Str
     Page<BoardDocument> findByUserIdAndAnswerCountIsNull(Long userId, Pageable pageable);
     Page<BoardDocument> findByTitleContainingOrContentContaining(String title, String content, Pageable pageable);
     Page<BoardDocument> findByParentIdAndIsBlindFalseOrderByCreateDateDesc(String parentId, Pageable pageable);
+    boolean existsByParentIdAndIsSelectedTrue(String parentId);
 }
 

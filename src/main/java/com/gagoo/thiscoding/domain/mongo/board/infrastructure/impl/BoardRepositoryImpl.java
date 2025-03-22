@@ -53,6 +53,11 @@ public class BoardRepositoryImpl implements BoardRepository {
         boardCustomRepository.incrementAnswerCount(parentQnaId);
     }
 
+    @Override
+    public void adoptAnswer(String qnaId) {
+        boardCustomRepository.adoptAnswer(qnaId);
+    }
+
     /**
      * 추천 개수 증가
      */
@@ -117,6 +122,11 @@ public class BoardRepositoryImpl implements BoardRepository {
     @Override
     public boolean existsById(String qnaId) {
         return boardMongoRepository.existsById(qnaId);
+    }
+
+    @Override
+    public boolean existsByParentIdAndIsSelectedIsTrue(String parentId) {
+        return boardMongoRepository.existsByParentIdAndIsSelectedTrue(parentId);
     }
 
     public Optional<Board> findById(String qnaId) {

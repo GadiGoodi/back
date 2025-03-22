@@ -17,9 +17,11 @@ public interface BoardRepository {
     Page<Search> findByTitleOrContent(String title, String content, Pageable pageable);
     Page<Board> findAnswerByQnaId(String qnaId, Pageable pageable);
     boolean existsById(String qnaId);
+    boolean existsByParentIdAndIsSelectedIsTrue(String qnaId);
     void incrementViewCount(String qnaId);
     void incrementAnswerCount(String parentQnaId);
     void incrementReplyCount(String qnaId);
     void incrementLikeCount(String qnaId);
     void decrementLikeCount(String qnaId);
+    void adoptAnswer(String qnaId);
 }
