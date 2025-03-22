@@ -103,6 +103,13 @@ public class FakeBoardRepository implements BoardRepository {
     }
 
     @Override
+    public boolean existsByParentIdAndIsSelectedIsTrue(String qnaId) {
+        return data.stream()
+                .anyMatch(board -> board.getParentId().equals(qnaId)
+                        && board.isSelected());
+    }
+
+    @Override
     public void incrementViewCount(String boardId) {
         findById(boardId).ifPresent(board -> {
             Board updatedBoard = Board.builder()
@@ -160,6 +167,72 @@ public class FakeBoardRepository implements BoardRepository {
                     .answerCount(board.getAnswerCount())
                     .replyCount(board.getReplyCount() + 1)
                     .isSelected(board.isSelected())
+                    .userId(board.getUserId())
+                    .createDate(board.getCreateDate())
+                    .build();
+
+            data.removeIf(item -> item.getId().equals(qnaId));
+            data.add(updatedBoard);
+        });
+    }
+
+    @Override
+    public void incrementLikeCount(String qnaId) {
+        findById(qnaId).ifPresent(board -> {
+            Board updatedBoard = Board.builder()
+                    .id(board.getId())
+                    .title(board.getTitle())
+                    .language(board.getLanguage())
+                    .content(board.getContent())
+                    .parentId(board.getParentId())
+                    .likeCount(board.getLikeCount() + 1)
+                    .viewCount(board.getViewCount())
+                    .answerCount(board.getAnswerCount())
+                    .isSelected(board.isSelected())
+                    .userId(board.getUserId())
+                    .createDate(board.getCreateDate())
+                    .build();
+
+            data.removeIf(item -> item.getId().equals(qnaId));
+            data.add(updatedBoard);
+        });
+    }
+
+    @Override
+    public void decrementLikeCount(String qnaId) {
+        findById(qnaId).ifPresent(board -> {
+            Board updatedBoard = Board.builder()
+                    .id(board.getId())
+                    .title(board.getTitle())
+                    .language(board.getLanguage())
+                    .content(board.getContent())
+                    .parentId(board.getParentId())
+                    .likeCount(board.getLikeCount() - 1)
+                    .viewCount(board.getViewCount())
+                    .answerCount(board.getAnswerCount())
+                    .isSelected(board.isSelected())
+                    .userId(board.getUserId())
+                    .createDate(board.getCreateDate())
+                    .build();
+
+            data.removeIf(item -> item.getId().equals(qnaId));
+            data.add(updatedBoard);
+        });
+    }
+
+    @Override
+    public void adoptAnswer(String qnaId) {
+        findById(qnaId).ifPresent(board -> {
+            Board updatedBoard = Board.builder()
+                    .id(board.getId())
+                    .title(board.getTitle())
+                    .language(board.getLanguage())
+                    .content(board.getContent())
+                    .parentId(board.getParentId())
+                    .likeCount(board.getLikeCount())
+                    .viewCount(board.getViewCount())
+                    .answerCount(board.getAnswerCount())
+                    .isSelected(true)
                     .userId(board.getUserId())
                     .createDate(board.getCreateDate())
                     .build();
