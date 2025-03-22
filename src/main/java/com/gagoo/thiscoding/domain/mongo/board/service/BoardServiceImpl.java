@@ -139,7 +139,7 @@ public class BoardServiceImpl implements BoardService {
      * 답변 채택
      */
     @Override
-    public void adoptAnswer(String qnaId) 
+    public void adoptAnswer(String qnaId)  {
         validateAllAdopt(qnaId);
 
         boardRepository.adoptAnswer(qnaId);
