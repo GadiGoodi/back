@@ -19,4 +19,13 @@ public class FakeSecurityUtils implements SecurityUtils {
         return email;
     }
 
+    @Override
+    public boolean isLogin() {
+        if(email == null) {
+            return false;
+        }
+
+        return true;
+    }
+
 }

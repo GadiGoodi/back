@@ -52,7 +52,6 @@ public class BoardReadController {
         return ResponseEntity.ok(CustomPageDto.of(answerPage.map(AnswerListResponse::from)));
     }
 
-
     @GetMapping("/search")
     @ConvertToOneBase
     public ResponseEntity<CustomPageDto<SearchResponse>> search(@RequestParam String keyword, Pageable pageable) {
