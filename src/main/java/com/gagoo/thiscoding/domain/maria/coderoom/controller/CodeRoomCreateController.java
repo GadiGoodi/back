@@ -17,14 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@RequestMapping("api/codingrooms-modal")
+@RequestMapping("/api/codingrooms-modal")
 @RequiredArgsConstructor
 public class CodeRoomCreateController {
 
     private final CodeRoomService codeRoomService;
 
     // 코드방 생성
-    @PostMapping("/create")
+    @PostMapping
     @AuthorizationRequired(value = Role.USER, status = OK)
     public ResponseEntity<CodeRoomCreateResponse> createCodeRoom(@RequestBody CodeRoomCreate codeRoomCreate) {
         CodeRoom codeRoom = codeRoomService.createCodeRoom(codeRoomCreate);
