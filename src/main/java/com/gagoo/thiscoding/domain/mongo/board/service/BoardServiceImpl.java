@@ -126,13 +126,18 @@ public class BoardServiceImpl implements BoardService {
      */
     @Override
     public Page<AnswerList> findAnswersByQnaId(String qnaId, Pageable pageable) {
-        Long currentUserId = getCurrentUser().getId();
+        if(securityUtils.isLogin()) {
+            Long currentUserId = getCurrentUser().getId();
+
+            return boardRepository.findAnswerByQnaId(qnaId, pageable)
+                    .map(board -> {
+                        boolean isLike = getIsLikeByQnaIdAndUserId(board.getId(), currentUserId);
+                        return AnswerList.from(board, isLike);
+                    });
+        }
 
         return boardRepository.findAnswerByQnaId(qnaId, pageable)
-                .map(board -> {
-                    boolean isLike = getIsLikeByQnaIdAndUserId(board.getId(), currentUserId);
-                    return AnswerList.from(board, isLike);
-                });
+                .map(board -> AnswerList.from(board, false));
     }
 
     /**
