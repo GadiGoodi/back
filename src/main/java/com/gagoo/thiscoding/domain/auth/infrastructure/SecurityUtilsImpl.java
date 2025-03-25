@@ -21,6 +21,17 @@ public class SecurityUtilsImpl implements SecurityUtils {
         return user.getEmail();
     }
 
+    @Override
+    public boolean isLogin() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if(authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * SecurityContextHolder에 저장된 유저 정보 반환
      */
