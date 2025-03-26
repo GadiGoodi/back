@@ -2,6 +2,8 @@ package com.gagoo.thiscoding.domain.mongo.board.infrastructure.impl;
 
 import com.gagoo.thiscoding.domain.mongo.board.infrastructure.BoardDocument;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -10,9 +12,11 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.bson.Document;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.function.LongSupplier;
 import java.util.stream.Collectors;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
@@ -55,6 +59,36 @@ public class BoardCustomRepository {
         AggregationResults<Document> results =
                 mongoTemplate.aggregate(aggregation, "board", Document.class);
         return results;
+    }
+
+    /**
+     * 채택 답변 우선 정렬하여 조회
+     */
+    public Page<BoardDocument> getAnswerByQnaIdSortByIsSelected(String qnaId, Pageable pageable) {
+        Aggregation aggregation = getSelectedAnswerPriorityAggregation(qnaId, pageable);
+
+        AggregationResults<BoardDocument> results = mongoTemplate.aggregate(aggregation, "qna", BoardDocument.class);
+
+        List<BoardDocument> answerList = results.getMappedResults();
+
+        LongSupplier totalSupplier = () -> mongoTemplate.count(new Query(Criteria.where("parentId").is(qnaId)), "qna");
+
+        return PageableExecutionUtils.getPage(answerList, pageable, totalSupplier);
+    }
+
+    /**
+     * 채택된 답변 우선 정렬 및 내림차순 조회 쿼리
+     */
+    private Aggregation getSelectedAnswerPriorityAggregation(String qnaId, Pageable pageable) {
+        Aggregation aggregation = Aggregation.newAggregation(
+            match(Criteria.where("parentId").is(qnaId)),
+                sort(Sort.by(Sort.Order.desc("isSelected"),
+                        Sort.Order.desc("createDate"))),
+                skip((long) pageable.getPageNumber() * pageable.getPageSize()),
+                limit(pageable.getPageSize())
+        );
+
+        return aggregation;
     }
 
     /**
