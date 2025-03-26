@@ -7,11 +7,13 @@ import com.gagoo.thiscoding.domain.maria.coderoom.infrastructure.jpa.CodeRoomCus
 import com.gagoo.thiscoding.domain.maria.coderoom.infrastructure.jpa.CodeRoomJpaRepository;
 import com.gagoo.thiscoding.domain.maria.coderoom.service.port.CodeRoomRepository;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
+import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.UserCodeRoom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -39,6 +41,16 @@ public class CodeRoomRepositoryImpl implements CodeRoomRepository {
     @Override
     public Page<InvitationCodeRoom> findInvitedCodeRoomsByUser(User user, Pageable pageable) {
         return codeRoomCustomRepository.findInvitedCodeRoomsByUser(user, pageable);
+    }
+
+    @Override
+    public List<User> findUserListByUserCodeRoom(UserCodeRoom userCodeRoom) {
+        return codeRoomCustomRepository.findUserListByUserCodeRoom(userCodeRoom);
+    }
+
+    @Override
+    public Page<UserCodeRoom> findAllUserCodeRoomByUser(User user, Pageable pageable) {
+        return codeRoomCustomRepository.findAllUserCodeRoomByUser(user, pageable);
     }
 
     @Override

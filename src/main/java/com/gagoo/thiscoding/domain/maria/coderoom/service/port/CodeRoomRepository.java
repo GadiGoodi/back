@@ -4,7 +4,11 @@ import com.gagoo.thiscoding.domain.maria.coderoom.domain.CodeRoom;
 
 import com.gagoo.thiscoding.domain.maria.coderoom.domain.dto.InvitationCodeRoom;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
+
+import java.util.List;
 import java.util.Optional;
+
+import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.UserCodeRoom;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -14,4 +18,6 @@ public interface CodeRoomRepository {
     Optional<CodeRoom> findById(Long id);
     void deleteById(Long id);
     Page<InvitationCodeRoom> findInvitedCodeRoomsByUser(User user, Pageable pageable);
+    List<User> findUserListByUserCodeRoom(UserCodeRoom userCodeRoom);
+    Page<UserCodeRoom> findAllUserCodeRoomByUser(User user, Pageable pageable);
 }
