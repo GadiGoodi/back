@@ -126,17 +126,18 @@ public class BoardServiceImpl implements BoardService {
      */
     @Override
     public Page<AnswerList> findAnswersByQnaId(String qnaId, Pageable pageable) {
+        // 로그인 상태일 경우, 답변 추천 여부 조회
         if(securityUtils.isLogin()) {
             Long currentUserId = getCurrentUser().getId();
 
-            return boardRepository.findAnswerByQnaId(qnaId, pageable)
+            return boardRepository.findAnswerByQnaIdSortByIsSelected(qnaId, pageable)
                     .map(board -> {
                         boolean isLike = getIsLikeByQnaIdAndUserId(board.getId(), currentUserId);
                         return AnswerList.from(board, isLike);
                     });
         }
 
-        return boardRepository.findAnswerByQnaId(qnaId, pageable)
+        return boardRepository.findAnswerByQnaIdSortByIsSelected(qnaId, pageable)
                 .map(board -> AnswerList.from(board, false));
     }
 
