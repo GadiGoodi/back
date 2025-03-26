@@ -86,7 +86,6 @@ public class FakeBoardRepository implements BoardRepository {
         return null;
     }
 
-
     @Override
     public Page<Search> findByTitleOrContent(String title, String content, Pageable pageable) {
         return null;
@@ -94,6 +93,11 @@ public class FakeBoardRepository implements BoardRepository {
 
     @Override
     public Page<Board> findAnswerByQnaId(String qnaId, Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public Page<Board> findAnswerByQnaIdSortByIsSelected(String qnaId, Pageable pageable) {
         return null;
     }
 
