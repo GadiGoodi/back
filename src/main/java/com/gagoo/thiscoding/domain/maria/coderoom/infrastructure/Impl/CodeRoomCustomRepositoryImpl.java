@@ -1,11 +1,8 @@
 package com.gagoo.thiscoding.domain.maria.coderoom.infrastructure.Impl;
 
 import com.gagoo.thiscoding.domain.maria.alarm.domain.AlarmType;
-import com.gagoo.thiscoding.domain.maria.alarm.infrastructure.QAlarmEntity;
-import com.gagoo.thiscoding.domain.maria.coderoom.infrastructure.QCodeRoomEntity;
 import com.gagoo.thiscoding.domain.maria.coderoom.infrastructure.jpa.CodeRoomCustomRepository;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
-import com.gagoo.thiscoding.domain.maria.user.infrastructure.QUserEntity;
 import com.gagoo.thiscoding.domain.maria.coderoom.domain.dto.InvitationCodeRoom;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.UserCodeRoom;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.infrastructure.UserCodeRoomEntity;
@@ -20,6 +17,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
+import static com.gagoo.thiscoding.domain.maria.alarm.infrastructure.QAlarmEntity.alarmEntity;
+import static com.gagoo.thiscoding.domain.maria.coderoom.domain.contants.Capacity.MAX_CAPACITY;
+import static com.gagoo.thiscoding.domain.maria.coderoom.domain.contants.Capacity.MIN_CAPACITY;
 import static com.gagoo.thiscoding.domain.maria.coderoom.infrastructure.QCodeRoomEntity.codeRoomEntity;
 import static com.gagoo.thiscoding.domain.maria.user.infrastructure.QUserEntity.userEntity;
 import static com.gagoo.thiscoding.domain.maria.usercoderoom.infrastructure.QUserCodeRoomEntity.userCodeRoomEntity;
@@ -33,9 +33,6 @@ public class CodeRoomCustomRepositoryImpl implements CodeRoomCustomRepository {
 
     @Override
     public Page<InvitationCodeRoom> findInvitedCodeRoomsByUser(User user, Pageable pageable) {
-        QCodeRoomEntity codeRoomEntity = QCodeRoomEntity.codeRoomEntity;
-        QAlarmEntity alarmEntity = QAlarmEntity.alarmEntity;
-        QUserEntity userEntity = QUserEntity.userEntity;
 
         List<InvitationCodeRoom> results = queryFactory
             .select(Projections.constructor(InvitationCodeRoom.class,
@@ -49,12 +46,9 @@ public class CodeRoomCustomRepositoryImpl implements CodeRoomCustomRepository {
                 userEntity.imageUrl
             ))
             .from(alarmEntity)
-            .join(codeRoomEntity).on(alarmEntity.targetId.eq(codeRoomEntity.id))
-            .join(userEntity).on(alarmEntity.sender.id.eq(userEntity.id))
-            .where(alarmEntity.receiver.id.eq(user.getId())
-                .and(alarmEntity.type.eq(AlarmType.CODE))
-                .and(codeRoomEntity.headCount.goe(1))
-                .and(codeRoomEntity.headCount.lt(6)))
+            .join(codeRoomEntity).on(alarmCodeRoomEq())
+            .join(userEntity).on(alarmSenderEq())
+            .where(invitationCodeRoom(user))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
@@ -62,10 +56,9 @@ public class CodeRoomCustomRepositoryImpl implements CodeRoomCustomRepository {
         JPAQuery<Long> countQuery = queryFactory
             .select(codeRoomEntity.count())
             .from(alarmEntity)
-            .join(codeRoomEntity).on(alarmEntity.targetId.eq(codeRoomEntity.id))
-            .join(userEntity).on(alarmEntity.sender.id.eq(userEntity.id))
-            .where(alarmEntity.receiver.id.eq(user.getId())
-                .and(alarmEntity.type.eq(AlarmType.CODE)));
+            .join(codeRoomEntity).on(alarmCodeRoomEq())
+            .join(userEntity).on(alarmSenderEq())
+            .where(invitationCodeRoom(user));
 
         return PageableExecutionUtils.getPage(results, pageable, countQuery::fetchOne);
     }
@@ -113,6 +106,20 @@ public class CodeRoomCustomRepositoryImpl implements CodeRoomCustomRepository {
                 .where(userIdCondition);
 
         return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
+    }
+
+    private BooleanExpression alarmCodeRoomEq() {
+        return alarmEntity.targetId.eq(codeRoomEntity.id);
+    }
+    private BooleanExpression alarmSenderEq() {
+        return alarmEntity.sender.id.eq(userEntity.id);
+    }
+
+    private BooleanExpression invitationCodeRoom(User user) {
+        return alarmEntity.receiver.id.eq(user.getId())
+            .and(alarmEntity.type.eq(AlarmType.CODE))
+            .and(codeRoomEntity.headCount.goe(MIN_CAPACITY))
+            .and(codeRoomEntity.headCount.lt(MAX_CAPACITY));
     }
 }
 
