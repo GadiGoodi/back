@@ -1,0 +1,5 @@
+- name: 모든 호스트에 공통 설정 적용
+  hosts: all
+  become: yes
+  roles:
+    - common

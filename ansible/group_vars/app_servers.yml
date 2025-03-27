@@ -1,0 +1,5 @@
+java_version: "17"
+project_name: "thiscoding"
+docker_image: "jaew0n/thiscoding:latest"
+app_ports:
+  - "8080:8080"

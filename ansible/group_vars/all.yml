@@ -1,0 +1,11 @@
+timezone: "Asia/Seoul"
+common_packages:
+  - htop
+  - vim
+  - curl
+  - git
+  - unzip
+  - net-tools
+  - ca-certificates
+  - gnupg
+  - lsb-release
