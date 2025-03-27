@@ -1,5 +1,7 @@
 package com.gagoo.thiscoding.domain.maria.user.service;
 
+import static com.gagoo.thiscoding.global.paging.PageSize.FRIEND;
+
 import com.gagoo.thiscoding.domain.maria.user.controller.port.UserService;
 import com.gagoo.thiscoding.domain.maria.user.controller.request.UpdateProfileNicknameRequest;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
@@ -10,6 +12,9 @@ import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +23,15 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final SecurityUtils securityUtils;
+
+    /**
+     * 닉네임으로 회원 객체 리스트 조회
+     * */
+    @Override
+    public Page<User> searchByNickname(String nickname, Pageable pageable) {
+        Pageable customPageable = PageRequest.of(pageable.getPageNumber(), FRIEND);
+        return userRepository.findByNicknameContaining(nickname, customPageable);
+    }
 
     /**
      * 회원가입 진행 시 이메일 존재 여부 검증
