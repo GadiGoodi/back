@@ -53,12 +53,10 @@ public class CodeRoomServiceImpl implements CodeRoomService {
     @Override
     public CodeRoomEnter enterCodeRoom(String uuid) {
         User currentUser = getCurrentUser();
-
         CodeRoom codeRoom = getCodeRoomByUuid(uuid);
-
         UserCodeRoom userCodeRoom = getUserCodeRoomByCodeRoomIdAndUserId(codeRoom.getId(), currentUser.getId());
 
-        userCodeRoomRepository.save(userCodeRoom.access());
+        accessUserCodeRoom(userCodeRoom);
 
         Code code = getCodeByRoomIdAndFileName(codeRoom.getId(), "main");
 
@@ -98,6 +96,16 @@ public class CodeRoomServiceImpl implements CodeRoomService {
         return userCodeRoomRepository.findByCodeRoomIdAndUserId(codeRoomId, userId).orElseThrow(
                 () -> new UserCodeRoomNotFoundException(ErrorCode.USER_CODE_ROOM_NOT_FOUND)
         );
+    }
+
+    /**
+     * 참여 코드방 내 isActivated 속성 활성화
+     * @param userCodeRoom
+     */
+    private void accessUserCodeRoom(UserCodeRoom userCodeRoom) {
+        if(!userCodeRoom.isActivated()) {
+            userCodeRoomRepository.save(userCodeRoom.access());
+        }
     }
 
     /**
