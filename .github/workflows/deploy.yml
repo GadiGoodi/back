@@ -97,4 +97,4 @@ jobs:
       - name: 앤서블로 배포 실행
         working-directory: ansible
         run: |
-          ansible-playbook playbooks/app-server.yml
+          ansible-playbook -vvv playbooks/app-server.yml
