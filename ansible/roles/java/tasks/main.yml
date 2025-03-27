@@ -1,0 +1,10 @@
+- name: Install Java
+  apt:
+    name: "openjdk-{{ java_version }}-jdk"
+    state: present
+
+- name: Set JAVA_HOME
+  lineinfile:
+    path: /etc/environment
+    line: 'JAVA_HOME="/usr/lib/jvm/java-{{ java_version }}-openjdk-amd64"'
+    state: present

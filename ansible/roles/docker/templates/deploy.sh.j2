@@ -1,0 +1,22 @@
+#!/bin/bash
+
+echo "Starting deployment of {{ project_name }} at $(date)"
+
+# 기존 컨테이너 정지 및 삭제
+echo "Stopping any existing containers..."
+docker stop {{ project_name }}-container || true
+docker rm {{ project_name }}-container || true
+
+# 최신 이미지 가져오기
+echo "Pulling latest image..."
+docker pull {{ docker_image }}
+
+# 새 컨테이너 실행
+echo "Starting new container..."
+docker run -d \
+  --name {{ project_name }}-container \
+  --restart unless-stopped \
+  -p {{ app_ports[0] }} \
+  {{ docker_image }}
+
+echo "Deployment completed at $(date)"

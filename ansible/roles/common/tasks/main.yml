@@ -1,0 +1,50 @@
+- name: Update apt cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: 공통 패키지 설정
+  apt:
+    name: "{{ common_packages }}"
+    state: present
+
+- name: Set timezone
+  timezone:
+    name: "{{ timezone }}"
+
+- name: SSH 설정 강화
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  loop:
+    - { regexp: '^PermitRootLogin', line: 'PermitRootLogin no' } # root 계정 로그인 비활성화
+    - { regexp: '^PasswordAuthentication', line: 'PasswordAuthentication no' } # 패스워드를 통한 로그인 비활성화
+  notify: Restart sshd
+
+- name: Setup automatic security updates
+  apt:
+    name: unattended-upgrades
+    state: present
+
+- name: 자동 보안 업데이트의 세부 설정
+  copy:
+    content: |
+      APT::Periodic::Update-Package-Lists "1"; # 매일 패키지 목록을 갱신
+      APT::Periodic::Unattended-Upgrade "1"; # 보안 업데이트를 자동으로 설치
+      APT::Periodic::AutocleanInterval "7"; # 7일마다 사용하지 않는 패키지들을 자동으로 정리
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Uncomplicated Firewall를 설정하여 들어오는 모든 연결 차단
+  ufw:
+    state: enabled
+    policy: deny
+
+- name:  SSH 연결을 방화벽을 통해 허용
+  ufw:
+    rule: allow
+    name: OpenSSH

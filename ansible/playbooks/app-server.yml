@@ -1,0 +1,22 @@
+- name: 애플리케이션 서버 구성
+  hosts: app_servers
+  become: yes
+  roles:
+    - java
+    - docker
+  tasks:
+    - name: 배포 디렉토리 생성
+      file:
+        path: /home/ubuntu/deploy
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+
+    - name: 배포 스크립트 복사
+      template:
+        src: roles/docker/templates/deploy.sh.j2
+        dest: /home/ubuntu/deploy/deploy.sh
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
