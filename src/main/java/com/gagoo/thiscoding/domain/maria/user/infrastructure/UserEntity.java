@@ -56,6 +56,7 @@ public class UserEntity {
                 .email(this.email)
                 .password(this.password)
                 .nickname(this.nickname)
+                .imageUrl(this.imageUrl)
                 .isActivated(this.isActivated)
                 .isBanned(this.isBanned)
                 .role(this.role)
