@@ -62,6 +62,7 @@ public class Manager {
     public Manager updateManagerNotices(ManagerNoticesUpdate managerNoticesPost){
         this.title = managerNoticesPost.getTitle();
         this.content = managerNoticesPost.getContent();
+        this.category = managerNoticesPost.getCategory();
 
         return this;
     }
