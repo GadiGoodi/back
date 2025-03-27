@@ -30,9 +30,9 @@ public class FriendServiceImpl implements FriendService {
     }
 
     private void validateUserExistence(Long userId) {
-        if (userRepository.existsByUserId(userId)) {
-            throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
-        }
+//        if (userRepository.existsByUserId(userId)) {
+//            throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
+//        }
     }
 
 
