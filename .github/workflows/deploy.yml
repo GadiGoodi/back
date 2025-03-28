@@ -104,6 +104,14 @@ jobs:
         working-directory: ansible
         run: ls -R ./roles
 
+      - name: roles 디렉토리 권한 확인 및 부여
+        working-directory: ansible
+        run: |
+          pwd
+            ls -la ./roles
+            chmod -R 755 ./roles
+            ls -la ./roles
+
       - name: 앤서블로 배포 실행
         working-directory: ansible
         run: |
