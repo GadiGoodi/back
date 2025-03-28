@@ -1,14 +1,27 @@
 package com.gagoo.thiscoding.domain.maria.friend.controller.port;
 
-import com.gagoo.thiscoding.domain.maria.friend.domain.Friend;
-import com.gagoo.thiscoding.domain.maria.friend.domain.dto.FriendRequest;
-import java.util.List;
+import com.gagoo.thiscoding.domain.maria.friend.service.dto.FriendInfo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface FriendService {
 
-    Friend create(FriendRequest friendRequest);
+    Page<FriendInfo> getMyFriends(Pageable pageable);
 
-    List<Friend> getFriendList(Long userId);
+    Page<FriendInfo> getReceivedFriendRequests(Pageable pageable);
 
-    Long delete(FriendRequest friendRequest);
+    Page<FriendInfo> getSentFriendRequests(Pageable pageable);
+
+    Page<FriendInfo> getSearchFriends(String keyword, Pageable pageable);
+
+    void friendRequest(String receiverNickname);
+
+    void delete(Long friendId);
+
+    void cancelFriendRequest(Long friendId);
+
+    void acceptFriendRequest(Long friendId);
+
+    void rejectFriendRequest(Long friendId);
 }
+

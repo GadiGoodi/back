@@ -7,10 +7,10 @@ import lombok.Getter;
 @Getter
 public class Friend {
 
-    private Long id;
-    private User sender;
-    private User receiver;
-    private boolean isFriend;
+    private final Long id;
+    private final User sender;
+    private final User receiver;
+    private final boolean isFriend;
 
     @Builder
     public Friend(Long id, User sender, User receiver, boolean isFriend) {
@@ -20,10 +20,27 @@ public class Friend {
         this.isFriend = isFriend;
     }
 
+    public static Friend create(User receiver, User sender){
+        return Friend.builder()
+            .receiver(receiver)
+            .sender(sender)
+            .build();
+    }
+
     public static Friend from(User sender, User receiver){
         return Friend.builder()
             .sender(sender)
             .receiver(receiver)
             .build();
     }
+
+    public Friend accept() {
+        return Friend.builder()
+            .id(id)
+            .sender(sender)
+            .receiver(receiver)
+            .isFriend(true)
+            .build();
+    }
+
 }
