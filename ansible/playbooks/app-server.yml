@@ -15,7 +15,7 @@
 
     - name: 배포 스크립트 복사
       template:
-        src: ./roles/docker/templates/deploy.sh.j2
+        src: /home/runner/work/back/back/ansible/roles/docker/templates/deploy.sh.j2
         dest: /home/ubuntu/deploy/deploy.sh
         owner: ubuntu
         group: ubuntu
