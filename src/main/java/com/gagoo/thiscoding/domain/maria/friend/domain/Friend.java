@@ -20,10 +20,27 @@ public class Friend {
         this.isFriend = isFriend;
     }
 
+    public static Friend create(User receiver, User sender){
+        return Friend.builder()
+            .receiver(receiver)
+            .sender(sender)
+            .build();
+    }
+
     public static Friend from(User sender, User receiver){
         return Friend.builder()
             .sender(sender)
             .receiver(receiver)
             .build();
     }
+
+    public Friend accept() {
+        return Friend.builder()
+            .id(id)
+            .sender(sender)
+            .receiver(receiver)
+            .isFriend(true)
+            .build();
+    }
+
 }

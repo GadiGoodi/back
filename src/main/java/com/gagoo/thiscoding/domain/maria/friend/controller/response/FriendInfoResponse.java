@@ -1,5 +1,7 @@
 package com.gagoo.thiscoding.domain.maria.friend.controller.response;
 
+import com.gagoo.thiscoding.domain.maria.friend.service.dto.FriendInfo;
+import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,5 +16,13 @@ public class FriendInfoResponse {
         this.id = id;
         this.nickname = nickname;
         this.imageUrl = imageUrl;
+    }
+    
+    public static FriendInfoResponse from(FriendInfo friendInfo) {
+        return FriendInfoResponse.builder()
+            .id(friendInfo.getId())
+            .nickname(friendInfo.getNickname())
+            .imageUrl(friendInfo.getImageUrl())
+            .build();
     }
 }
