@@ -4,6 +4,7 @@ import static com.gagoo.thiscoding.global.paging.PageSize.FRIEND;
 
 import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
 import com.gagoo.thiscoding.domain.maria.friend.controller.port.FriendService;
+import com.gagoo.thiscoding.domain.maria.friend.controller.request.FriendSearch;
 import com.gagoo.thiscoding.domain.maria.friend.domain.Friend;
 import com.gagoo.thiscoding.domain.maria.friend.service.Exception.AlreadyFriendRequestException;
 import com.gagoo.thiscoding.domain.maria.friend.service.Exception.FriendAlreadyExistsException;
@@ -14,7 +15,6 @@ import com.gagoo.thiscoding.domain.maria.friend.service.port.FriendRepository;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -46,9 +46,9 @@ public class FriendServiceImpl implements FriendService {
      * 내 친구 검색
      * */
     @Override
-    public Page<FriendInfo> getSearchFriends(String keyword, Pageable pageable) {
+    public Page<FriendInfo> getSearchFriends(FriendSearch friendSearch, Pageable pageable) {
         Pageable customPageable = PageRequest.of(pageable.getPageNumber(), FRIEND);
-        return friendRepository.searchFriends(securityUtils.getUserNickname(), keyword, customPageable);
+        return friendRepository.searchFriends(securityUtils.getUserNickname(), friendSearch.keyword(), customPageable);
     }
 
     /**
@@ -75,29 +75,23 @@ public class FriendServiceImpl implements FriendService {
         User targetUser = userRepository.getByNickname(targetUserNickname);
         User currentUser = userRepository.getByNickname(securityUtils.getUserNickname());
 
-        validateSelfFriendRequest(targetUserNickname, currentUser.getNickname());
+        friendRepository.findMyFriend(currentUser.getId(), targetUser.getId())
+            .ifPresentOrElse(friend -> {
+                if (friend.getReceiver().getId().equals(currentUser.getId())) {
+                    friend.accept();
+                    friendRepository.save(friend);
+                    return;
+                }
 
-        Optional<Friend> friendOpt = friendRepository.findMyFriend(currentUser.getId(), targetUser.getId());
+                validateSelfFriendRequest(targetUserNickname, currentUser.getNickname());
+                validateAlreadyFriend(friend);
+                validateMySentRequest(friend, currentUser.getId());
 
-        // 친구 관계가 없으면 정상적으로 요청 생성
-        if (friendOpt.isEmpty()) {
-            Friend newFriend = Friend.create(targetUser, currentUser);
-            friendRepository.save(newFriend);
-            return;
-        }
+            }, () -> {
+                Friend newFriend = Friend.create(targetUser, currentUser);
+                friendRepository.save(newFriend);
+            });
 
-        // 친구 관계가 존재하는 경우 실행 로직
-        Friend friend = friendOpt.get();
-
-        // 현재 사용자가 상대방에게 이미 요청을 받은 경우, 요청 수락 처리
-        if (friend.getReceiver().getId().equals(currentUser.getId())) {
-            friend.accept();
-            friendRepository.save(friend);
-            return;
-        }
-
-        validateAlreadyFriend(friend);
-        validateMySentRequest(friend, currentUser.getId());
     }
 
     /**
@@ -196,6 +190,7 @@ public class FriendServiceImpl implements FriendService {
         if(!friend.getReceiver().getId().equals(myId)) {
             throw new FriendAlreadyExistsException(ErrorCode.ALREADY_FRIEND);
         }
+
     }
 
 }

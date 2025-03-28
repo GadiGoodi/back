@@ -3,7 +3,8 @@ package com.gagoo.thiscoding.domain.maria.friend.controller;
 import static org.springframework.http.HttpStatus.OK;
 
 import com.gagoo.thiscoding.domain.maria.friend.controller.port.FriendService;
-import com.gagoo.thiscoding.domain.maria.friend.service.dto.FriendInfo;
+import com.gagoo.thiscoding.domain.maria.friend.controller.request.FriendSearch;
+import com.gagoo.thiscoding.domain.maria.friend.controller.response.FriendInfoResponse;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
 import com.gagoo.thiscoding.global.paging.aop.ConvertToOneBase;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
@@ -14,10 +15,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -33,8 +34,8 @@ public class FriendController {
     @GetMapping
     @ConvertToOneBase
     @AuthorizationRequired(value = Role.USER, status = OK)
-    public ResponseEntity<CustomPageDto<FriendInfo>> getMyFriends(Pageable pageable) {
-        Page<FriendInfo> result = friendService.getMyFriends(pageable);
+    public ResponseEntity<CustomPageDto<FriendInfoResponse>> getMyFriends(Pageable pageable) {
+        Page<FriendInfoResponse> result = friendService.getMyFriends(pageable).map(FriendInfoResponse::from);
         return ResponseEntity
             .ok()
             .body(CustomPageDto.of(result));
@@ -46,8 +47,8 @@ public class FriendController {
     @GetMapping("/requests/received")
     @ConvertToOneBase
     @AuthorizationRequired(value = Role.USER, status = OK)
-    public ResponseEntity<CustomPageDto<FriendInfo>> getReceivedFriendRequests(Pageable pageable) {
-        Page<FriendInfo> result = friendService.getReceivedFriendRequests(pageable);
+    public ResponseEntity<CustomPageDto<FriendInfoResponse>> getReceivedFriendRequests(Pageable pageable) {
+        Page<FriendInfoResponse> result = friendService.getReceivedFriendRequests(pageable).map(FriendInfoResponse::from);
         return ResponseEntity
             .ok()
             .body(CustomPageDto.of(result));
@@ -59,8 +60,8 @@ public class FriendController {
     @GetMapping("/requests/sent")
     @ConvertToOneBase
     @AuthorizationRequired(value = Role.USER, status = OK)
-    public ResponseEntity<CustomPageDto<FriendInfo>> getSentFriendRequests(Pageable pageable) {
-        Page<FriendInfo> result = friendService.getSentFriendRequests(pageable);
+    public ResponseEntity<CustomPageDto<FriendInfoResponse>> getSentFriendRequests(Pageable pageable) {
+        Page<FriendInfoResponse> result = friendService.getSentFriendRequests(pageable).map(FriendInfoResponse::from);
         return ResponseEntity
             .ok()
             .body(CustomPageDto.of(result));
@@ -73,8 +74,9 @@ public class FriendController {
     @GetMapping("/search")
     @ConvertToOneBase
     @AuthorizationRequired(value = Role.USER, status = OK)
-    public ResponseEntity<CustomPageDto<FriendInfo>> getSearchFriends(@RequestParam String keyword, Pageable pageable) {
-        Page<FriendInfo> result = friendService.getSearchFriends(keyword, pageable);
+    public ResponseEntity<CustomPageDto<FriendInfoResponse>> getSearchFriends(@ModelAttribute
+        FriendSearch friendSearch, Pageable pageable) {
+        Page<FriendInfoResponse> result = friendService.getSearchFriends(friendSearch, pageable).map(FriendInfoResponse::from);
         return ResponseEntity
             .ok()
             .body(CustomPageDto.of(result));
