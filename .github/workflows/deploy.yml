@@ -94,6 +94,12 @@ jobs:
         run: |
           chmod 644 ansible/inventory.ini          
 
+      - name: 전체 디렉토리 구조 출력
+        working-directory: ansible
+        run: |
+          pwd
+          find . -type d
+
       - name: 현재 디렉토리 구조 출력
         working-directory: ansible
         run: ls -R ./roles
