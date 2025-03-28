@@ -90,33 +90,6 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
 
-      - name: 인벤토리 파일 권한 설정
-        run: |
-          chmod 644 ansible/inventory.ini          
-
-      - name: 전체 디렉토리 구조 출력
-        working-directory: ansible
-        run: |
-          pwd
-          find . -type d
-
-      - name: 현재 디렉토리 구조 출력
-        working-directory: ansible
-        run: ls -R ./roles
-
-      - name: Ansible Debugging
-        working-directory: ansible
-        run: |
-          pwd
-          echo "Roles directory contents:"
-          ls -la ./roles
-          echo "Playbooks directory contents:"
-          ls -la ./playbooks
-          echo "Inventory file contents:"
-          cat inventory.ini
-          echo "Ansible configuration:"
-          cat ansible.cfg
-
       - name: 앤서블로 배포 실행
         working-directory: ansible
         run: |
