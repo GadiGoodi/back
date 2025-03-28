@@ -2,8 +2,8 @@
   hosts: app_servers
   become: yes
   roles:
-    - java
-    - docker
+    - role: java
+    - role: docker
   tasks:
     - name: 배포 디렉토리 생성
       file:
