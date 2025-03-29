@@ -14,6 +14,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
+
+import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.UserCodeRoom;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -66,6 +68,16 @@ public class FakeCodeRoomRepository implements CodeRoomRepository {
             pageable,
             () -> (long) filteredAlarms.size()
         );
+    }
+
+    @Override
+    public List<User> findUserListByUserCodeRoom(UserCodeRoom userCodeRoom) {
+        return List.of();
+    }
+
+    @Override
+    public Page<UserCodeRoom> findAllUserCodeRoomByUser(User user, Pageable pageable) {
+        return null;
     }
 
     @Override
