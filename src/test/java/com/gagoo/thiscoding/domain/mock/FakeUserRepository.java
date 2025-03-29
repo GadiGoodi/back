@@ -4,6 +4,8 @@ import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.global.security.exception.UserNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,15 +66,30 @@ public class FakeUserRepository implements UserRepository {
                 .anyMatch(user -> user.getNickname().equals(nickname));
     }
 
-    @Override
-    public boolean existsByUserId(Long userId) {
-        return data.stream()
-                .anyMatch(user -> user.getId().equals(userId));
-    }
+//    @Override
+//    public boolean existsByUserId(Long userId) {
+//        return data.stream()
+//                .anyMatch(user -> user.getId().equals(userId));
+//    }
 
     public Optional<User> findByEmail(String email) {
         return data.stream()
                 .filter(user -> user.getEmail().equals(email))
                 .findFirst();
+    }
+
+    @Override
+    public Optional<User> findByNickname(String nickname) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Page<User> findByNicknameContaining(String nickname, Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public User getByNickname(String nickname) {
+        return null;
     }
 }
