@@ -49,7 +49,9 @@ class ManagerTest {
         ManagerNoticesUpdate managerUpdate = ManagerNoticesUpdate.builder()
                 .title("updateTitle")
                 .content("updateContent")
+                .category("FAQ")
                 .build();
+
         User user = User.builder()
                 .id(1L)
                 .email("test02@test.com")
@@ -69,14 +71,14 @@ class ManagerTest {
                 .build();
 
         //when
-        manager.updateManagerNotices(managerUpdate);
+        Manager updateManager = manager.updateManagerNotices(managerUpdate);
 
         //then
-        assertThat(manager.getId()).isEqualTo(1L);
-        assertThat(manager.getManager()).isEqualTo(user);
-        assertThat(manager.getTitle()).isEqualTo("updateTitle");
-        assertThat(manager.getContent()).isEqualTo("updateContent");
-        assertThat(manager.getCategory()).isEqualTo("FAQ");
+        assertThat(updateManager.getId()).isEqualTo(1L);
+        assertThat(updateManager.getManager()).isEqualTo(user);
+        assertThat(updateManager.getTitle()).isEqualTo("updateTitle");
+        assertThat(updateManager.getContent()).isEqualTo("updateContent");
+        assertThat(updateManager.getCategory()).isEqualTo("FAQ");
     }
 
 }
