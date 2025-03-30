@@ -20,6 +20,11 @@ public class FakeSecurityUtils implements SecurityUtils {
     }
 
     @Override
+    public String getUserNickname() {
+        return "";
+    }
+
+    @Override
     public boolean isLogin() {
         if(email == null) {
             return false;
