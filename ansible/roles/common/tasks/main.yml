@@ -39,7 +39,7 @@
     group: root
     mode: '0644'
 
-- name: Uncomplicated Firewall를 설정하여 들어오는 모든 연결 차단
+- name: 방화벽 설정으로 들어오는 모든 연결 차단
   ufw:
     state: enabled
     policy: deny
