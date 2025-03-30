@@ -1,7 +1,5 @@
 package com.gagoo.thiscoding.global.common.util;
 
-import static java.util.Optional.empty;
-
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -45,13 +43,13 @@ public class HttpServletUtils {
 
     public Optional<Cookie> getCookie(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
-
-        if (cookies != null && cookies.length > 0) {
-            return Arrays.stream(cookies)
-                    .filter(cookie -> cookie.getName().equals(name))
-                    .findAny();
+        if (cookies == null) {
+            return Optional.empty();
         }
 
-        return empty();
+        return Arrays.stream(cookies)
+                .filter(cookie -> cookie.getName().equals(name))
+                .findAny();
     }
+
 }
