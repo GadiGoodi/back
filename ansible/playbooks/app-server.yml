@@ -20,3 +20,8 @@
         owner: ubuntu
         group: ubuntu
         mode: '0755'
+
+    - name: 배포 스크립트 실행
+      shell: /home/ubuntu/deploy/deploy.sh
+      become: yes
+      become_user: ubuntu

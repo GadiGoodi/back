@@ -21,7 +21,7 @@
   loop:
     - { regexp: '^PermitRootLogin', line: 'PermitRootLogin no' } # root 계정 로그인 비활성화
     - { regexp: '^PasswordAuthentication', line: 'PasswordAuthentication no' } # 패스워드를 통한 로그인 비활성화
-  notify: Restart sshd
+  notify: Restart ssh
 
 - name: Setup automatic security updates
   apt:
@@ -39,7 +39,7 @@
     group: root
     mode: '0644'
 
-- name: Uncomplicated Firewall를 설정하여 들어오는 모든 연결 차단
+- name: 방화벽 설정으로 들어오는 모든 연결 차단
   ufw:
     state: enabled
     policy: deny
