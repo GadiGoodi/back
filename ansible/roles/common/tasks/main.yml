@@ -21,7 +21,7 @@
   loop:
     - { regexp: '^PermitRootLogin', line: 'PermitRootLogin no' } # root 계정 로그인 비활성화
     - { regexp: '^PasswordAuthentication', line: 'PasswordAuthentication no' } # 패스워드를 통한 로그인 비활성화
-  notify: Restart sshd
+  notify: Restart ssh
 
 - name: Setup automatic security updates
   apt:
