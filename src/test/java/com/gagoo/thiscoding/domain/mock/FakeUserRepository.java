@@ -60,18 +60,6 @@ public class FakeUserRepository implements UserRepository {
                 .anyMatch(user -> user.getEmail().equals(email));
     }
 
-    @Override
-    public boolean existsByNickname(String nickname) {
-        return data.stream()
-                .anyMatch(user -> user.getNickname().equals(nickname));
-    }
-
-//    @Override
-//    public boolean existsByUserId(Long userId) {
-//        return data.stream()
-//                .anyMatch(user -> user.getId().equals(userId));
-//    }
-
     public Optional<User> findByEmail(String email) {
         return data.stream()
                 .filter(user -> user.getEmail().equals(email))
@@ -84,7 +72,12 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
-    public Page<User> findByNicknameContaining(String nickname, Pageable pageable) {
+    public boolean existsByNickname(String nickname) {
+        return false;
+    }
+
+    @Override
+    public Page<User> findByNicknameContaining(String nickname, Long myId, Pageable pageable) {
         return null;
     }
 
