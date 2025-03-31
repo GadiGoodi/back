@@ -78,8 +78,8 @@ public class UserRepositoryImpl implements UserRepository {
      * 닉네임으로 유저 객체 리스트 조회
      * */
     @Override
-    public Page<User> findByNicknameContaining(String nickname, Pageable pageable) {
-        return userJpaRepository.findByNicknameContainingAndRoleAndIsActivatedTrueAndIsBannedFalse(nickname,
-            Role.USER, pageable).map(UserEntity::toModel);
+    public Page<User> findByNicknameContaining(String nickname, Long myId, Pageable pageable) {
+        return userJpaRepository.findByNicknameContainingAndRoleAndIsActivatedTrueAndIsBannedFalseAndIdNot(nickname,
+            Role.USER, myId,pageable).map(UserEntity::toModel);
     }
 }

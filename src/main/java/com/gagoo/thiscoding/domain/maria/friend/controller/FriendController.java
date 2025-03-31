@@ -29,7 +29,7 @@ public class FriendController {
     private final FriendService friendService;
 
     /**
-     * 친구목록 조회
+     * 친구 목록 조회
      * */
     @GetMapping
     @ConvertToOneBase
@@ -42,7 +42,7 @@ public class FriendController {
     }
 
     /**
-     * 받은 친구요청 목록 조회
+     * 받은 친구 요청 목록 조회
      * */
     @GetMapping("/requests/received")
     @ConvertToOneBase
@@ -55,7 +55,7 @@ public class FriendController {
     }
 
     /**
-     * 보낸 친구요청 목록 조회
+     * 보낸 친구 요청 목록 조회
      * */
     @GetMapping("/requests/sent")
     @ConvertToOneBase
@@ -69,7 +69,7 @@ public class FriendController {
 
 
     /**
-     * 친구목록에서 친구 검색
+     * 친구 목록에서 친구 검색
      * */
     @GetMapping("/search")
     @ConvertToOneBase

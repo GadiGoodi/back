@@ -29,8 +29,9 @@ public class UserServiceImpl implements UserService {
      * */
     @Override
     public Page<User> searchByNickname(String nickname, Pageable pageable) {
+        User currentUser = userRepository.getByEmail(getCurUserEmail());
         Pageable customPageable = PageRequest.of(pageable.getPageNumber(), FRIEND);
-        return userRepository.findByNicknameContaining(nickname, customPageable);
+        return userRepository.findByNicknameContaining(nickname, currentUser.getId(),customPageable);
     }
 
     /**
