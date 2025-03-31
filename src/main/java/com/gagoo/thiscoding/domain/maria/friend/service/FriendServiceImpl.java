@@ -42,8 +42,9 @@ public class FriendServiceImpl implements FriendService {
      */
     @Override
     public Page<FriendInfo> getMyFriends(Pageable pageable) {
+        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
         Pageable customPageable = PageRequest.of(pageable.getPageNumber(), FRIEND);
-        return friendRepository.findMyFriends(securityUtils.getUserNickname(), customPageable);
+        return friendRepository.findMyFriends(currentUser.getNickname(), customPageable);
     }
 
     /**
@@ -51,8 +52,9 @@ public class FriendServiceImpl implements FriendService {
      * */
     @Override
     public Page<FriendInfo> getSearchFriends(FriendSearch friendSearch, Pageable pageable) {
+        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
         Pageable customPageable = PageRequest.of(pageable.getPageNumber(), FRIEND);
-        return friendRepository.searchFriends(securityUtils.getUserNickname(), friendSearch.keyword(), customPageable);
+        return friendRepository.searchFriends(currentUser.getNickname(), friendSearch.keyword(), customPageable);
     }
 
     /**
@@ -60,7 +62,8 @@ public class FriendServiceImpl implements FriendService {
      */
     @Override
     public Page<FriendInfo> getReceivedFriendRequests(Pageable pageable) {
-        return friendRepository.findReceivedFriendRequests(securityUtils.getUserNickname(), pageable);
+        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
+        return friendRepository.findReceivedFriendRequests(currentUser.getNickname(), pageable);
     }
 
     /**
@@ -68,7 +71,8 @@ public class FriendServiceImpl implements FriendService {
      */
     @Override
     public Page<FriendInfo> getSentFriendRequests(Pageable pageable) {
-        return friendRepository.findSentFriendRequests(securityUtils.getUserNickname(), pageable);
+        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
+        return friendRepository.findSentFriendRequests(currentUser.getNickname(), pageable);
     }
 
     /**
@@ -118,7 +122,7 @@ public class FriendServiceImpl implements FriendService {
      * */
     @Override
     public void cancelFriendRequest(Long friendId) {
-        User currentUser = userRepository.getByNickname(securityUtils.getUserNickname());
+        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
         Friend friend = getByFriendId(friendId);
 
         validateAlreadyFriend(friend);

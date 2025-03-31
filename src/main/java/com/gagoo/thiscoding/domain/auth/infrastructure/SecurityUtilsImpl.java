@@ -22,13 +22,6 @@ public class SecurityUtilsImpl implements SecurityUtils {
     }
 
     @Override
-    public String getUserNickname(){
-        User user = getUser();
-
-        return user.getNickname();
-    }
-
-    @Override
     public boolean isLogin() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
