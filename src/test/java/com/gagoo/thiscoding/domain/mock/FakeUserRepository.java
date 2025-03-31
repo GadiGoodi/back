@@ -84,7 +84,7 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
-    public Page<User> findByNicknameContaining(String nickname, Pageable pageable) {
+    public Page<User> findByNicknameContaining(String nickname, Long myId, Pageable pageable) {
         return null;
     }
 

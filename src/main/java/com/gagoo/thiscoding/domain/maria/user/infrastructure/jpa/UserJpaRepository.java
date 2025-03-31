@@ -17,7 +17,7 @@ public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
 
     Optional<UserEntity> findByNickname(String nickname);
 
-    Page<UserEntity> findByNicknameContainingAndRoleAndIsActivatedTrueAndIsBannedFalse(
-        String nickname, Role role, Pageable pageable);
+    Page<UserEntity> findByNicknameContainingAndRoleAndIsActivatedTrueAndIsBannedFalseAndIdNot(
+        String nickname, Role role, Long excludeId, Pageable pageable);
 
 }

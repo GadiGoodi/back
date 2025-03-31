@@ -21,7 +21,7 @@ public enum ErrorCode {
     ALREADY_CREATE_EMAIL(HttpStatus.CONFLICT, "이미 가입된 이메일입니다."),
     ALREADY_CODE_ROOM(HttpStatus.CONFLICT, "이미 참여중인 코드방입니다."),
     ALREADY_FRIEND_REQUESTED(HttpStatus.CONFLICT, "이미 친구 요청을 보냈습니다"),
-    ALREADY_FRIEND(HttpStatus.CONFLICT, "이미 친구목록에 존재하는 회원입니다."),
+    ALREADY_FRIEND(HttpStatus.CONFLICT, "이미 친구 목록에 존재하는 회원입니다."),
     ALREADY_USER_CODE_ROOM(HttpStatus.CONFLICT, "이미 참여중인 코드방입니다."),
     ALREADY_LIKE(HttpStatus.CONFLICT, "이미 추천한 답변입니다."),
     ALREADY_BOOKMARK(HttpStatus.CONFLICT, "이미 북마크한 게시글입니다."),
