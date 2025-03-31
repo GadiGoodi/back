@@ -15,7 +15,7 @@ import com.gagoo.thiscoding.domain.maria.coderoom.service.exception.AlreadyJoine
 import com.gagoo.thiscoding.domain.maria.coderoom.service.exception.CodeRoomNotFoundException;
 import com.gagoo.thiscoding.domain.maria.coderoom.service.port.CodeRoomRepository;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
-import com.gagoo.thiscoding.domain.maria.user.service.exception.CapacityOutOfBoundsException;
+import com.gagoo.thiscoding.domain.maria.coderoom.service.exception.CapacityOutOfBoundsException;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.UserCodeRoom;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.service.port.UserCodeRoomRepository;

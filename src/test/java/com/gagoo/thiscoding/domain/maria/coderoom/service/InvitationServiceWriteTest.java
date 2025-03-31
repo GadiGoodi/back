@@ -9,7 +9,7 @@ import com.gagoo.thiscoding.domain.maria.alarm.service.exception.AlarmNotFoundEx
 import com.gagoo.thiscoding.domain.maria.coderoom.controller.port.InvitationService;
 import com.gagoo.thiscoding.domain.maria.coderoom.domain.CodeRoom;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
-import com.gagoo.thiscoding.domain.maria.user.service.exception.CapacityOutOfBoundsException;
+import com.gagoo.thiscoding.domain.maria.coderoom.service.exception.CapacityOutOfBoundsException;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.UserCodeRoom;
 import com.gagoo.thiscoding.domain.mock.TestContainer;
 import com.gagoo.thiscoding.global.security.infrastructure.FakeSecurityUtils;
