@@ -81,7 +81,7 @@ public class BoardServiceImpl implements BoardService {
 
         User currentUser = getCurrentUser();
 
-        boolean bookmarked = getBookmarkedByQnaIdAnsUserId(qnaDetail.getId(), currentUser.getId());
+        boolean bookmarked = getBookmarkedByQnaIdAndUserId(qnaDetail.getId(), currentUser.getId());
 
         return QnaDetail.from(qnaDetail, replyCount, bookmarked);
     }
@@ -182,7 +182,7 @@ public class BoardServiceImpl implements BoardService {
     /**
      * 북마크 여부 조회
      */
-    private boolean getBookmarkedByQnaIdAnsUserId(String qnaId, Long userId) {
+    private boolean getBookmarkedByQnaIdAndUserId(String qnaId, Long userId) {
         return bookmarkRepository.findByQnaIdAndUserId(qnaId, userId).isPresent();
     }
 
