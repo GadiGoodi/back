@@ -1,5 +1,6 @@
 package com.gagoo.thiscoding.domain.mongo.board.service;
 
+import com.gagoo.thiscoding.domain.maria.bookmark.service.port.BookmarkRepository;
 import com.gagoo.thiscoding.domain.maria.like.service.port.LikeRepository;
 import com.gagoo.thiscoding.domain.maria.reply.service.port.ReplyRepository;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
@@ -38,6 +39,7 @@ public class BoardServiceImpl implements BoardService {
     private final UserRepository userRepository;
     private final ReplyRepository replyRepository;
     private final LikeRepository likeRepository;
+    private final BookmarkRepository bookmarkRepository;
     private final BoardViewService boardViewService;
     private final SecurityUtils securityUtils;
 
@@ -77,7 +79,11 @@ public class BoardServiceImpl implements BoardService {
         Board qnaDetail = boardRepository.getById(qnaId);
         Long replyCount = replyRepository.countByQnaId(qnaId);
 
-        return QnaDetail.from(qnaDetail, replyCount);
+        User currentUser = getCurrentUser();
+
+        boolean bookmarked = getBookmarkedByQnaIdAnsUserId(qnaDetail.getId(), currentUser.getId());
+
+        return QnaDetail.from(qnaDetail, replyCount, bookmarked);
     }
 
     /**
@@ -171,6 +177,13 @@ public class BoardServiceImpl implements BoardService {
      */
     private boolean getIsLikeByQnaIdAndUserId(String qnaId, Long userId) {
         return likeRepository.findByQnaIdAndUserId(qnaId, userId).isPresent();
+    }
+
+    /**
+     * 북마크 여부 조회
+     */
+    private boolean getBookmarkedByQnaIdAnsUserId(String qnaId, Long userId) {
+        return bookmarkRepository.findByQnaIdAndUserId(qnaId, userId).isPresent();
     }
 
     /**
