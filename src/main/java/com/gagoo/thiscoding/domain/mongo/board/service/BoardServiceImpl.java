@@ -177,14 +177,14 @@ public class BoardServiceImpl implements BoardService {
      * 좋아요 여부 조회
      */
     private boolean getIsLikeByQnaIdAndUserId(String qnaId, Long userId) {
-        return likeRepository.findByQnaIdAndUserId(qnaId, userId).isPresent();
+        return likeRepository.existsByQnaIdAndUserId(qnaId, userId);
     }
 
     /**
      * 북마크 여부 조회
      */
     private boolean getBookmarkedByQnaIdAndUserId(String qnaId, Long userId) {
-        return bookmarkRepository.findByQnaIdAndUserId(qnaId, userId).isPresent();
+        return bookmarkRepository.existsByQnaIdAndUserId(qnaId, userId);
     }
 
     /**
