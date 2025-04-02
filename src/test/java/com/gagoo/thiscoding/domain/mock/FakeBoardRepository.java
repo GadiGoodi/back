@@ -102,6 +102,11 @@ public class FakeBoardRepository implements BoardRepository {
     }
 
     @Override
+    public Page<Board> findByIdIn(List<String> qnaId, Pageable pageable) {
+        return null;
+    }
+
+    @Override
     public boolean existsById(String qnaId) {
         return data.stream().anyMatch(board -> board.getId().equals(qnaId));
     }
