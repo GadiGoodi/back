@@ -1,9 +1,6 @@
--- 외래키 제약 조건 비활성화 후 테이블 삭제
-SET FOREIGN_KEY_CHECKS = 0;
-DROP TABLE IF EXISTS user_code_room;
-DROP TABLE IF EXISTS code_room;
-DROP TABLE IF EXISTS users;
-SET FOREIGN_KEY_CHECKS = 1;
+DROP TABLE IF EXISTS user_code_room CASCADE;
+DROP TABLE IF EXISTS code_room CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
 
 -- 테이블 생성
 CREATE TABLE users (
