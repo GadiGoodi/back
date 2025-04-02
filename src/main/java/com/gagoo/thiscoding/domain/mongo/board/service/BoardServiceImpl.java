@@ -29,6 +29,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Builder
 @Transactional(readOnly = true)
@@ -114,6 +116,23 @@ public class BoardServiceImpl implements BoardService {
         return boardRepository.findByUserIdAndParentIdIsNotRoot(currentUser.getId(),pageable)
                 .map(MyPageAnswerList::of);
     }
+
+
+    /**
+     * 마이페이지 내가 북마크한 QnA 질문 조회
+     */
+    @Override
+    public Page<MyPageBookMarkList> getMyPageBookMarkQuestion(Pageable pageable) {
+        User currentUser = getCurrentUser();
+
+        //UserId로 북마크한 QnA의 Id 리스트 조회
+        List<String> bookmarkedQnaIdList =  bookmarkRepository.findQnaIdsByUserIdPaged(currentUser.getId(),pageable);
+
+        //북마크한 QnA Id 리스트로 해당하는 QnA 데이터 조회
+        return boardRepository.findByIdIn(bookmarkedQnaIdList, pageable)
+                .map(MyPageBookMarkList::of);
+    }
+
 
     /**
      * 게시판 전체목록 조회

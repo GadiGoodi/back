@@ -17,6 +17,7 @@ public interface BoardRepository {
     Page<Search> findByTitleOrContent(String title, String content, Pageable pageable);
     Page<Board> findAnswerByQnaId(String qnaId, Pageable pageable);
     Page<Board> findAnswerByQnaIdSortByIsSelected(String qnaId, Pageable pageable);
+    Page<Board> findByIdIn(List<String> qnaId, Pageable pageable);
     boolean existsById(String qnaId);
     boolean existsByParentIdAndIsSelectedIsTrue(String qnaId);
     void incrementViewCount(String qnaId);
