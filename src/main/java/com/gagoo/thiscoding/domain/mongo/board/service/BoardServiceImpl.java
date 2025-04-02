@@ -29,6 +29,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Builder
 @Transactional(readOnly = true)
@@ -114,6 +116,25 @@ public class BoardServiceImpl implements BoardService {
         return boardRepository.findByUserIdAndParentIdIsNotRoot(currentUser.getId(),pageable)
                 .map(MyPageAnswerList::of);
     }
+
+
+    /**
+     * 마이페이지 내가 북마크한 QnA 질문 조회
+     */
+    @Override
+    public Page<MyPageBookMarkList> getMyPageBookMarkQuestion(Pageable pageable) {
+        User currentUser = getCurrentUser();
+
+        //UserId로 북마크한 QnA의 Id 리스트 조회
+        List<String> bookmarkedQnaIdList =  bookmarkRepository.findQnaIdsByUserIdPaged(currentUser.getId(),pageable);
+
+        validateBookmarkedByUserId(bookmarkedQnaIdList);
+
+        //북마크한 QnA Id 리스트로 해당하는 QnA 데이터 조회
+        return boardRepository.findByIdIn(bookmarkedQnaIdList, pageable)
+                .map(MyPageBookMarkList::of);
+    }
+
 
     /**
      * 게시판 전체목록 조회
@@ -227,6 +248,15 @@ public class BoardServiceImpl implements BoardService {
     private void validateIsSelectedAnswerExists(String parentId) {
         if(boardRepository.existsByParentIdAndIsSelectedIsTrue(parentId)) {
             throw new ExistAdoptedAnswer(ErrorCode.EXIST_ADOPTED_ANSWER);
+        }
+    }
+
+    /**
+     * 북마크한 QnA가 존재하는지 검증
+     */
+    private void validateBookmarkedByUserId(List<String> qnaIdList){
+        if (qnaIdList == null || qnaIdList.isEmpty()) {
+            throw  new QnaNotFoundException(ErrorCode.QNA_NOT_FOUND);
         }
     }
 }

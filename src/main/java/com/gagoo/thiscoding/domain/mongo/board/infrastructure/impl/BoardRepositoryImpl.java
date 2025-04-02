@@ -120,6 +120,11 @@ public class BoardRepositoryImpl implements BoardRepository {
     }
 
     @Override
+    public Page<Board> findByIdIn(List<String> id, Pageable pageable) {
+        return boardMongoRepository.findByIdIn(id,pageable).map(BoardDocument::toModel);
+    }
+
+    @Override
     public Board save(Board board) {
         return boardMongoRepository.save(BoardDocument.from(board)).toModel();
     }

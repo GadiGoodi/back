@@ -1,7 +1,6 @@
 package com.gagoo.thiscoding.domain.mongo.board.controller.port;
 
 import com.gagoo.thiscoding.domain.mongo.board.controller.request.BoardAnswer;
-import com.gagoo.thiscoding.domain.mongo.board.controller.response.MyPageQnA;
 import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
 import com.gagoo.thiscoding.domain.mongo.board.domain.dto.BoardCreate;
 import com.gagoo.thiscoding.domain.mongo.board.domain.dto.Search;
@@ -20,4 +19,5 @@ public interface BoardService {
     CustomPageDto<QnaList> findAll(Pageable pageable);
     Page<AnswerList> findAnswersByQnaId(String qnaId, Pageable pageable);
     void adoptAnswer(String qnaId);
+    Page<MyPageBookMarkList> getMyPageBookMarkQuestion(Pageable pageable);
 }

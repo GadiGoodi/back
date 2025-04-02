@@ -3,8 +3,8 @@ package com.gagoo.thiscoding.domain.mongo.board.controller;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
 import com.gagoo.thiscoding.domain.mongo.board.controller.port.BoardService;
 import com.gagoo.thiscoding.domain.mongo.board.controller.response.MyPageAnswer;
+import com.gagoo.thiscoding.domain.mongo.board.controller.response.MyPageBookmark;
 import com.gagoo.thiscoding.domain.mongo.board.controller.response.MyPageQnA;
-import com.gagoo.thiscoding.domain.mongo.board.service.dto.QnaList;
 import com.gagoo.thiscoding.global.paging.aop.ConvertToOneBase;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
 import com.gagoo.thiscoding.global.security.aop.AuthorizationRequired;
@@ -25,6 +25,7 @@ public class MyQnaController {
 
     private final BoardService boardService;
 
+    //마이페이지 작성한 QnA 질문 조회
     @AuthorizationRequired(value = {Role.USER,Role.ADMIN}, status = OK)
     @GetMapping("/qna")
     @ConvertToOneBase
@@ -35,6 +36,7 @@ public class MyQnaController {
 
     }
 
+    //마이페이지 작성한 QnA 답변 조회
     @AuthorizationRequired(value = {Role.USER,Role.ADMIN}, status = OK)
     @GetMapping("/answer")
     @ConvertToOneBase
@@ -42,5 +44,15 @@ public class MyQnaController {
         Page<MyPageAnswer> answerResult = boardService.getMyPagePostAnswer(pageable).map(MyPageAnswer::from);
         return ResponseEntity.ok(CustomPageDto.of(answerResult));
 
+    }
+
+    //마이페이지 북마크한 QnA 조회
+    @AuthorizationRequired(value = {Role.USER,Role.ADMIN}, status = OK)
+    @GetMapping("/bookmark")
+    @ConvertToOneBase
+    public ResponseEntity<CustomPageDto<MyPageBookmark>> getMyPageBookMarkQnA(Pageable pageable) {
+        Page<MyPageBookmark> bookmarkList = boardService.getMyPageBookMarkQuestion(pageable).map(MyPageBookmark::from);
+
+        return ResponseEntity.ok(CustomPageDto.of(bookmarkList));
     }
 }

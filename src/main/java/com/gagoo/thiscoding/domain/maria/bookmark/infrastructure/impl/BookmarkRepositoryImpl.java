@@ -5,8 +5,10 @@ import com.gagoo.thiscoding.domain.maria.bookmark.infrastructure.BookmarkEntity;
 import com.gagoo.thiscoding.domain.maria.bookmark.infrastructure.jpa.BookmarkJpaRepository;
 import com.gagoo.thiscoding.domain.maria.bookmark.service.port.BookmarkRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -33,5 +35,10 @@ public class BookmarkRepositoryImpl implements BookmarkRepository {
     @Override
     public boolean existsByQnaIdAndUserId(String qnaId, Long userId) {
         return bookmarkJpaRepository.existsByQnaIdAndUserId(qnaId, userId);
+    }
+
+    @Override
+    public List<String> findQnaIdsByUserIdPaged(Long userId, Pageable pageable) {
+        return bookmarkJpaRepository.findQnaIdsByUserIdPaged(userId, pageable);
     }
 }
