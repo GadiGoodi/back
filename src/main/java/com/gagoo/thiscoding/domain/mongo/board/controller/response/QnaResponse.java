@@ -1,5 +1,6 @@
 package com.gagoo.thiscoding.domain.mongo.board.controller.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gagoo.thiscoding.domain.mongo.board.service.dto.QnaDetail;
 import lombok.Builder;
@@ -29,6 +30,8 @@ public class QnaResponse {
     private final Long replyCount;
     @JsonProperty
     private final LocalDateTime createDate;
+    @JsonProperty
+    private final boolean bookmarked;
 
     public static QnaResponse from(QnaDetail qnaDetail) {
         return QnaResponse.builder()
@@ -41,6 +44,7 @@ public class QnaResponse {
                 .answerCount(qnaDetail.getAnswerCount())
                 .replyCount(qnaDetail.getReplyCount())
                 .createDate(qnaDetail.getCreateDate())
+                .bookmarked(qnaDetail.isBookmarked())
                 .build();
     }
 }

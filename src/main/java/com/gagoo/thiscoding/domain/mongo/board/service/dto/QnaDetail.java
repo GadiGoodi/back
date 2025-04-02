@@ -29,8 +29,10 @@ public class QnaDetail {
     private final Long replyCount;
     @JsonProperty
     private final LocalDateTime createDate;
+    @JsonProperty
+    private final boolean bookmarked;
 
-    public static QnaDetail from(Board board, Long replyCount) {
+    public static QnaDetail from(Board board, Long replyCount, boolean bookmarked) {
         return QnaDetail.builder()
                 .qnaId(board.getId())
                 .language(board.getLanguage())
@@ -41,6 +43,7 @@ public class QnaDetail {
                 .answerCount(board.getAnswerCount())
                 .replyCount(replyCount)
                 .createDate(board.getCreateDate())
+                .bookmarked(bookmarked)
                 .build();
     }
 }
