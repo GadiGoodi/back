@@ -1,8 +1,11 @@
 package com.gagoo.thiscoding.domain.auth.infrastructure;
 
+import com.gagoo.thiscoding.domain.auth.exception.ClaimNotFoundException;
+import com.gagoo.thiscoding.domain.auth.exception.ExpiredJwtTokenException;
+import com.gagoo.thiscoding.domain.auth.exception.MalformedFormJwtTokenException;
+import com.gagoo.thiscoding.domain.auth.exception.UnsupportedJwtTokenException;
 import com.gagoo.thiscoding.domain.auth.service.port.TokenProvider;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
-import com.gagoo.thiscoding.global.exception.GlobalException;
 import com.gagoo.thiscoding.global.security.config.JwtProperties;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -119,13 +122,13 @@ public class JwtTokenProvider implements TokenProvider {
                     .parseSignedClaims(token);
 
         } catch (SecurityException | MalformedJwtException e) {
-            throw new GlobalException(ErrorCode.INVALID_SIGNATURE);
+            throw new MalformedFormJwtTokenException(ErrorCode.INVALID_SIGNATURE);
         } catch (ExpiredJwtException e) {
-            throw new GlobalException(ErrorCode.TOKEN_EXPIRED);
+            throw new ExpiredJwtTokenException(ErrorCode.TOKEN_EXPIRED);
         } catch (UnsupportedJwtException e) {
-            throw new GlobalException(ErrorCode.INVALID_TOKEN);
+            throw new UnsupportedJwtTokenException(ErrorCode.INVALID_TOKEN);
         } catch (IllegalArgumentException e) {
-            throw new GlobalException(ErrorCode.CLAIM_NOT_FOUND);
+            throw new ClaimNotFoundException(ErrorCode.CLAIM_NOT_FOUND);
         }
     }
 }
