@@ -1,6 +1,7 @@
 package com.gagoo.thiscoding.domain.mock;
 
 import com.gagoo.thiscoding.domain.maria.alarm.service.port.AlarmRepository;
+import com.gagoo.thiscoding.domain.maria.bookmark.service.port.BookmarkRepository;
 import com.gagoo.thiscoding.domain.maria.coderoom.controller.port.CodeRoomService;
 import com.gagoo.thiscoding.domain.maria.coderoom.controller.port.InvitationService;
 import com.gagoo.thiscoding.domain.maria.coderoom.controller.port.ParticipationService;
@@ -8,6 +9,7 @@ import com.gagoo.thiscoding.domain.maria.coderoom.service.CodeRoomServiceImpl;
 import com.gagoo.thiscoding.domain.maria.coderoom.service.InvitationServiceImpl;
 import com.gagoo.thiscoding.domain.maria.coderoom.service.ParticipationServiceImpl;
 import com.gagoo.thiscoding.domain.maria.coderoom.service.port.CodeRoomRepository;
+import com.gagoo.thiscoding.domain.maria.like.service.port.LikeRepository;
 import com.gagoo.thiscoding.domain.maria.manager.controller.port.ManagerService;
 import com.gagoo.thiscoding.domain.maria.manager.service.ManagerServiceImpl;
 import com.gagoo.thiscoding.domain.maria.manager.service.port.ManagerRepository;
@@ -49,6 +51,8 @@ public class TestContainer {
     public final CodeRepository codeRepository;
     public final CodeRoomRepository codeRoomRepository;
     public final UserCodeRoomRepository userCodeRoomRepository;
+    public final BookmarkRepository bookmarkRepository;
+    public final LikeRepository likeRepository;
     public final CertificationService certificationService;
     public final ReplyService replyService;
     public final BoardService boardService;
@@ -75,6 +79,8 @@ public class TestContainer {
         this.codeRepository = new FakeCodeRepository();
         this.codeRoomRepository = new FakeCodeRoomRepository();
         this.userCodeRoomRepository = new FakeUserCodeRoomRepository();
+        this.bookmarkRepository = new FakeBookmarkRepository();
+        this.likeRepository = new FakeLikeRepository();
 
         this.certificationService = CertificationServiceImpl.builder()
                 .mailSender(this.mailSender)
@@ -95,6 +101,8 @@ public class TestContainer {
                 .boardRepository(this.boardRepository)
                 .replyRepository(this.replyRepository)
                 .boardViewService(this.boardViewService)
+                .bookmarkRepository(this.bookmarkRepository)
+                .likeRepository(this.likeRepository)
                 .securityUtils(securityUtils)
                 .build();
         this.managerService = ManagerServiceImpl.builder()
