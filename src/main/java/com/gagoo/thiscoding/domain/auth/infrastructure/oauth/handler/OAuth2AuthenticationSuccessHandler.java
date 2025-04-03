@@ -24,7 +24,7 @@ import static com.gagoo.thiscoding.domain.auth.common.AuthConstants.AUTHORIZATIO
 @Component
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-    private static final String REDIRECT_URI = "http://localhost:8080";
+    private static final String REDIRECT_URI = "http://localhost:3000";
     private final HttpServletUtils servletUtils;
     private final TokenFactory tokenFactory;
 
@@ -43,6 +43,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         servletUtils.addCookie(response, AUTHORIZATION, token.getRtk(), token.getRtkExpTime());
 
         this.clearAuthenticationAttributes(request, response);
+        this.getRedirectStrategy().sendRedirect(request, response, REDIRECT_URI);
     }
 
     /**
