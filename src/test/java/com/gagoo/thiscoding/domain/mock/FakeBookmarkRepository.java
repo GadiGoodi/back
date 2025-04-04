@@ -48,6 +48,8 @@ public class FakeBookmarkRepository implements BookmarkRepository {
 
     @Override
     public List<String> findQnaIdsByUserIdPaged(Long userId, Pageable pageable) {
-        return data.stream().filter(item -> item.getUser().equals(userId)).map(Bookmark::getQnaId).collect(Collectors.toList());
+        return data.stream()
+                .filter(item -> item.getUser().getId().equals(userId))
+               .map(Bookmark::getQnaId).collect(Collectors.toList());
     }
 }
