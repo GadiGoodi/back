@@ -83,7 +83,30 @@ public class FakeBoardRepository implements BoardRepository {
 
     @Override
     public Page<Board> findByUserIdAndParentIdIsNotRoot(Long userId, Pageable pageable) {
-        return null;
+
+        if (pageable.getPageSize() < 1) {
+            return Page.empty(pageable);
+        }
+
+        List<Board> findBoardAnswerList = data.stream()
+                .filter(board -> board.getUserId().equals(userId)
+                && !Objects.equals(board.getParentId(), "root"))
+                .toList();
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), findBoardAnswerList.size());
+
+        if (start >= findBoardAnswerList.size()) {
+            return Page.empty(pageable);
+        }
+
+        List<Board> pageableBoard = findBoardAnswerList.subList(start, end);
+
+        return PageableExecutionUtils.getPage(
+                pageableBoard,
+                pageable,
+                findBoardAnswerList::size);
+
     }
 
     @Override
@@ -103,7 +126,30 @@ public class FakeBoardRepository implements BoardRepository {
 
     @Override
     public Page<Board> findByIdIn(List<String> qnaId, Pageable pageable) {
-        return null;
+        if (pageable.getPageSize() < 1) {
+            return Page.empty(pageable);
+        }
+
+        List<Board> findQnaByQnaId = data.stream()
+                .filter(board -> qnaId.contains(board.getId()))
+                .collect(Collectors.toList());
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), findQnaByQnaId.size());
+
+        if (start >= findQnaByQnaId.size()) {
+            return Page.empty(pageable);
+        }
+
+
+        List<Board> pageableBoard = findQnaByQnaId.subList(start, end);
+
+
+        return PageableExecutionUtils.getPage(
+                pageableBoard,
+                pageable,
+                findQnaByQnaId::size);
+
     }
 
     @Override
