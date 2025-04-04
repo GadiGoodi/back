@@ -1,8 +1,8 @@
 package com.gagoo.thiscoding.domain.maria.user.controller.port;
 
+import com.gagoo.thiscoding.domain.auth.domain.Token;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 public interface TokenReissueService {
-    void create(HttpServletRequest request, HttpServletResponse response);
+    Token create(HttpServletRequest request);
 }
