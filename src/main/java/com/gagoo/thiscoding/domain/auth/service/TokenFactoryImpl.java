@@ -31,6 +31,19 @@ public class TokenFactoryImpl implements TokenFactory {
     }
 
     /**
+     * OAuth2 로그인 성공 시 프론트로 전달할 임시 액세스 토큰 발급
+     */
+    public String createTempAccessToken(User user) {
+        long tempExpireTime = 60 * 1000L;
+
+        return tokenProvider.createAtk(
+                user.getEmail(),
+                user.getRole().getValue(),
+                tempExpireTime
+        );
+    }
+
+    /**
      * 로그아웃할 때 리프레시 토큰 삭제
      */
     @Override

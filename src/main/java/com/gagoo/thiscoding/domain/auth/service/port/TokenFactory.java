@@ -5,6 +5,6 @@ import com.gagoo.thiscoding.domain.auth.domain.Token;
 
 public interface TokenFactory {
     Token createToken(User user);
-
+    String createTempAccessToken(User user);
     void remove(String email);
 }

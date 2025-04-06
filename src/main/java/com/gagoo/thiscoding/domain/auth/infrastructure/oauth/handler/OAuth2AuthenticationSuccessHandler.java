@@ -1,7 +1,5 @@
 package com.gagoo.thiscoding.domain.auth.infrastructure.oauth.handler;
 
-
-import com.gagoo.thiscoding.domain.auth.domain.Token;
 import com.gagoo.thiscoding.domain.auth.exception.InvalidAuthenticationException;
 import com.gagoo.thiscoding.domain.auth.service.port.TokenFactory;
 import com.gagoo.thiscoding.global.common.util.HttpServletUtils;
@@ -15,10 +13,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
-
-import static com.gagoo.thiscoding.domain.auth.common.AuthConstants.AUTHORIZATION;
 
 @Slf4j
 @Component
@@ -32,18 +29,53 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException {
         log.info("OAuth2AuthenticationSuccessHandler::onAuthenticationSuccess");
-        if (response.isCommitted()) {
+
+        if (isResponseCommitted(response)) {
             return;
         }
 
         ThisCodingAuthentication thisCodingAuthentication = parseToThisCodingAuthentication(authentication);
-        Token token = tokenFactory.createToken(thisCodingAuthentication.getUser());
+        String tempAccessToken = generateTempAccessToken(thisCodingAuthentication);
+        String redirectUrl = getRedirectUrl(tempAccessToken);
 
-        servletUtils.setHeader(response, AUTHORIZATION, token.getBearerAtk());
-        servletUtils.addCookie(response, AUTHORIZATION, token.getRtk(), token.getRtkExpTime());
+        performRedirect(request, response, redirectUrl);
+    }
 
+    /**
+     * 응답이 이미 커밋되었는지 확인
+     */
+    private boolean isResponseCommitted(HttpServletResponse response) {
+        if (response.isCommitted()) {
+            log.info("응답이 이미 커밋되었습니다.");
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 리다이렉트 url 생성
+     */
+    private static String getRedirectUrl(String tempAccessToken) {
+        return UriComponentsBuilder
+                .fromUriString(REDIRECT_URI)
+                .queryParam("tempToken", tempAccessToken)
+                .build()
+                .toUriString();
+    }
+
+    /**
+     * 임시 액세스 토큰 생성
+     */
+    private String generateTempAccessToken(ThisCodingAuthentication authentication) {
+        return tokenFactory.createTempAccessToken(authentication.getUser());
+    }
+
+    /**
+     * 리다이렉트 수행
+     */
+    private void performRedirect(HttpServletRequest request, HttpServletResponse response, String redirectUrl) throws IOException {
         this.clearAuthenticationAttributes(request, response);
-        this.getRedirectStrategy().sendRedirect(request, response, REDIRECT_URI);
+        this.getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }
 
     /**
@@ -67,5 +99,4 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
         throw new InvalidAuthenticationException(ErrorCode.INVALID_AUTHENTICATION);
     }
-
 }

@@ -9,9 +9,9 @@ import com.gagoo.thiscoding.domain.maria.user.domain.dto.UserCreate;
 
 public interface AuthService {
     User create(UserCreate userCreate);
-    User getUserInfo();
     User changePassword(ChangePasswordRequest request);
     User resetPassword(ResetPasswordRequest request);
     LoginDto login(LoginRequest loginRequest);
+    LoginDto getUserInfo();
     void removeToken();
 }

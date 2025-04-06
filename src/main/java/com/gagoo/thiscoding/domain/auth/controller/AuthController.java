@@ -29,6 +29,9 @@ public class AuthController {
     private final AuthService authService;
     private final HttpServletUtils servletUtils;
 
+    /**
+     * 회원 가입
+     */
     @PostMapping("/sign-up")
     public ResponseEntity<Void> create(@Valid @RequestBody UserCreate userCreate) {
         authService.create(userCreate);
@@ -38,18 +41,22 @@ public class AuthController {
                 .build();
     }
 
+    /**
+     * 로그인
+     */
     @PostMapping("/login")
     public ResponseEntity<UserResponse> login(
             HttpServletResponse response,
             @Valid @RequestBody LoginRequest loginRequest) {
         LoginDto loginDto = authService.login(loginRequest);
-
-        servletUtils.setHeader(response, AUTHORIZATION, loginDto.getToken().getBearerAtk());
-        servletUtils.addCookie(response, AUTHORIZATION, loginDto.getToken().getRtk(), loginDto.getToken().getRtkExpTime());
+        setAuthTokens(response, loginDto);
 
         return ResponseEntity.ok(UserResponse.from(loginDto.getUser()));
     }
 
+    /**
+     * 비밀번호 변경
+     */
     @PostMapping("/change-password")
     @AuthorizationRequired(value = {Role.USER, Role.ADMIN}, status = OK)
     public ResponseEntity<String> changePassword(@Valid @RequestBody ChangePasswordRequest request) {
@@ -58,6 +65,9 @@ public class AuthController {
         return ResponseEntity.ok().body("비밀번호 변경이 완료되었습니다.");
     }
 
+    /**
+     * 비밀번호 초기화
+     */
     @PostMapping("/reset-password")
     public ResponseEntity<String> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
         authService.resetPassword(request);
@@ -65,12 +75,21 @@ public class AuthController {
         return ResponseEntity.ok().body("비밀번호 변경이 완료되었습니다.");
     }
 
+    /**
+     * 소셜 로그인 유저 정보 조회
+     */
     @GetMapping("/oauth/user-info")
     @AuthorizationRequired(value = {Role.USER, Role.ADMIN}, status = OK)
-    public ResponseEntity<UserResponse> getOauthUserInfo() {
-        return ResponseEntity.ok(UserResponse.from(authService.getUserInfo()));
+    public ResponseEntity<UserResponse> getOauthUserInfo(HttpServletResponse response) {
+        LoginDto loginDto = authService.getUserInfo();
+        setAuthTokens(response, loginDto);
+
+        return ResponseEntity.ok(UserResponse.from(loginDto.getUser()));
     }
 
+    /**
+     * 로그아웃
+     */
     @DeleteMapping("/logout")
     @AuthorizationRequired(value = {Role.USER, Role.ADMIN}, status = OK)
     public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
@@ -80,5 +99,13 @@ public class AuthController {
         servletUtils.removeCookie(request, response, AUTHORIZATION);
 
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 헤더와 쿠키에 토큰 적용
+     */
+    private void setAuthTokens(HttpServletResponse response, LoginDto loginDto) {
+        servletUtils.setHeader(response, AUTHORIZATION, loginDto.getToken().getBearerAtk());
+        servletUtils.addCookie(response, AUTHORIZATION, loginDto.getToken().getRtk(), loginDto.getToken().getRtkExpTime());
     }
 }

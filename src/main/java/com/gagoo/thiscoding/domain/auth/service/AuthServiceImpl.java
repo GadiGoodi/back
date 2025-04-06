@@ -93,8 +93,11 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public User getUserInfo() {
-        return getCurrentUser();
+    public LoginDto getUserInfo() {
+        User currentUser = getCurrentUser();
+        Token token = tokenFactory.createToken(currentUser);
+
+        return LoginDto.of(currentUser, token);
     }
 
     /**
