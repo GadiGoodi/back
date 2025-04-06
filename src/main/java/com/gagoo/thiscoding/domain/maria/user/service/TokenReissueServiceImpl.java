@@ -1,5 +1,7 @@
 package com.gagoo.thiscoding.domain.maria.user.service;
 
+import com.gagoo.thiscoding.domain.auth.domain.Token;
+import com.gagoo.thiscoding.domain.auth.exception.ExpiredJwtTokenException;
 import com.gagoo.thiscoding.domain.maria.user.controller.port.TokenReissueService;
 import com.gagoo.thiscoding.domain.maria.user.service.exception.TokenNotEquals;
 import com.gagoo.thiscoding.domain.auth.service.port.TokenProvider;
@@ -10,7 +12,6 @@ import com.gagoo.thiscoding.global.security.config.JwtProperties;
 import com.gagoo.thiscoding.global.common.util.HttpServletUtils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,7 @@ public class TokenReissueServiceImpl implements TokenReissueService {
      * 리프레쉬 토큰으로 엑세스 토큰 재발급
      */
     @Override
-    public void create(HttpServletRequest request, HttpServletResponse response) {
+    public Token create(HttpServletRequest request) {
         String rtk = validateRtk(httpServletUtils.getCookie(request, AUTHORIZATION));
 
         String email = tokenProvider.getUsername(rtk);
@@ -44,7 +45,7 @@ public class TokenReissueServiceImpl implements TokenReissueService {
         String reissueRtk = isReissueRtk(rtk) ?
                 tokenProvider.createRtk(email, role, jwtProperties.getRtkExpireTime()) : rtk;
 
-        reissueToken(response, reissueAtk, reissueRtk);
+        return Token.of(reissueAtk, reissueRtk, jwtProperties.getRtkExpireTime());
     }
 
     /**
@@ -55,14 +56,6 @@ public class TokenReissueServiceImpl implements TokenReissueService {
         long currentTime = System.currentTimeMillis() / 1000;
 
         return (expirationTime - currentTime) < jwtProperties.getRtkExpireTime();
-    }
-
-    /**
-     *  기존 리프레쉬 토큰 제거 및 엑세스토큰과 리프레쉬토큰 재발급
-     */
-    private void reissueToken(HttpServletResponse response, String reissueAtk, String reissueRtk) {
-        httpServletUtils.setHeader(response, AUTHORIZATION, reissueAtk);
-        httpServletUtils.addCookie(response, AUTHORIZATION, reissueRtk, jwtProperties.getRtkExpireTime());
     }
 
     /**
@@ -78,7 +71,7 @@ public class TokenReissueServiceImpl implements TokenReissueService {
      */
     private void validateEqualsToken(String rtk, String key) {
         if (!rtk.equals(refreshTokenStore.getRtk(key))) {
-            new TokenNotEquals(ErrorCode.TOKEN_NOT_EQUALS);
+            throw new TokenNotEquals(ErrorCode.TOKEN_NOT_EQUALS);
         }
     }
 
@@ -87,7 +80,7 @@ public class TokenReissueServiceImpl implements TokenReissueService {
      */
     private void validateTokenExpired(String rtk) {
         if (tokenProvider.isExpired(rtk)) {
-            new GlobalException(ErrorCode.TOKEN_EXPIRED);
+            throw new ExpiredJwtTokenException(ErrorCode.TOKEN_EXPIRED);
         }
     }
 
