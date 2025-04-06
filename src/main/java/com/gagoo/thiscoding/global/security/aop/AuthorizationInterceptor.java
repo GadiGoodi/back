@@ -3,6 +3,7 @@ package com.gagoo.thiscoding.global.security.aop;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.global.security.exception.AuthorizationException;
+import com.gagoo.thiscoding.global.security.exception.UserNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
@@ -65,7 +66,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
      */
     private void validateAuthentication(Authentication authentication) {
         if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
-            throw new AuthorizationException(ErrorCode.USER_NOT_LOGIN);
+            throw new UserNotFoundException(ErrorCode.USER_NOT_LOGIN);
         }
     }
 
