@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.springframework.http.HttpStatus.OK;
-
 @RestController
 @RequestMapping("/api/my-page")
 @RequiredArgsConstructor
@@ -26,7 +24,7 @@ public class MyQnaController {
     private final BoardService boardService;
 
     //마이페이지 작성한 QnA 질문 조회
-    @AuthorizationRequired(value = {Role.USER,Role.ADMIN}, status = OK)
+    @AuthorizationRequired(value = {Role.USER,Role.ADMIN})
     @GetMapping("/qna")
     @ConvertToOneBase
     public ResponseEntity<CustomPageDto<MyPageQnA>> getMyPageQnA(Pageable pageable) {
@@ -37,7 +35,7 @@ public class MyQnaController {
     }
 
     //마이페이지 작성한 QnA 답변 조회
-    @AuthorizationRequired(value = {Role.USER,Role.ADMIN}, status = OK)
+    @AuthorizationRequired(value = {Role.USER,Role.ADMIN})
     @GetMapping("/answer")
     @ConvertToOneBase
     public ResponseEntity<CustomPageDto<MyPageAnswer>> getMyPageAnswer(Pageable pageable) {
@@ -47,7 +45,7 @@ public class MyQnaController {
     }
 
     //마이페이지 북마크한 QnA 조회
-    @AuthorizationRequired(value = {Role.USER,Role.ADMIN}, status = OK)
+    @AuthorizationRequired(value = {Role.USER,Role.ADMIN})
     @GetMapping("/bookmark")
     @ConvertToOneBase
     public ResponseEntity<CustomPageDto<MyPageBookmark>> getMyPageBookMarkQnA(Pageable pageable) {

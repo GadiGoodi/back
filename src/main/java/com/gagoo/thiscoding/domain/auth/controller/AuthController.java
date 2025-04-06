@@ -19,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static com.gagoo.thiscoding.domain.auth.common.AuthConstants.*;
-import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -58,7 +57,7 @@ public class AuthController {
      * 비밀번호 변경
      */
     @PostMapping("/change-password")
-    @AuthorizationRequired(value = {Role.USER, Role.ADMIN}, status = OK)
+    @AuthorizationRequired(value = {Role.USER, Role.ADMIN})
     public ResponseEntity<String> changePassword(@Valid @RequestBody ChangePasswordRequest request) {
         authService.changePassword(request);
 
@@ -79,7 +78,7 @@ public class AuthController {
      * 소셜 로그인 유저 정보 조회
      */
     @GetMapping("/oauth/user-info")
-    @AuthorizationRequired(value = {Role.USER, Role.ADMIN}, status = OK)
+    @AuthorizationRequired(value = {Role.USER, Role.ADMIN})
     public ResponseEntity<UserResponse> getOauthUserInfo(HttpServletResponse response) {
         LoginDto loginDto = authService.getUserInfo();
         setAuthTokens(response, loginDto);
@@ -91,7 +90,7 @@ public class AuthController {
      * 로그아웃
      */
     @DeleteMapping("/logout")
-    @AuthorizationRequired(value = {Role.USER, Role.ADMIN}, status = OK)
+    @AuthorizationRequired(value = {Role.USER, Role.ADMIN})
     public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
         authService.removeToken();
 

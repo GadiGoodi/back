@@ -11,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.http.HttpStatus.OK;
-
 @RestController
 @RequestMapping("/api/code")
 @RequiredArgsConstructor
@@ -21,7 +19,7 @@ public class CodeCreateController {
 
     // 코드 파일 생성 (저장)
     @PostMapping("/create")
-    @AuthorizationRequired(value = Role.USER, status = OK)
+    @AuthorizationRequired(value = Role.USER)
     public ResponseEntity<CodeResponse> createCode(@RequestBody CodeCreate codeCreate) {
         Code code = codeService.createCode(codeCreate);
 

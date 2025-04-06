@@ -1,8 +1,5 @@
 package com.gagoo.thiscoding.domain.maria.coderoom.controller;
 
-
-import static org.springframework.http.HttpStatus.OK;
-
 import com.gagoo.thiscoding.domain.maria.coderoom.controller.port.InvitationService;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
 import com.gagoo.thiscoding.domain.maria.coderoom.controller.response.InvitationCodeRoomResponse;
@@ -29,7 +26,7 @@ public class InvitationController {
 
     @GetMapping
     @ConvertToOneBase
-    @AuthorizationRequired(value = Role.USER, status = OK)
+    @AuthorizationRequired(value = Role.USER)
     public ResponseEntity<CustomPageDto<InvitationCodeRoomResponse>> CodeRoomInviteListView(Pageable pageable) {
         Page<InvitationCodeRoomResponse> codeRooms = invitationService.getInvitationCodeRoomList(pageable).map(InvitationCodeRoomResponse::from);
         return ResponseEntity
@@ -38,7 +35,7 @@ public class InvitationController {
     }
 
     @PutMapping("/alarms/{alarmId}/codeRooms/{codeRoomId}")
-    @AuthorizationRequired(value = Role.USER, status = OK)
+    @AuthorizationRequired(value = Role.USER)
     public ResponseEntity<?> acceptInvitation(@PathVariable Long codeRoomId, @PathVariable Long alarmId) {
         invitationService.acceptInvitationCodeRoom(codeRoomId,alarmId);
         return ResponseEntity
@@ -47,7 +44,7 @@ public class InvitationController {
     }
 
     @DeleteMapping("/alarms/{alarmId}/codeRooms/{codeRoomId}")
-    @AuthorizationRequired(value = Role.USER, status = OK)
+    @AuthorizationRequired(value = Role.USER)
     public ResponseEntity<?> rejectInvitation(@PathVariable Long codeRoomId, @PathVariable Long alarmId) {
         invitationService.rejectInvitationCodeRoom(codeRoomId, alarmId);
         return ResponseEntity

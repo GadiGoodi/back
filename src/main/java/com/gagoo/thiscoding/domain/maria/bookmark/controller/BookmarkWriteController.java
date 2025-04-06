@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.http.HttpStatus.OK;
-
 @RestController
 @RequestMapping("/api/qna")
 @RequiredArgsConstructor
@@ -18,7 +16,7 @@ public class BookmarkWriteController {
 
     // 북마크
     @PostMapping("/{qnaId}/bookmark")
-    @AuthorizationRequired(value = Role.USER, status = OK)
+    @AuthorizationRequired(value = Role.USER)
     public ResponseEntity<String> bookmarkQna(@PathVariable String qnaId) {
         bookmarkService.bookmarkQna(qnaId);
 
@@ -27,7 +25,7 @@ public class BookmarkWriteController {
 
     // 북마크 취소
     @DeleteMapping("/{qnaId}/cancel-bookmark")
-    @AuthorizationRequired(value = Role.USER, status = OK)
+    @AuthorizationRequired(value = Role.USER)
     public ResponseEntity<String> cancelQnaBookmark(@PathVariable String qnaId) {
         bookmarkService.cancelQnaBookmark(qnaId);
 

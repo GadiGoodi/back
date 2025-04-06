@@ -15,8 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.http.HttpStatus.OK;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/admin/notices")
@@ -27,7 +25,7 @@ public class ManagerNoticesController {
     //공지사항 목록 조회
     @GetMapping
     @ConvertToOneBase
-    @AuthorizationRequired(value = {Role.ADMIN, Role.USER}, status = OK)
+    @AuthorizationRequired(value = {Role.ADMIN, Role.USER})
     public ResponseEntity<Page<ManagerNoticesList>> getNoticesAll(Pageable pageable) {
         return ResponseEntity
                 .ok()
@@ -36,7 +34,7 @@ public class ManagerNoticesController {
 
     //공지사항 상세 조회
     @GetMapping("/{id}")
-    @AuthorizationRequired(value = {Role.ADMIN, Role.USER}, status = OK)
+    @AuthorizationRequired(value = {Role.ADMIN, Role.USER})
     public ResponseEntity<ManagerNoticesDetail> getNoticesDetail(@PathVariable Long id) {
         return ResponseEntity
                 .ok()
@@ -45,9 +43,8 @@ public class ManagerNoticesController {
 
     //공지사항 수정
     @PatchMapping("/{id}")
-    @AuthorizationRequired(value = {Role.ADMIN}, status = OK)
-    public ResponseEntity<?> updateManagerNotices(@PathVariable Long id,
-                                                  @RequestBody ManagerNoticesUpdate request) {
+    @AuthorizationRequired(value = {Role.ADMIN})
+    public ResponseEntity<?> updateManagerNotices(@PathVariable Long id, @RequestBody ManagerNoticesUpdate request) {
 
         managerService.updateAdminNotices(id, request);
         return ResponseEntity.ok("공지사항 수정이 완료되었습니다.");
@@ -55,7 +52,7 @@ public class ManagerNoticesController {
 
     //공지사항 삭제
     @DeleteMapping("/{id}")
-    @AuthorizationRequired(value = {Role.ADMIN}, status = OK)
+    @AuthorizationRequired(value = {Role.ADMIN})
     public ResponseEntity<?> deleteManagerNotices(@PathVariable Long id) {
         managerService.deleteManagerNotices(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

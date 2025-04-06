@@ -1,6 +1,5 @@
 package com.gagoo.thiscoding.domain.maria.usercoderoom.controller;
 
-import com.gagoo.thiscoding.domain.maria.coderoom.controller.response.CodeRoomCreateResponse;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.controller.port.UserCodeRoomService;
 import com.gagoo.thiscoding.global.security.aop.AuthorizationRequired;
@@ -12,8 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.springframework.http.HttpStatus.OK;
-
 @RestController
 @RequestMapping("/api/user-code-rooms")
 @RequiredArgsConstructor
@@ -22,7 +19,7 @@ public class UserCodeRoomCreateController {
 
     // 코드방 참여 생성
     @PostMapping("/{codeRoomId}")
-    @AuthorizationRequired(value = Role.USER, status = OK)
+    @AuthorizationRequired(value = Role.USER)
     public ResponseEntity<Boolean> createUserCodeRoom(@PathVariable Long codeRoomId) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)

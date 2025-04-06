@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.http.HttpStatus.OK;
-
 @RestController
 @RequestMapping("/api/qna")
 @RequiredArgsConstructor
@@ -18,7 +16,7 @@ public class LikeWriteController {
 
     // 답변 추천
     @PostMapping("/{qnaId}/like")
-    @AuthorizationRequired(value = Role.USER, status = OK)
+    @AuthorizationRequired(value = Role.USER)
     public ResponseEntity<String> likeAnswer(@PathVariable String qnaId) {
         likeService.likeAnswer(qnaId);
 
@@ -27,7 +25,7 @@ public class LikeWriteController {
 
     // 답변 추천 취소
     @DeleteMapping("/{qnaId}/cancel-like")
-    @AuthorizationRequired(value = Role.USER, status = OK)
+    @AuthorizationRequired(value = Role.USER)
     public ResponseEntity<String> cancelAnswerLike(@PathVariable String qnaId) {
         likeService.cancelAnswerLike(qnaId);
 
