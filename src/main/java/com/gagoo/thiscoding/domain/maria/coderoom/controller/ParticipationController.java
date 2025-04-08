@@ -13,8 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.http.HttpStatus.OK;
-
 @RestController
 @RequestMapping("/api/my-page/participations")
 @RequiredArgsConstructor
@@ -24,7 +22,7 @@ public class ParticipationController {
     // 참여 중인 코드방 목록 조회
     @GetMapping
     @ConvertToOneBase
-    @AuthorizationRequired(value = Role.USER, status = OK)
+    @AuthorizationRequired(value = Role.USER)
     public ResponseEntity<CustomPageDto<ParticipatingCodeRoomResponse>> getParticipationList(Pageable pageable) {
         Page<ParticipatingCodeRoomResponse> userCodeRooms = participationService.getParticipations(pageable);
         return ResponseEntity
@@ -34,7 +32,7 @@ public class ParticipationController {
 
     // 참여 중인 코드방 입/퇴장
     @PatchMapping("/{id}/access")
-    @AuthorizationRequired(value = Role.USER, status = OK)
+    @AuthorizationRequired(value = Role.USER)
     public ResponseEntity<Boolean> accessParticipation(@PathVariable Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -43,7 +41,7 @@ public class ParticipationController {
 
     // 참여 중인 코드방 탈퇴
     @DeleteMapping("/{id}/leave")
-    @AuthorizationRequired(value = Role.USER, status = OK)
+    @AuthorizationRequired(value = Role.USER)
     public ResponseEntity<Boolean> leaveParticipation(@PathVariable Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)

@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.springframework.http.HttpStatus.OK;
-
 @RestController
 @RequestMapping("/api/codingrooms-modal")
 @RequiredArgsConstructor
@@ -25,7 +23,7 @@ public class CodeRoomCreateController {
 
     // 코드방 생성
     @PostMapping
-    @AuthorizationRequired(value = Role.USER, status = OK)
+    @AuthorizationRequired(value = Role.USER)
     public ResponseEntity<CodeRoomCreateResponse> createCodeRoom(@RequestBody CodeRoomCreate codeRoomCreate) {
         CodeRoom codeRoom = codeRoomService.createCodeRoom(codeRoomCreate);
 

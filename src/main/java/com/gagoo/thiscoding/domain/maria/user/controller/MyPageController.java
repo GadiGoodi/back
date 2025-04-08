@@ -16,8 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.http.HttpStatus.*;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
@@ -27,21 +25,21 @@ public class MyPageController {
     private final MyPageService myPageService;
 
     @GetMapping("/me/top10")
-    @AuthorizationRequired(value = Role.USER, status = OK)
+    @AuthorizationRequired(value = Role.USER)
     public ResponseEntity<Top10StatusResponse> get() {
         return ResponseEntity
                 .ok(Top10StatusResponse.from(myPageService.isTop10()));
     }
 
     @PatchMapping("/me/profile/nickname")
-    @AuthorizationRequired(value = {Role.USER}, status = OK)
+    @AuthorizationRequired(value = Role.USER)
     public ResponseEntity<String> updateProfileNickname(@RequestBody UpdateProfileNicknameRequest request) {
         userService.updateNickname(request);
         return ResponseEntity.ok().body("닉네임 변경 완료");
     }
 
     @PatchMapping("/me/profile/image")
-    @AuthorizationRequired(value = {Role.USER}, status = OK)
+    @AuthorizationRequired(value = Role.USER)
     public ResponseEntity<String> updateProfileImage(@RequestBody UpdateProfileImageRequest request) {
         userService.updateImage(request);
         return ResponseEntity.ok().body("프로필 사진 변경 완료");
@@ -49,7 +47,7 @@ public class MyPageController {
 
     @GetMapping("/search")
     @ConvertToOneBase
-    @AuthorizationRequired(value = Role.USER, status = OK)
+    @AuthorizationRequired(value = Role.USER)
     public ResponseEntity<CustomPageDto<UserProfile>> search (@RequestParam String keyword, Pageable pageable) {
         Page<UserProfile> result = userService.searchByNickname(keyword, pageable).map(UserProfile::from);
         return ResponseEntity

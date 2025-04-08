@@ -9,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.http.HttpStatus.*;
-
 @RestController
 @RequestMapping("/api/qna")
 @RequiredArgsConstructor
@@ -19,7 +17,7 @@ public class BoardWriteController {
     private final BoardService boardService;
 
     @PostMapping
-    @AuthorizationRequired(value = {Role.USER, Role.ADMIN}, status = OK)
+    @AuthorizationRequired(value = {Role.USER, Role.ADMIN})
     public ResponseEntity<Void> create(@RequestBody BoardCreate boardCreate) {
         boardService.create(boardCreate);
 
@@ -27,7 +25,7 @@ public class BoardWriteController {
     }
 
     @PostMapping("/{qnaId}/answer")
-    @AuthorizationRequired(value = {Role.USER, Role.ADMIN}, status = OK)
+    @AuthorizationRequired(value = {Role.USER, Role.ADMIN})
     public ResponseEntity<Void> writeAnswer(@PathVariable String qnaId, @RequestBody BoardAnswer boardAnswer) {
         boardService.writeAnswer(qnaId, boardAnswer);
 
@@ -35,7 +33,7 @@ public class BoardWriteController {
     }
 
     @PostMapping("/{qnaId}/adopt")
-    @AuthorizationRequired(value = {Role.USER, Role.ADMIN}, status = OK)
+    @AuthorizationRequired(value = {Role.USER, Role.ADMIN})
     public ResponseEntity<String> adoptAnswer(@PathVariable String qnaId) {
         boardService.adoptAnswer(qnaId);
 

@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.springframework.http.HttpStatus.OK;
-
 @RestController
 @RequestMapping("/api/codingrooms")
 @RequiredArgsConstructor
@@ -23,7 +21,7 @@ public class CodeRoomController {
 
     // 코드방 입장 (조회)
     @GetMapping("/{uuid}")
-    @AuthorizationRequired(value = Role.USER, status = OK)
+    @AuthorizationRequired(value = Role.USER)
     public ResponseEntity<CodeRoomEnterResponse> enterCodeRoom(@PathVariable String uuid) {
         CodeRoomEnter codeRoomEnter = codeRoomService.enterCodeRoom(uuid);
 

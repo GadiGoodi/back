@@ -3,6 +3,7 @@ package com.gagoo.thiscoding.global.security.aop;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.global.security.exception.AuthorizationException;
+import com.gagoo.thiscoding.global.security.exception.UserNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
@@ -29,23 +30,12 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        Collection<? extends GrantedAuthority> possibleAuthority = roleToAuthority(annotation.value());
-
-        if (!hasAuthority(possibleAuthority)) {
-            throw new AuthorizationException(ErrorCode.USER_NOT_LOGIN);
-        }
-
-        return true;
-    }
-
-    /**
-     * 접근 가능한 권한이 하나라도 존재하는지 확인
-     */
-    private boolean hasAuthority(Collection<? extends GrantedAuthority> possibleAuthority) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        return authentication != null && authentication.getAuthorities()
-                .stream().anyMatch(possibleAuthority::contains);
+        validateAuthentication(authentication);
+        validateAuthorization(authentication, annotation.value());
+
+        return true;
     }
 
     /**
@@ -70,4 +60,28 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
                 .map(SimpleGrantedAuthority::new)
                 .toList();
     }
+
+    /**
+     * 인증 확인
+     */
+    private void validateAuthentication(Authentication authentication) {
+        if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
+            throw new UserNotFoundException(ErrorCode.USER_NOT_LOGIN);
+        }
+    }
+
+    /**
+     * 인가 확인
+     */
+    private void validateAuthorization(Authentication authentication, Role[] requiredRoles) {
+        Collection<? extends GrantedAuthority> requiredAuthorities = roleToAuthority(requiredRoles);
+
+        boolean hasAuthority = authentication.getAuthorities().stream()
+                .anyMatch(requiredAuthorities::contains);
+
+        if (!hasAuthority) {
+            throw new AuthorizationException(ErrorCode.ACCESS_DENIED);
+        }
+    }
+
 }

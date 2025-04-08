@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.springframework.http.HttpStatus.OK;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/admin/notices")
@@ -25,7 +23,7 @@ public class ManagerNoticesCreateController {
 
     //공지사항 작성
     @PostMapping
-    @AuthorizationRequired(value = {Role.ADMIN}, status = OK)
+    @AuthorizationRequired(value = Role.ADMIN)
     public ResponseEntity<ManagerNoticesCreate> createNotice(@RequestBody ManagerNoticesCreate request) {
         managerService.createAdminNotices(request);
         return new ResponseEntity<>(HttpStatus.CREATED);
