@@ -3,6 +3,7 @@ package com.gagoo.thiscoding.domain.maria.coderoom.controller;
 import com.gagoo.thiscoding.domain.maria.coderoom.controller.port.InvitationService;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
 import com.gagoo.thiscoding.domain.maria.coderoom.controller.response.InvitationCodeRoomResponse;
+import com.gagoo.thiscoding.global.common.response.ApiResponse;
 import com.gagoo.thiscoding.global.paging.aop.ConvertToOneBase;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
 import com.gagoo.thiscoding.global.security.aop.AuthorizationRequired;
@@ -27,28 +28,24 @@ public class InvitationController {
     @GetMapping
     @ConvertToOneBase
     @AuthorizationRequired(value = Role.USER)
-    public ResponseEntity<CustomPageDto<InvitationCodeRoomResponse>> CodeRoomInviteListView(Pageable pageable) {
+    public ApiResponse<CustomPageDto<InvitationCodeRoomResponse>> CodeRoomInviteListView(Pageable pageable) {
         Page<InvitationCodeRoomResponse> codeRooms = invitationService.getInvitationCodeRoomList(pageable).map(InvitationCodeRoomResponse::from);
-        return ResponseEntity
-            .ok()
-            .body(CustomPageDto.of(codeRooms));
+        return ApiResponse
+                .ok(CustomPageDto.of(codeRooms), "");
     }
 
     @PutMapping("/alarms/{alarmId}/codeRooms/{codeRoomId}")
     @AuthorizationRequired(value = Role.USER)
-    public ResponseEntity<?> acceptInvitation(@PathVariable Long codeRoomId, @PathVariable Long alarmId) {
+    public ApiResponse<?> acceptInvitation(@PathVariable Long codeRoomId, @PathVariable Long alarmId) {
         invitationService.acceptInvitationCodeRoom(codeRoomId,alarmId);
-        return ResponseEntity
-            .ok()
-            .body("수락 완료");
+        return ApiResponse
+            .ok(null,"수락 완료");
     }
 
     @DeleteMapping("/alarms/{alarmId}/codeRooms/{codeRoomId}")
     @AuthorizationRequired(value = Role.USER)
-    public ResponseEntity<?> rejectInvitation(@PathVariable Long codeRoomId, @PathVariable Long alarmId) {
+    public ApiResponse<?> rejectInvitation(@PathVariable Long codeRoomId, @PathVariable Long alarmId) {
         invitationService.rejectInvitationCodeRoom(codeRoomId, alarmId);
-        return ResponseEntity
-            .ok()
-            .body("거절 완료");
+        return ApiResponse.ok(null, "거절 완료");
     }
 }

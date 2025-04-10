@@ -5,6 +5,7 @@ import com.gagoo.thiscoding.domain.mongo.code.controller.port.CodeService;
 import com.gagoo.thiscoding.domain.mongo.code.controller.response.CodeResponse;
 import com.gagoo.thiscoding.domain.mongo.code.domain.Code;
 import com.gagoo.thiscoding.domain.mongo.code.domain.dto.CodeCreate;
+import com.gagoo.thiscoding.global.common.response.ApiResponse;
 import com.gagoo.thiscoding.global.security.aop.AuthorizationRequired;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,23 +21,20 @@ public class CodeController {
     // 코드 파일 조회
     @GetMapping("/{codeId}")
     @AuthorizationRequired(value = Role.USER)
-    public ResponseEntity<CodeResponse> getCode(@PathVariable String codeId) {
+    public ApiResponse<CodeResponse> getCode(@PathVariable String codeId) {
         Code code = codeService.getById(codeId);
 
-        return ResponseEntity
-                .ok()
-                .body(CodeResponse.from(code));
+        return ApiResponse
+                .ok(CodeResponse.from(code), "코드 파일 조회 성공");
     }
 
     // 코드 파일 저장
     @PostMapping("/save")
     @AuthorizationRequired(value = Role.USER)
-    public ResponseEntity<CodeResponse> saveCode(@RequestBody CodeCreate codeCreate) {
+    public ApiResponse<CodeResponse> saveCode(@RequestBody CodeCreate codeCreate) {
         Code code = codeService.saveCode(codeCreate);
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(CodeResponse.from(code));
+        return ApiResponse.created(CodeResponse.from(code), "코드 파일 저장 성공");
     }
 
 }

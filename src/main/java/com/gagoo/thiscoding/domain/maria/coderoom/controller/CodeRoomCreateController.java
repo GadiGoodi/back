@@ -5,6 +5,7 @@ import com.gagoo.thiscoding.domain.maria.coderoom.controller.response.CodeRoomCr
 import com.gagoo.thiscoding.domain.maria.coderoom.domain.CodeRoom;
 import com.gagoo.thiscoding.domain.maria.coderoom.domain.dto.CodeRoomCreate;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
+import com.gagoo.thiscoding.global.common.response.ApiResponse;
 import com.gagoo.thiscoding.global.security.aop.AuthorizationRequired;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,11 +25,9 @@ public class CodeRoomCreateController {
     // 코드방 생성
     @PostMapping
     @AuthorizationRequired(value = Role.USER)
-    public ResponseEntity<CodeRoomCreateResponse> createCodeRoom(@RequestBody CodeRoomCreate codeRoomCreate) {
+    public ApiResponse<CodeRoomCreateResponse> createCodeRoom(@RequestBody CodeRoomCreate codeRoomCreate) {
         CodeRoom codeRoom = codeRoomService.createCodeRoom(codeRoomCreate);
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(CodeRoomCreateResponse.from(codeRoom));
+        return ApiResponse.created(CodeRoomCreateResponse.from(codeRoom), "코드방 생성 성공");
     }
 }

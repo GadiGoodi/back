@@ -3,6 +3,7 @@ package com.gagoo.thiscoding.domain.maria.reply.controller;
 import com.gagoo.thiscoding.domain.maria.reply.controller.port.ReplyService;
 import com.gagoo.thiscoding.domain.maria.reply.service.dto.ReplyList;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
+import com.gagoo.thiscoding.global.common.response.ApiResponse;
 import com.gagoo.thiscoding.global.paging.aop.ConvertToOneBase;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
 import com.gagoo.thiscoding.global.security.aop.AuthorizationRequired;
@@ -23,15 +24,15 @@ public class ReplyReadController {
 
     @GetMapping("/{qnaId}/reply")
     @ConvertToOneBase
-    public ResponseEntity<CustomPageDto<ReplyList>> getQnAReply(@PathVariable String qnaId, Pageable pageable) {
-        return ResponseEntity.ok(replyService.getQnAReply(qnaId, pageable));
+    public ApiResponse<CustomPageDto<ReplyList>> getQnAReply(@PathVariable String qnaId, Pageable pageable) {
+        return ApiResponse.ok(replyService.getQnAReply(qnaId, pageable),"댓글 목록 조회 완료");
     }
 
     @GetMapping("/{qnaId}/reply/{parentId}")
     @ConvertToOneBase
-    public ResponseEntity<CustomPageDto<ReplyList>> getReplies(@PathVariable String qnaId,
+    public ApiResponse<CustomPageDto<ReplyList>> getReplies(@PathVariable String qnaId,
                                                                @PathVariable Long parentId,Pageable pageable){
-        return ResponseEntity.ok(replyService.getReplies(qnaId,parentId, pageable));
+        return ApiResponse.ok(replyService.getReplies(qnaId,parentId, pageable),"대댓글 목록 조회 완료");
     }
 
 }

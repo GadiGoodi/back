@@ -2,6 +2,7 @@ package com.gagoo.thiscoding.domain.maria.bookmark.controller;
 
 import com.gagoo.thiscoding.domain.maria.bookmark.controller.port.BookmarkService;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
+import com.gagoo.thiscoding.global.common.response.ApiResponse;
 import com.gagoo.thiscoding.global.security.aop.AuthorizationRequired;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,18 +18,18 @@ public class BookmarkWriteController {
     // 북마크
     @PostMapping("/{qnaId}/bookmark")
     @AuthorizationRequired(value = Role.USER)
-    public ResponseEntity<String> bookmarkQna(@PathVariable String qnaId) {
+    public ApiResponse<String> bookmarkQna(@PathVariable String qnaId) {
         bookmarkService.bookmarkQna(qnaId);
 
-        return ResponseEntity.ok("게시글 북마크가 완료되었습니다.");
+        return ApiResponse.ok(null,"게시글 북마크가 완료되었습니다.");
     }
 
     // 북마크 취소
     @DeleteMapping("/{qnaId}/cancel-bookmark")
     @AuthorizationRequired(value = Role.USER)
-    public ResponseEntity<String> cancelQnaBookmark(@PathVariable String qnaId) {
+    public ApiResponse<String> cancelQnaBookmark(@PathVariable String qnaId) {
         bookmarkService.cancelQnaBookmark(qnaId);
 
-        return ResponseEntity.ok("북마크를 취소하였습니다.");
+        return ApiResponse.ok(null,"북마크를 취소하였습니다.");
     }
 }
