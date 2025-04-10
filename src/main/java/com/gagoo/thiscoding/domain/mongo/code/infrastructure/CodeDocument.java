@@ -21,6 +21,9 @@ public class CodeDocument {
     @Field(name = "writer_id")
     private Long writerId;
 
+    @Field
+    private String nickname;
+
     @Field(name = "file_name")
     private String fileName;
 
@@ -34,6 +37,7 @@ public class CodeDocument {
                 .id(this.id)
                 .roomId(this.roomId)
                 .writerId(this.writerId)
+                .nickname(this.nickname)
                 .fileName(this.fileName)
                 .value(this.value)
                 .saveDate(this.saveDate)
