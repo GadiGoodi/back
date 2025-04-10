@@ -62,6 +62,8 @@ public class TestContainer {
     public final CodeRoomService codeRoomService;
     public final ParticipationService participationService;
     public final UserCodeRoomService userCodeRoomService;
+    public final FakeTokenProvider fakeTokenProvider;
+    public final FakeTokenFactory fakeTokenFactory;
 
     @Builder
     public TestContainer(SecurityUtils securityUtils) {
@@ -69,6 +71,9 @@ public class TestContainer {
         this.authCodeStore = new FakeAuthCodeStore();
         this.passwordEncoderHolder = new FakePasswordEncoder();
         this.uuidHolder = new FakeUuidHolder("test-uuid");
+
+        this.fakeTokenProvider = new FakeTokenProvider(this.uuidHolder);
+        this.fakeTokenFactory = new FakeTokenFactory(this.fakeTokenProvider);
 
         this.userRepository = new FakeUserRepository();
         this.replyRepository = new FakeReplyRepository();
