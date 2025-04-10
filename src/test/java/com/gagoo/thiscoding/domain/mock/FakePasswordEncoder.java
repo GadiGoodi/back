@@ -10,6 +10,6 @@ public class FakePasswordEncoder implements PasswordEncoderHolder {
 
     @Override
     public boolean matches(String password, String encodedPassword) {
-        return false;
+        return encodedPassword.equals("encoded-" + password);
     }
 }
