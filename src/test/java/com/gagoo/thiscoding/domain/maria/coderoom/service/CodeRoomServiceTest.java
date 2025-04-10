@@ -70,7 +70,7 @@ class CodeRoomServiceTest {
                 .roomId(1L)
                 .value("/* Java */\\n\\nclass Main {\\n\\tstatic public void main(String []args) {\\n\\t\\tSystem.out.println(\"Hello, World!\");\\n\\t}\\n}")
                 .fileName("main")
-                .build(), 1L);
+                .build(), 1L, "test01");
 
         this.testCode = testContainer.codeRepository.save(code);
     }

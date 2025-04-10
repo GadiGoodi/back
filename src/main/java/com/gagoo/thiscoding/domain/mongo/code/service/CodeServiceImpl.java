@@ -27,7 +27,7 @@ public class CodeServiceImpl implements CodeService {
      */
     @Override
     public Code createCode(CodeCreate codeCreate) {
-        Code code = Code.create(codeCreate, getCurrentUserId());
+        Code code = Code.create(codeCreate, getCurrentUser().getId(), getCurrentUser().getNickname());
 
         return codeRepository.save(code);
     }
@@ -47,7 +47,7 @@ public class CodeServiceImpl implements CodeService {
             validateRoomIdAndFileNameExists(codeCreate.getRoomId(), codeCreate.getFileName());
             return createCode(codeCreate);
         } else {
-            code = Code.save(codeCreate, getCurrentUserId());
+            code = Code.save(codeCreate, getCurrentUser().getId(), getCurrentUser().getNickname());
             return codeRepository.save(code);
         }
     }
@@ -77,10 +77,10 @@ public class CodeServiceImpl implements CodeService {
     }
 
     /**
-     * 로그인 사용자 아이디 조회
-     * @return id
+     * 로그인 사용자 조회
+     * @return user
      */
-    private Long getCurrentUserId() {
-        return userRepository.getByEmail(securityUtils.getUserEmail()).getId();
+    private User getCurrentUser() {
+        return userRepository.getByEmail(securityUtils.getUserEmail());
     }
 }
