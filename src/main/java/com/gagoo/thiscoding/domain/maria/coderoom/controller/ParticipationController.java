@@ -3,6 +3,7 @@ package com.gagoo.thiscoding.domain.maria.coderoom.controller;
 import com.gagoo.thiscoding.domain.maria.coderoom.controller.port.ParticipationService;
 import com.gagoo.thiscoding.domain.maria.coderoom.controller.response.ParticipatingCodeRoomResponse;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
+import com.gagoo.thiscoding.global.common.response.ApiResponse;
 import com.gagoo.thiscoding.global.paging.aop.ConvertToOneBase;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
 import com.gagoo.thiscoding.global.security.aop.AuthorizationRequired;
@@ -23,28 +24,23 @@ public class ParticipationController {
     @GetMapping
     @ConvertToOneBase
     @AuthorizationRequired(value = Role.USER)
-    public ResponseEntity<CustomPageDto<ParticipatingCodeRoomResponse>> getParticipationList(Pageable pageable) {
+    public ApiResponse<CustomPageDto<ParticipatingCodeRoomResponse>> getParticipationList(Pageable pageable) {
         Page<ParticipatingCodeRoomResponse> userCodeRooms = participationService.getParticipations(pageable);
-        return ResponseEntity
-                .ok()
-                .body(CustomPageDto.of(userCodeRooms));
+        return ApiResponse
+                .ok(CustomPageDto.of(userCodeRooms), "참여 중인 코드방 목록 조회 성공");
     }
 
     // 참여 중인 코드방 입/퇴장
     @PatchMapping("/{id}/access")
     @AuthorizationRequired(value = Role.USER)
-    public ResponseEntity<Boolean> accessParticipation(@PathVariable Long id) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(participationService.accessUserCodeRoom(id));
+    public ApiResponse<Boolean> accessParticipation(@PathVariable Long id) {
+        return ApiResponse.ok(participationService.accessUserCodeRoom(id),"참여 중인 코드방 입/퇴장 성공");
     }
 
     // 참여 중인 코드방 탈퇴
     @DeleteMapping("/{id}/leave")
     @AuthorizationRequired(value = Role.USER)
-    public ResponseEntity<Boolean> leaveParticipation(@PathVariable Long id) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(participationService.leaveUserCodeRoom(id));
+    public ApiResponse<Boolean> leaveParticipation(@PathVariable Long id) {
+        return ApiResponse.ok(participationService.leaveUserCodeRoom(id), "참여 중인 코드방 탈퇴 성공");
     }
 }

@@ -5,6 +5,7 @@ import com.gagoo.thiscoding.domain.mongo.code.controller.port.CodeService;
 import com.gagoo.thiscoding.domain.mongo.code.controller.response.CodeResponse;
 import com.gagoo.thiscoding.domain.mongo.code.domain.Code;
 import com.gagoo.thiscoding.domain.mongo.code.domain.dto.CodeCreate;
+import com.gagoo.thiscoding.global.common.response.ApiResponse;
 import com.gagoo.thiscoding.global.security.aop.AuthorizationRequired;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,12 +21,11 @@ public class CodeCreateController {
     // 코드 파일 생성 (저장)
     @PostMapping("/create")
     @AuthorizationRequired(value = Role.USER)
-    public ResponseEntity<CodeResponse> createCode(@RequestBody CodeCreate codeCreate) {
+    public ApiResponse<CodeResponse> createCode(@RequestBody CodeCreate codeCreate) {
         Code code = codeService.createCode(codeCreate);
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(CodeResponse.from(code));
+        return ApiResponse
+                .created(CodeResponse.from(code),"코드 파일 생성 (저장) 성공");
     }
 
 }

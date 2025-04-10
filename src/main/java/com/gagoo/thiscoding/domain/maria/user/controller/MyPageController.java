@@ -7,6 +7,7 @@ import com.gagoo.thiscoding.domain.maria.user.controller.response.Top10StatusRes
 import com.gagoo.thiscoding.domain.maria.user.controller.response.UserProfile;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.UpdateProfileImageRequest;
+import com.gagoo.thiscoding.global.common.response.ApiResponse;
 import com.gagoo.thiscoding.global.paging.aop.ConvertToOneBase;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
 import com.gagoo.thiscoding.global.security.aop.AuthorizationRequired;
@@ -26,33 +27,32 @@ public class MyPageController {
 
     @GetMapping("/me/top10")
     @AuthorizationRequired(value = Role.USER)
-    public ResponseEntity<Top10StatusResponse> get() {
-        return ResponseEntity
-                .ok(Top10StatusResponse.from(myPageService.isTop10()));
+    public ApiResponse<Top10StatusResponse> get() {
+        return ApiResponse
+                .ok(Top10StatusResponse.from(myPageService.isTop10()),"Top10 여부 조회 성공");
     }
 
     @PatchMapping("/me/profile/nickname")
     @AuthorizationRequired(value = Role.USER)
-    public ResponseEntity<String> updateProfileNickname(@RequestBody UpdateProfileNicknameRequest request) {
+    public ApiResponse<String> updateProfileNickname(@RequestBody UpdateProfileNicknameRequest request) {
         userService.updateNickname(request);
-        return ResponseEntity.ok().body("닉네임 변경 완료");
+        return ApiResponse.ok(null,"닉네임 변경 완료");
     }
 
     @PatchMapping("/me/profile/image")
     @AuthorizationRequired(value = Role.USER)
-    public ResponseEntity<String> updateProfileImage(@RequestBody UpdateProfileImageRequest request) {
+    public ApiResponse<String> updateProfileImage(@RequestBody UpdateProfileImageRequest request) {
         userService.updateImage(request);
-        return ResponseEntity.ok().body("프로필 사진 변경 완료");
+        return ApiResponse.ok(null,"프로필 사진 변경 완료");
     }
 
     @GetMapping("/search")
     @ConvertToOneBase
     @AuthorizationRequired(value = Role.USER)
-    public ResponseEntity<CustomPageDto<UserProfile>> search (@RequestParam String keyword, Pageable pageable) {
+    public ApiResponse<CustomPageDto<UserProfile>> search (@RequestParam String keyword, Pageable pageable) {
         Page<UserProfile> result = userService.searchByNickname(keyword, pageable).map(UserProfile::from);
-        return ResponseEntity
-            .ok()
-            .body(CustomPageDto.of(result));
+        return ApiResponse
+                .ok(CustomPageDto.of(result), "유저 프로필 검색 성공");
     }
 
 }

@@ -4,6 +4,7 @@ import com.gagoo.thiscoding.domain.maria.coderoom.controller.port.CodeRoomServic
 import com.gagoo.thiscoding.domain.maria.coderoom.controller.response.CodeRoomEnterResponse;
 import com.gagoo.thiscoding.domain.maria.coderoom.domain.dto.CodeRoomEnter;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
+import com.gagoo.thiscoding.global.common.response.ApiResponse;
 import com.gagoo.thiscoding.global.security.aop.AuthorizationRequired;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +23,10 @@ public class CodeRoomController {
     // 코드방 입장 (조회)
     @GetMapping("/{uuid}")
     @AuthorizationRequired(value = Role.USER)
-    public ResponseEntity<CodeRoomEnterResponse> enterCodeRoom(@PathVariable String uuid) {
+    public ApiResponse<CodeRoomEnterResponse> enterCodeRoom(@PathVariable String uuid) {
         CodeRoomEnter codeRoomEnter = codeRoomService.enterCodeRoom(uuid);
 
-        return ResponseEntity
-                .ok(CodeRoomEnterResponse.from(codeRoomEnter));
+        return ApiResponse
+                .ok(CodeRoomEnterResponse.from(codeRoomEnter),"코드방 입장 성공");
     }
 }

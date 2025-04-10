@@ -1,7 +1,7 @@
 package com.gagoo.thiscoding.global.exception;
 
+import com.gagoo.thiscoding.global.common.response.ApiResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -14,27 +14,26 @@ import java.util.List;
 public class GlobalizedResponseException {
 
     @ExceptionHandler(GlobalException.class)
-    public final ResponseEntity<?> handleGlobalException(final GlobalException e, WebRequest request) {
+    public final ApiResponse<?> handleGlobalException(final GlobalException e, WebRequest request) {
 
-        return ResponseEntity
-                .status(e.getErrorCode().getStatus())
-                .body(
-                        new ExceptionResponse(e.getErrorCode().getMessage(),
-                                request.getDescription(false))
-                );
+        return ApiResponse.error(
+                e.getErrorCode().getStatus(),
+                e.getErrorCode().getMessage()
+        );
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException e, WebRequest request){
+    public ApiResponse<List<ExceptionResponse>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e, WebRequest request){
+
         List<ExceptionResponse> errors = new ArrayList<>();
 
-        e.getBindingResult().getAllErrors()
-                .forEach(c ->
-                        errors.add(new ExceptionResponse(c.getDefaultMessage(),
-                                request.getDescription(false)))
-                );
+        e.getBindingResult().getAllErrors().forEach(c -> {
+            errors.add(new ExceptionResponse(c.getDefaultMessage(),
+                    request.getDescription(false)));
+        });
 
-        return ResponseEntity.badRequest().body(errors);
+        return ApiResponse.error(HttpStatus.BAD_REQUEST, "유효성 검사에 실패하였습니다", errors);
+
     }
 
 }

@@ -5,6 +5,7 @@ import com.gagoo.thiscoding.domain.mongo.board.controller.port.BoardService;
 import com.gagoo.thiscoding.domain.mongo.board.controller.response.MyPageAnswer;
 import com.gagoo.thiscoding.domain.mongo.board.controller.response.MyPageBookmark;
 import com.gagoo.thiscoding.domain.mongo.board.controller.response.MyPageQnA;
+import com.gagoo.thiscoding.global.common.response.ApiResponse;
 import com.gagoo.thiscoding.global.paging.aop.ConvertToOneBase;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
 import com.gagoo.thiscoding.global.security.aop.AuthorizationRequired;
@@ -27,10 +28,10 @@ public class MyQnaController {
     @AuthorizationRequired(value = {Role.USER,Role.ADMIN})
     @GetMapping("/qna")
     @ConvertToOneBase
-    public ResponseEntity<CustomPageDto<MyPageQnA>> getMyPageQnA(Pageable pageable) {
+    public ApiResponse<CustomPageDto<MyPageQnA>> getMyPageQnA(Pageable pageable) {
 
         Page<MyPageQnA> qnaResult = boardService.getMyPagePostQnA(pageable).map(MyPageQnA::from);
-        return ResponseEntity.ok(CustomPageDto.of(qnaResult));
+        return ApiResponse.ok(CustomPageDto.of(qnaResult),"마이페이지 작성한 QnA 질문 조회 완료");
 
     }
 
@@ -38,9 +39,9 @@ public class MyQnaController {
     @AuthorizationRequired(value = {Role.USER,Role.ADMIN})
     @GetMapping("/answer")
     @ConvertToOneBase
-    public ResponseEntity<CustomPageDto<MyPageAnswer>> getMyPageAnswer(Pageable pageable) {
+    public ApiResponse<CustomPageDto<MyPageAnswer>> getMyPageAnswer(Pageable pageable) {
         Page<MyPageAnswer> answerResult = boardService.getMyPagePostAnswer(pageable).map(MyPageAnswer::from);
-        return ResponseEntity.ok(CustomPageDto.of(answerResult));
+        return ApiResponse.ok(CustomPageDto.of(answerResult),"마이페이지 작성한 QnA 답변 완료");
 
     }
 
@@ -48,9 +49,9 @@ public class MyQnaController {
     @AuthorizationRequired(value = {Role.USER,Role.ADMIN})
     @GetMapping("/bookmark")
     @ConvertToOneBase
-    public ResponseEntity<CustomPageDto<MyPageBookmark>> getMyPageBookMarkQnA(Pageable pageable) {
+    public ApiResponse<CustomPageDto<MyPageBookmark>> getMyPageBookMarkQnA(Pageable pageable) {
         Page<MyPageBookmark> bookmarkList = boardService.getMyPageBookMarkQuestion(pageable).map(MyPageBookmark::from);
 
-        return ResponseEntity.ok(CustomPageDto.of(bookmarkList));
+        return ApiResponse.ok(CustomPageDto.of(bookmarkList),"마이페이지 북마크한 QnA 질문 조회 완료");
     }
 }
