@@ -21,7 +21,7 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-    private static final String REDIRECT_URI = "http://localhost:3000";
+    private static final String REDIRECT_URI = "http://localhost:3000/redirect";
     private final HttpServletUtils servletUtils;
     private final TokenFactory tokenFactory;
 
