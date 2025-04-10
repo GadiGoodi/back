@@ -19,7 +19,7 @@ class PasswordServiceImplTest {
     }
 
     @Test
-    void matchPassword_비밀번호가_일치하지_않으면_예외가_발생한다() {
+    void matchPassword_비밀번호가_일치하면_예외가_발생하지_않는다() {
         // given
         String rawPassword = "1234";
         String encodedPassword = "encoded-1234";
@@ -31,9 +31,9 @@ class PasswordServiceImplTest {
     }
 
     @Test
-    void matchPassword_비밀번호가_일치하면_예외가_발생하지_않는다() {
+    void matchPassword_비밀번호가_일치하지_않으면_예외가_발생한다() {
         // given
-        String rawPassword = "1234";
+        String rawPassword = "12345";
         String encodedPassword = "encoded-1234";
 
         // when & then
