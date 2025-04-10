@@ -89,8 +89,8 @@ public class TokenReissueServiceImpl implements TokenReissueService {
      */
     private String validateRtk(Optional<Cookie> cookie) {
         return cookie
-                .filter(c -> "rtk".equals(c.getName()))  // 쿠키 이름이 "rtk"인 경우만 필터링
-                .map(c -> c.getValue().substring(TOKEN_PREFIX.length()))  // "Bearer "를 제거한 토큰 값 반환
+                .filter(c -> "Authorization".equals(c.getName()))
+                .map(Cookie::getValue)
                 .orElseThrow(() -> new GlobalException(ErrorCode.TOKEN_NOT_FOUND));
     }
 
