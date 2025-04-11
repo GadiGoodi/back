@@ -13,7 +13,7 @@ public class TokenDto {
 
     public static TokenDto from(Token token) {
         return TokenDto.builder()
-                .atk(token.getBearerAtk())
+                .atk(token.getAtk())
                 .rtk(token.getRtk())
                 .rtkExpTime(token.getRtkExpTime())
                 .build();

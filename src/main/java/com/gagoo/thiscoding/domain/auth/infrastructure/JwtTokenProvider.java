@@ -100,7 +100,7 @@ public class JwtTokenProvider implements TokenProvider {
      */
     @Override
     public String createAtk(String email, String role, Long expTime) {
-        return createToken(email, role, expTime);
+        return TOKEN_PREFIX + createToken(email, role, expTime);
     }
 
     /**
