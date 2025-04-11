@@ -7,6 +7,7 @@ import com.gagoo.thiscoding.domain.maria.like.service.port.LikeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -33,5 +34,10 @@ public class LikeRepositoryImpl implements LikeRepository {
     @Override
     public boolean existsByQnaIdAndUserId(String qnaId, Long userId) {
         return likeJpaRepository.existsByQnaIdAndUserId(qnaId, userId);
+    }
+
+    @Override
+    public List<String> findQnaIdsByQnaIdsAndUserId(List<String> qnaId, Long userId) {
+        return likeJpaRepository.findQnaIdsByQnaIdAndUserId(qnaId, userId);
     }
 }
