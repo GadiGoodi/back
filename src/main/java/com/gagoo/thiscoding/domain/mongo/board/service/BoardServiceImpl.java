@@ -158,14 +158,15 @@ public class BoardServiceImpl implements BoardService {
         if (securityUtils.isLogin()) {
             Long currentUserId = getCurrentUser().getId();
 
-            // 답변 ID 목록 추출
+            // 답변 ID 리스트
             List<String> answerIds = answers.getContent().stream()
                     .map(Board::getId)
                     .collect(Collectors.toList());
 
-            // 해당 답변 목록에 대한 좋아요 여부를 일괄 조회
+            // 해당 답변에 대한 추천 이력이 있는지 조회
             List<String> likedAnswerIds= getLikedQnaIdsByAnwswerIdsAndUserId(answerIds, currentUserId);
 
+            // 추천 여부를 반환값에 포함시켜 반환
             return answers.map(board -> {
                 boolean isLike = likedAnswerIds.contains(board.getId());
                 return AnswerList.from(board, isLike);
