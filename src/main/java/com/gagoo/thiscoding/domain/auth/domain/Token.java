@@ -4,8 +4,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import static com.gagoo.thiscoding.domain.auth.common.AuthConstants.*;
-
 @Builder
 @Getter
 @RequiredArgsConstructor
@@ -16,9 +14,5 @@ public class Token {
 
     public static Token of(String atk, String rtk, Long rtkExpTime) {
         return new Token(atk, rtk, rtkExpTime);
-    }
-
-    public String getBearerAtk() {
-        return TOKEN_PREFIX + atk;
     }
 }

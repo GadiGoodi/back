@@ -104,7 +104,7 @@ public class AuthController {
      * 헤더와 쿠키에 토큰 적용
      */
     private void setAuthTokens(HttpServletResponse response, LoginDto loginDto) {
-        servletUtils.setHeader(response, AUTHORIZATION, loginDto.getToken().getBearerAtk());
+        servletUtils.setHeader(response, AUTHORIZATION, loginDto.getToken().getAtk());
         servletUtils.addCookie(response, AUTHORIZATION, loginDto.getToken().getRtk(), loginDto.getToken().getRtkExpTime());
     }
 }

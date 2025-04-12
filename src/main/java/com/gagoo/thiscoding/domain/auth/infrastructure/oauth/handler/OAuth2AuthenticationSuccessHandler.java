@@ -1,6 +1,5 @@
 package com.gagoo.thiscoding.domain.auth.infrastructure.oauth.handler;
 
-import com.gagoo.thiscoding.domain.auth.common.AuthConstants;
 import com.gagoo.thiscoding.domain.auth.exception.InvalidAuthenticationException;
 import com.gagoo.thiscoding.domain.auth.service.port.TokenFactory;
 import com.gagoo.thiscoding.global.common.util.HttpServletUtils;
@@ -17,8 +16,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
-
-import static com.gagoo.thiscoding.domain.auth.common.AuthConstants.*;
 
 @Slf4j
 @Component
@@ -70,7 +67,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
      * 임시 액세스 토큰 생성
      */
     private String generateTempAccessToken(ThisCodingAuthentication authentication) {
-        return TOKEN_PREFIX + tokenFactory.createTempAccessToken(authentication.getUser());
+        return tokenFactory.createTempAccessToken(authentication.getUser());
     }
 
     /**
