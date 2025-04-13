@@ -1,6 +1,7 @@
 package com.gagoo.thiscoding.domain.mongo.board.service;
 
 import com.gagoo.thiscoding.domain.maria.bookmark.service.port.BookmarkRepository;
+import com.gagoo.thiscoding.domain.maria.like.domain.Like;
 import com.gagoo.thiscoding.domain.maria.like.service.port.LikeRepository;
 import com.gagoo.thiscoding.domain.maria.reply.service.port.ReplyRepository;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
@@ -30,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Builder
@@ -117,7 +119,6 @@ public class BoardServiceImpl implements BoardService {
                 .map(MyPageAnswerList::of);
     }
 
-
     /**
      * 마이페이지 내가 북마크한 QnA 질문 조회
      */
@@ -132,7 +133,6 @@ public class BoardServiceImpl implements BoardService {
         return boardRepository.findByIdIn(bookmarkedQnaIdList, pageable)
                 .map(MyPageBookMarkList::of);
     }
-
 
     /**
      * 게시판 전체목록 조회
@@ -151,19 +151,29 @@ public class BoardServiceImpl implements BoardService {
      */
     @Override
     public Page<AnswerList> findAnswersByQnaId(String qnaId, Pageable pageable) {
-        // 로그인 상태일 경우, 답변 추천 여부 조회
-        if(securityUtils.isLogin()) {
+        validateParentQnaExists(qnaId);
+
+        Page<Board> answers = boardRepository.findAnswerByQnaIdSortByIsSelected(qnaId, pageable);
+
+        if (securityUtils.isLogin()) {
             Long currentUserId = getCurrentUser().getId();
 
-            return boardRepository.findAnswerByQnaIdSortByIsSelected(qnaId, pageable)
-                    .map(board -> {
-                        boolean isLike = getIsLikeByQnaIdAndUserId(board.getId(), currentUserId);
-                        return AnswerList.from(board, isLike);
-                    });
+            // 답변 ID 리스트
+            List<String> answerIds = answers.getContent().stream()
+                    .map(Board::getId)
+                    .collect(Collectors.toList());
+
+            // 해당 답변에 대한 추천 이력이 있는지 조회
+            List<String> likedAnswerIds= getLikedQnaIdsByAnwswerIdsAndUserId(answerIds, currentUserId);
+
+            // 추천 여부를 반환값에 포함시켜 반환
+            return answers.map(board -> {
+                boolean isLike = likedAnswerIds.contains(board.getId());
+                return AnswerList.from(board, isLike);
+            });
         }
 
-        return boardRepository.findAnswerByQnaIdSortByIsSelected(qnaId, pageable)
-                .map(board -> AnswerList.from(board, false));
+        return answers.map(board -> AnswerList.from(board, false));
     }
 
     /**
@@ -191,12 +201,12 @@ public class BoardServiceImpl implements BoardService {
     private User getCurrentUser() {
         return userRepository.getByEmail(securityUtils.getUserEmail());
     }
-
+    
     /**
-     * 좋아요 여부 조회
+     * 좋아요 답변 ID 목록 조회
      */
-    private boolean getIsLikeByQnaIdAndUserId(String qnaId, Long userId) {
-        return likeRepository.existsByQnaIdAndUserId(qnaId, userId);
+    private List<String> getLikedQnaIdsByAnwswerIdsAndUserId(List<String> answerIds, Long userId) {
+        return likeRepository.findQnaIdsByQnaIdsAndUserId(answerIds, userId);
     }
 
     /**

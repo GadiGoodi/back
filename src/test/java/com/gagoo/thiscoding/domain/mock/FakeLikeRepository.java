@@ -43,4 +43,13 @@ public class FakeLikeRepository implements LikeRepository {
                 .anyMatch(like -> like.getQnaId().equals(qnaId)
                 && like.getUser().equals(userId));
     }
+
+    @Override
+    public List<String> findQnaIdsByQnaIdsAndUserId(List<String> qnaIds, Long userId) {
+        return data.stream()
+                .filter(like -> qnaIds.contains(like.getQnaId()) && like.getUser().equals(userId))
+                .map(Like::getQnaId)
+                .distinct()
+                .toList();
+    }
 }
