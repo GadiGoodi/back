@@ -28,4 +28,13 @@ public class CodeCreateController {
                 .created(CodeResponse.from(code),"코드 파일 생성 (저장) 성공");
     }
 
+    // 코드 파일 저장
+    @PostMapping("/save")
+    @AuthorizationRequired(value = Role.USER)
+    public ApiResponse<CodeResponse> saveCode(@RequestBody CodeCreate codeCreate) {
+        Code code = codeService.saveCode(codeCreate);
+
+        return ApiResponse.created(CodeResponse.from(code), "코드 파일 저장 성공");
+    }
+
 }
