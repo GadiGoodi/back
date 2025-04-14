@@ -1,5 +1,5 @@
 package com.gagoo.thiscoding.domain.maria.usercoderoom.controller.port;
 
 public interface UserCodeRoomService {
-    boolean createUserCodeRoom(Long codeRoomId);
+    boolean createUserCodeRoom(Long roomId);
 }
