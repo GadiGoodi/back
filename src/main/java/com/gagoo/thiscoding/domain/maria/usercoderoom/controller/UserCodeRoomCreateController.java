@@ -19,10 +19,10 @@ public class UserCodeRoomCreateController {
     private final UserCodeRoomService userCodeRoomService;
 
     // 코드방 참여 생성
-    @PostMapping("/{codeRoomId}")
+    @PostMapping("/{roomId}")
     @AuthorizationRequired(value = Role.USER)
-    public ApiResponse<Boolean> createUserCodeRoom(@PathVariable Long codeRoomId) {
+    public ApiResponse<Boolean> createUserCodeRoom(@PathVariable Long roomId) {
         return ApiResponse
-                .created(userCodeRoomService.createUserCodeRoom(codeRoomId),"코드방 참여 생성 성공");
+                .created(userCodeRoomService.createUserCodeRoom(roomId),"코드방 참여 생성 성공");
     }
 }

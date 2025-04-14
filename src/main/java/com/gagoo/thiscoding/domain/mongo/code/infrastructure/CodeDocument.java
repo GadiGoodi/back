@@ -49,6 +49,7 @@ public class CodeDocument {
         codeDocument.id = code.getId();
         codeDocument.roomId = code.getRoomId();
         codeDocument.writerId = code.getWriterId();
+        codeDocument.nickname = code.getNickname();
         codeDocument.fileName = code.getFileName();
         codeDocument.value = code.getValue();
         codeDocument.saveDate = code.getSaveDate();

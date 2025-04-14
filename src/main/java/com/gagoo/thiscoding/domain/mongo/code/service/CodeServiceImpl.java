@@ -6,11 +6,14 @@ import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.domain.mongo.code.controller.port.CodeService;
 import com.gagoo.thiscoding.domain.mongo.code.domain.Code;
 import com.gagoo.thiscoding.domain.mongo.code.domain.dto.CodeCreate;
+import com.gagoo.thiscoding.domain.mongo.code.domain.dto.CodeList;
 import com.gagoo.thiscoding.domain.mongo.code.service.exception.CodeNotFoundException;
 import com.gagoo.thiscoding.domain.mongo.code.service.exception.ExistCodeFileName;
 import com.gagoo.thiscoding.domain.mongo.code.service.port.CodeRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -65,14 +68,32 @@ public class CodeServiceImpl implements CodeService {
     }
 
     /**
+     * 코드 목록 조회
+     * @param roomId
+     * @param pageable
+     * @return
+     */
+    @Override
+    public Page<CodeList> getCodeList(Long roomId, Pageable pageable) {
+        validateRoomId(roomId);
+
+        return codeRepository.findByRoomId(roomId, pageable).map(CodeList::from);
+    }
+
+    /**
      * 특정 코드방 내의 파일명 중복 검증
      * @param roomId
      * @param fileName
      */
-    @Override
-    public void validateRoomIdAndFileNameExists(Long roomId, String fileName) {
+    private void validateRoomIdAndFileNameExists(Long roomId, String fileName) {
         if(codeRepository.existsByRoomIdAndFileName(roomId, fileName)) {
             throw new ExistCodeFileName(ErrorCode.EXIST_CODE_FILENAME);
+        }
+    }
+
+    private void validateRoomId(Long roomId) {
+        if(!codeRepository.existsByRoomId(roomId)) {
+            throw new CodeNotFoundException(ErrorCode.CODE_ROOM_NOT_FOUND);
         }
     }
 

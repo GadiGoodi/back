@@ -2,6 +2,9 @@ package com.gagoo.thiscoding.domain.mock;
 
 import com.gagoo.thiscoding.domain.mongo.code.domain.Code;
 import com.gagoo.thiscoding.domain.mongo.code.service.port.CodeRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +42,11 @@ public class FakeCodeRepository implements CodeRepository {
     }
 
     @Override
+    public boolean existsByRoomId(Long roomId) {
+        return data.stream().anyMatch(item -> item.getRoomId().equals(roomId));
+    }
+
+    @Override
     public Optional<Code> findById(String id) {
         return data.stream().filter(item -> item.getId().equals(id)).findAny();
     }
@@ -46,6 +54,30 @@ public class FakeCodeRepository implements CodeRepository {
     @Override
     public Optional<Code> findByRoomIdAndFileName(Long roomId, String fileName) {
         return data.stream().filter(item -> item.getRoomId().equals(roomId) && item.getFileName().equals(fileName)).findAny();
+    }
+
+    @Override
+    public Page<Code> findByRoomId(Long roomId, Pageable pageable) {
+        if (pageable.getPageSize() < 1) {
+            return Page.empty(pageable);
+        }
+
+        List<Code> findRoomId = data.stream().filter(item -> item.getRoomId().equals(roomId)).toList();
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), findRoomId.size());
+
+        if(start >= findRoomId.size()) {
+            return Page.empty(pageable);
+        }
+
+        List<Code> pageableCode = findRoomId.subList(start, end);
+
+        return PageableExecutionUtils.getPage(
+                pageableCode,
+                pageable,
+                findRoomId::size
+        );
     }
 
     private String generatedTestId() {

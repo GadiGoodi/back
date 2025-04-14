@@ -5,6 +5,8 @@ import com.gagoo.thiscoding.domain.mongo.code.infrastructure.CodeDocument;
 import com.gagoo.thiscoding.domain.mongo.code.infrastructure.mongo.CodeMongoRepository;
 import com.gagoo.thiscoding.domain.mongo.code.service.port.CodeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -25,6 +27,11 @@ public class CodeRepositoryImpl implements CodeRepository {
     }
 
     @Override
+    public boolean existsByRoomId(Long roomId) {
+        return codeMongoRepository.existsByRoomId(roomId);
+    }
+
+    @Override
     public Optional<Code> findById(String id) {
         return codeMongoRepository.findById(id).map(CodeDocument::toModel);
     }
@@ -32,6 +39,11 @@ public class CodeRepositoryImpl implements CodeRepository {
     @Override
     public Optional<Code> findByRoomIdAndFileName(Long roomId, String fileName) {
         return codeMongoRepository.findByRoomIdAndFileName(roomId, fileName).map(CodeDocument::toModel);
+    }
+
+    @Override
+    public Page<Code> findByRoomId(Long roomId, Pageable pageable) {
+        return codeMongoRepository.findByRoomId(roomId, pageable).map(CodeDocument::toModel);
     }
 
 }

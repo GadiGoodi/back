@@ -29,16 +29,16 @@ public class UserCodeRoomServiceImpl implements UserCodeRoomService {
 
     /**
      * 코드방 참여 생성
-     * @param codeRoomId
+     * @param roomId
      * @return 생성한 UserCodeRoom
      */
     @Override
-    public boolean createUserCodeRoom(Long codeRoomId) {
+    public boolean createUserCodeRoom(Long roomId) {
         User currentUser = getCurrentUser();
 
-        CodeRoom codeRoom = getCodeRoom(codeRoomId);
+        CodeRoom codeRoom = getCodeRoom(roomId);
 
-        validateJoinCodeRoom(codeRoomId, currentUser.getId());
+        validateJoinCodeRoom(roomId, currentUser.getId());
 
         UserCodeRoom userCodeRoom = UserCodeRoom.create(currentUser, codeRoom);
 
@@ -51,11 +51,11 @@ public class UserCodeRoomServiceImpl implements UserCodeRoomService {
 
     /**
      * 이미 참여한 코드방인지 검증
-     * @param codeRoomId
+     * @param roomId
      * @param userId
      */
-    private void validateJoinCodeRoom(Long codeRoomId, Long userId) {
-        if(userCodeRoomRepository.existByCodeRoomIdAndUserId(codeRoomId, userId)) {
+    private void validateJoinCodeRoom(Long roomId, Long userId) {
+        if(userCodeRoomRepository.existByCodeRoomIdAndUserId(roomId, userId)) {
             throw new AlreadyJoinedCodeRoomException(ErrorCode.ALREADY_CODE_ROOM);
         }
     }
@@ -67,8 +67,8 @@ public class UserCodeRoomServiceImpl implements UserCodeRoomService {
         return userRepository.getByEmail(securityUtils.getUserEmail());
     }
 
-    private CodeRoom getCodeRoom(Long codeRoomId) {
-        return codeRoomRepository.findById(codeRoomId).orElseThrow(
+    private CodeRoom getCodeRoom(Long roomId) {
+        return codeRoomRepository.findById(roomId).orElseThrow(
                 () -> new CodeRoomNotFoundException(ErrorCode.CODE_ROOM_NOT_FOUND)
         );
     }
