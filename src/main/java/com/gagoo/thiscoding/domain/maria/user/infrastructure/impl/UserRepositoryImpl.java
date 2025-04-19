@@ -5,8 +5,6 @@ import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
 import com.gagoo.thiscoding.domain.maria.user.infrastructure.UserEntity;
 import com.gagoo.thiscoding.domain.maria.user.infrastructure.jpa.UserJpaRepository;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
-import com.gagoo.thiscoding.global.exception.ErrorCode;
-import com.gagoo.thiscoding.global.security.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,23 +21,6 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User save(User user) {
         return userJpaRepository.save(UserEntity.from(user)).toModel();
-    }
-
-    /**
-     * 조회된 유저 정보 에러처리
-     */
-    @Override
-    public User getByEmail(String email) {
-        return findByEmail(email).orElseThrow(
-                () -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND)
-        );
-    }
-
-    @Override
-    public User getByNickname(String nickname) {
-        return findByNickname(nickname).orElseThrow(
-            () -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND)
-        );
     }
 
     @Override

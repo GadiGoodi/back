@@ -2,7 +2,7 @@ package com.gagoo.thiscoding.domain.auth.service;
 
 import com.gagoo.thiscoding.domain.auth.service.port.PasswordEncoderHolder;
 import com.gagoo.thiscoding.domain.auth.service.port.PasswordService;
-import com.gagoo.thiscoding.domain.maria.user.service.exception.PasswordNotEqualException;
+import com.gagoo.thiscoding.domain.maria.user.exception.PasswordNotEqualException;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

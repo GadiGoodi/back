@@ -14,11 +14,7 @@ public interface UserRepository {
     Optional<User> findByNickname(String nickname);
 
     Page<User> findByNicknameContaining(String nickname, Long myId, Pageable pageable);
-
-    User getByNickname(String nickname);
-
-    User getByEmail(String email);
-
+    
     User save(User user);
 
     boolean existsByEmail(String email);

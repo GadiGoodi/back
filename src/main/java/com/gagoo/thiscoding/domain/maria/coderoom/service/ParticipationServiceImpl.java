@@ -6,7 +6,7 @@ import com.gagoo.thiscoding.domain.maria.coderoom.domain.CodeRoom;
 import com.gagoo.thiscoding.domain.maria.coderoom.service.exception.CodeRoomNotFoundException;
 import com.gagoo.thiscoding.domain.maria.coderoom.service.port.CodeRoomRepository;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
-import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
+import com.gagoo.thiscoding.domain.maria.user.service.helper.UserFinder;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.UserCodeRoom;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.service.port.UserCodeRoomRepository;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.service.exception.NotUserCodeRoomParticipantException;
@@ -29,7 +29,7 @@ public class ParticipationServiceImpl implements ParticipationService {
 
     private final CodeRoomRepository codeRoomRepository;
     private final UserCodeRoomRepository userCodeRoomRepository;
-    private final UserRepository userRepository;
+    private final UserFinder userFinder;
     private final SecurityUtils securityUtils;
 
     /**
@@ -39,7 +39,7 @@ public class ParticipationServiceImpl implements ParticipationService {
     @Override
     public Page<ParticipatingCodeRoomResponse> getParticipations(Pageable pageable) {
         Pageable customPageable = PageRequest.of(pageable.getPageNumber(), PageSize.CODEROOM);
-        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
+        User currentUser = userFinder.getByEmail(securityUtils.getUserEmail());
 
         Page<UserCodeRoom> userCodeRoomPage = codeRoomRepository.findAllUserCodeRoomByUser(currentUser, customPageable);
 

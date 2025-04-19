@@ -13,7 +13,7 @@ import com.gagoo.thiscoding.domain.maria.friend.service.Exception.FriendNotFound
 import com.gagoo.thiscoding.domain.maria.friend.service.dto.FriendInfo;
 import com.gagoo.thiscoding.domain.maria.friend.service.port.FriendRepository;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
-import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
+import com.gagoo.thiscoding.domain.maria.user.service.helper.UserFinder;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.global.security.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 public class FriendServiceImpl implements FriendService {
 
     private final FriendRepository friendRepository;
-    private final UserRepository userRepository;
+    private final UserFinder userFinder;
     private final SecurityUtils securityUtils;
 
     /**
@@ -42,7 +42,7 @@ public class FriendServiceImpl implements FriendService {
      */
     @Override
     public Page<FriendInfo> getMyFriends(Pageable pageable) {
-        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
+        User currentUser = userFinder.getByEmail(securityUtils.getUserEmail());
         Pageable customPageable = PageRequest.of(pageable.getPageNumber(), FRIEND);
         return friendRepository.findMyFriends(currentUser.getNickname(), customPageable);
     }
@@ -52,7 +52,7 @@ public class FriendServiceImpl implements FriendService {
      * */
     @Override
     public Page<FriendInfo> getSearchFriends(FriendSearch friendSearch, Pageable pageable) {
-        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
+        User currentUser = userFinder.getByEmail(securityUtils.getUserEmail());
         Pageable customPageable = PageRequest.of(pageable.getPageNumber(), FRIEND);
         return friendRepository.searchFriends(currentUser.getNickname(), friendSearch.keyword(), customPageable);
     }
@@ -62,7 +62,7 @@ public class FriendServiceImpl implements FriendService {
      */
     @Override
     public Page<FriendInfo> getReceivedFriendRequests(Pageable pageable) {
-        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
+        User currentUser = userFinder.getByEmail(securityUtils.getUserEmail());
         return friendRepository.findReceivedFriendRequests(currentUser.getNickname(), pageable);
     }
 
@@ -71,7 +71,7 @@ public class FriendServiceImpl implements FriendService {
      */
     @Override
     public Page<FriendInfo> getSentFriendRequests(Pageable pageable) {
-        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
+        User currentUser = userFinder.getByEmail(securityUtils.getUserEmail());
         return friendRepository.findSentFriendRequests(currentUser.getNickname(), pageable);
     }
 
@@ -80,8 +80,8 @@ public class FriendServiceImpl implements FriendService {
      */
     @Override
     public void friendRequest(String targetUserNickname) {
-        User targetUser = userRepository.getByNickname(targetUserNickname);
-        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
+        User targetUser = userFinder.getByNickname(targetUserNickname);
+        User currentUser = userFinder.getByEmail(securityUtils.getUserEmail());
         validateUserIsActivated(targetUser);
         validateSelfFriendRequest(targetUserNickname, currentUser.getNickname());
 
@@ -122,7 +122,7 @@ public class FriendServiceImpl implements FriendService {
      * */
     @Override
     public void cancelFriendRequest(Long friendId) {
-        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
+        User currentUser = userFinder.getByEmail(securityUtils.getUserEmail());
         Friend friend = getByFriendId(friendId);
 
         validateAlreadyFriend(friend);
@@ -136,7 +136,7 @@ public class FriendServiceImpl implements FriendService {
      */
     @Override
     public void acceptFriendRequest(Long friendId) {
-        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
+        User currentUser = userFinder.getByEmail(securityUtils.getUserEmail());
         Friend friend = getByFriendId(friendId);
 
         validateUserIsActivated(friend.getSender());
@@ -163,7 +163,7 @@ public class FriendServiceImpl implements FriendService {
      * */
     @Override
     public void rejectFriendRequest(Long friendId) {
-        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
+        User currentUser = userFinder.getByEmail(securityUtils.getUserEmail());
 
         Friend friend = getByFriendId(friendId);
 
@@ -178,7 +178,7 @@ public class FriendServiceImpl implements FriendService {
      */
     @Override
     public void delete(Long friendId) {
-        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
+        User currentUser = userFinder.getByEmail(securityUtils.getUserEmail());
         Friend friend = getByFriendId(friendId);
 
         validateIsFriend(friend);

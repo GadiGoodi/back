@@ -8,7 +8,7 @@ import com.gagoo.thiscoding.domain.maria.like.service.exception.ExistLike;
 import com.gagoo.thiscoding.domain.maria.like.service.exception.LikeNotFoundException;
 import com.gagoo.thiscoding.domain.maria.like.service.port.LikeRepository;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
-import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
+import com.gagoo.thiscoding.domain.maria.user.service.helper.UserFinder;
 import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
 import com.gagoo.thiscoding.domain.mongo.board.service.exception.QnaNotFoundException;
 import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardRepository;
@@ -22,7 +22,7 @@ public class LikeServiceImpl implements LikeService {
 
     private final LikeRepository likeRepository;
     private final BoardRepository boardRepository;
-    private final UserRepository userRepository;
+    private final UserFinder userFinder;
     private final SecurityUtils securityUtils;
 
     /**
@@ -126,6 +126,6 @@ public class LikeServiceImpl implements LikeService {
      * @return
      */
     private User getCurrentUser() {
-        return userRepository.getByEmail(securityUtils.getUserEmail());
+        return userFinder.getByEmail(securityUtils.getUserEmail());
     }
 }

@@ -11,6 +11,7 @@ public interface AuthService {
     User create(UserCreate userCreate);
     User changePassword(ChangePasswordRequest request);
     User resetPassword(ResetPasswordRequest request);
+    User withdraw();
     LoginDto login(LoginRequest loginRequest);
     LoginDto getUserInfo();
     void removeToken();

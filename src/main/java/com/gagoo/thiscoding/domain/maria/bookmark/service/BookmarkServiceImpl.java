@@ -7,7 +7,7 @@ import com.gagoo.thiscoding.domain.maria.bookmark.service.exception.BookmarkNotF
 import com.gagoo.thiscoding.domain.maria.bookmark.service.exception.ExistBookmark;
 import com.gagoo.thiscoding.domain.maria.bookmark.service.port.BookmarkRepository;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
-import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
+import com.gagoo.thiscoding.domain.maria.user.service.helper.UserFinder;
 import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
 import com.gagoo.thiscoding.domain.mongo.board.service.exception.QnaNotFoundException;
 import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardRepository;
@@ -21,7 +21,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 
     private final BookmarkRepository bookmarkRepository;
     private final BoardRepository boardRepository;
-    private final UserRepository userRepository;
+    private final UserFinder userFinder;
     private final SecurityUtils securityUtils;
 
     /**
@@ -110,6 +110,6 @@ public class BookmarkServiceImpl implements BookmarkService {
      * @return
      */
     private User getCurrentUser() {
-        return userRepository.getByEmail(securityUtils.getUserEmail());
+        return userFinder.getByEmail(securityUtils.getUserEmail());
     }
 }

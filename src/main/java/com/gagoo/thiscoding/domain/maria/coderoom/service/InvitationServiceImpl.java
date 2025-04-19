@@ -16,7 +16,7 @@ import com.gagoo.thiscoding.domain.maria.coderoom.service.exception.CodeRoomNotF
 import com.gagoo.thiscoding.domain.maria.coderoom.service.port.CodeRoomRepository;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.coderoom.service.exception.CapacityOutOfBoundsException;
-import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
+import com.gagoo.thiscoding.domain.maria.user.service.helper.UserFinder;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.UserCodeRoom;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.service.port.UserCodeRoomRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
@@ -33,10 +33,10 @@ import org.springframework.stereotype.Service;
 @Builder
 public class InvitationServiceImpl implements InvitationService {
 
-    private final UserRepository userRepository;
     private final CodeRoomRepository codeRoomRepository;
     private final AlarmRepository alarmRepository;
     private final UserCodeRoomRepository userCodeRoomRepository;
+    private final UserFinder userFinder;
     private final SecurityUtils securityUtils;
 
     /**
@@ -44,7 +44,7 @@ public class InvitationServiceImpl implements InvitationService {
      */
     @Override
     public Page<InvitationCodeRoom> getInvitationCodeRoomList(Pageable pageable) {
-        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
+        User currentUser = userFinder.getByEmail(securityUtils.getUserEmail());
         Pageable customPageable = PageRequest.of(pageable.getPageNumber(), CODEROOM);
         return codeRoomRepository.findInvitedCodeRoomsByUser(currentUser, customPageable);
     }
@@ -55,7 +55,7 @@ public class InvitationServiceImpl implements InvitationService {
     @Transactional
     @Override
     public UserCodeRoom acceptInvitationCodeRoom(Long codeRoomId, Long alarmId) {
-        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
+        User currentUser = userFinder.getByEmail(securityUtils.getUserEmail());
         validateCodeRoom(codeRoomId, alarmId, currentUser.getId());
 
         CodeRoom codeRoom = getByCodeRoomId(codeRoomId);
@@ -75,7 +75,7 @@ public class InvitationServiceImpl implements InvitationService {
     @Transactional
     @Override
     public void rejectInvitationCodeRoom(Long codeRoomId, Long alarmId) {
-        User currentUser = userRepository.getByEmail(securityUtils.getUserEmail());
+        User currentUser = userFinder.getByEmail(securityUtils.getUserEmail());
         validateCodeRoom(codeRoomId, alarmId, currentUser.getId());
         alarmRepository.deleteById(alarmId);
     }

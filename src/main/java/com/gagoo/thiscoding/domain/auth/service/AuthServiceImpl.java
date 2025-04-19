@@ -8,6 +8,7 @@ import com.gagoo.thiscoding.domain.auth.service.port.PasswordService;
 import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.UserCreate;
+import com.gagoo.thiscoding.domain.maria.user.service.helper.UserFinder;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.domain.auth.domain.Token;
 import com.gagoo.thiscoding.domain.auth.dto.LoginDto;
@@ -23,8 +24,9 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final PasswordService passwordService;
-    private final SecurityUtils securityUtils;
     private final TokenFactory tokenFactory;
+    private final UserFinder userFinder;
+    private final SecurityUtils securityUtils;
 
     /**
      * 회원가입
@@ -33,7 +35,7 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public User create(UserCreate userCreate) {
-        preparePassword(userCreate.getPassword(), userCreate.getCheckPassword());
+        passwordService.validatePasswordMatch(userCreate.getPassword(), userCreate.getCheckPassword());
         User user = User.create(userCreate, passwordService.getPasswordEncoder());
 
         return userRepository.save(user);
@@ -44,13 +46,12 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public LoginDto login(LoginRequest request) {
-        User user = userRepository.getByEmail(request.email());
+        User user = findUserByEmail(request.email());
 
         validateUserActivation(user);
         passwordService.matchPassword(request.password(), user.getPassword());
-        Token token = tokenFactory.createToken(user);
 
-        return LoginDto.of(user, token);
+        return createLoginDto(user);
     }
 
     /**
@@ -70,7 +71,7 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public User resetPassword(ResetPasswordRequest request) {
-        User user = userRepository.getByEmail(request.email());
+        User user = findUserByEmail(request.email());
         return updatePassword(user, request.newPassword(), request.checkPassword());
     }
 
@@ -83,6 +84,33 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
+     * 회원 탈퇴
+     * - 탈퇴시 isActivated 상태값 false로 변경
+     */
+    @Override
+    public User withdraw() {
+        User currentUser = getCurrentUser();
+        User withdrawUser = currentUser.withdraw();
+
+        return userRepository.save(withdrawUser);
+    }
+
+    @Override
+    public LoginDto getUserInfo() {
+        User currentUser = getCurrentUser();
+        return createLoginDto(currentUser);
+    }
+
+    /**
+     * 이메일로 사용자 찾기
+     * @param email 이메일
+     * @return 사용자 정보
+     */
+    private User findUserByEmail(String email) {
+        return userFinder.getByEmail(email);
+    }
+
+    /**
      * 비밀번호 변경 공통 로직 메서드
      */
     private User updatePassword(User user, String newPassword, String checkPassword) {
@@ -92,19 +120,11 @@ public class AuthServiceImpl implements AuthService {
         return userRepository.save(updateUser);
     }
 
-    @Override
-    public LoginDto getUserInfo() {
-        User currentUser = getCurrentUser();
-        Token token = tokenFactory.createToken(currentUser);
-
-        return LoginDto.of(currentUser, token);
-    }
-
     /**
      * 현재 로그인한 유저 정보 반환
      */
     private User getCurrentUser() {
-        return userRepository.getByEmail(getCurUserEmail());
+        return findUserByEmail(getCurUserEmail());
     }
 
     /**
@@ -112,14 +132,6 @@ public class AuthServiceImpl implements AuthService {
      */
     private String getCurUserEmail() {
         return securityUtils.getUserEmail();
-    }
-
-
-    /**
-     * 비밀번호 검증 및 암호화
-     */
-    private void preparePassword(String password, String checkPassword) {
-        passwordService.validatePasswordMatch(password, checkPassword);
     }
 
     /**
@@ -131,4 +143,11 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
+    /**
+     * 로그인 DTO 생성 공통 메서드
+     */
+    private LoginDto createLoginDto(User user) {
+        Token token = tokenFactory.createToken(user);
+        return LoginDto.of(user, token);
+    }
 }

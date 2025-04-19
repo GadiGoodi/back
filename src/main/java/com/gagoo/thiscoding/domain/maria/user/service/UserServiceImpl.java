@@ -6,8 +6,9 @@ import com.gagoo.thiscoding.domain.maria.user.controller.port.UserService;
 import com.gagoo.thiscoding.domain.maria.user.controller.request.UpdateProfileNicknameRequest;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.UpdateProfileImageRequest;
-import com.gagoo.thiscoding.domain.maria.user.service.exception.AlreadyCreateEmail;
-import com.gagoo.thiscoding.domain.maria.user.service.exception.ExistUserNickname;
+import com.gagoo.thiscoding.domain.maria.user.exception.AlreadyCreateEmail;
+import com.gagoo.thiscoding.domain.maria.user.exception.ExistUserNickname;
+import com.gagoo.thiscoding.domain.maria.user.service.helper.UserFinder;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserFinder userFinder;
     private final SecurityUtils securityUtils;
 
     /**
@@ -29,7 +31,7 @@ public class UserServiceImpl implements UserService {
      * */
     @Override
     public Page<User> searchByNickname(String nickname, Pageable pageable) {
-        User currentUser = userRepository.getByEmail(getCurUserEmail());
+        User currentUser = userFinder.getByEmail(getCurUserEmail());
         Pageable customPageable = PageRequest.of(pageable.getPageNumber(), FRIEND);
         return userRepository.findByNicknameContaining(nickname, currentUser.getId(),customPageable);
     }
@@ -57,7 +59,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User updateNickname(UpdateProfileNicknameRequest request) {
-        User currentUser = userRepository.getByEmail(getCurUserEmail());
+        User currentUser = userFinder.getByEmail(getCurUserEmail());
         validateNicknameExists(request.nickname());
 
         User updateUser = currentUser.updateNickname(request.nickname());
@@ -70,7 +72,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User updateImage(UpdateProfileImageRequest request) {
-        User currentUser = userRepository.getByEmail(getCurUserEmail());
+        User currentUser = userFinder.getByEmail(getCurUserEmail());
         User updateUser = currentUser.updateProfile(request.imageUrl());
 
         return userRepository.save(updateUser);

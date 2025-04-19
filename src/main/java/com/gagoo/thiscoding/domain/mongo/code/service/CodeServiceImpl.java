@@ -2,7 +2,7 @@ package com.gagoo.thiscoding.domain.mongo.code.service;
 
 import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
-import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
+import com.gagoo.thiscoding.domain.maria.user.service.helper.UserFinder;
 import com.gagoo.thiscoding.domain.mongo.code.controller.port.CodeService;
 import com.gagoo.thiscoding.domain.mongo.code.domain.Code;
 import com.gagoo.thiscoding.domain.mongo.code.domain.dto.CodeCreate;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CodeServiceImpl implements CodeService {
     private final CodeRepository codeRepository;
-    private final UserRepository userRepository;
+    private final UserFinder userFinder;
     private final SecurityUtils securityUtils;
 
     /**
@@ -102,6 +102,6 @@ public class CodeServiceImpl implements CodeService {
      * @return user
      */
     private User getCurrentUser() {
-        return userRepository.getByEmail(securityUtils.getUserEmail());
+        return userFinder.getByEmail(securityUtils.getUserEmail());
     }
 }
