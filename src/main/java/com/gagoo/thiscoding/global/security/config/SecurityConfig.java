@@ -2,7 +2,7 @@ package com.gagoo.thiscoding.global.security.config;
 
 import com.gagoo.thiscoding.domain.auth.infrastructure.oauth.OAuth2UserServiceHandler;
 import com.gagoo.thiscoding.domain.auth.infrastructure.oauth.handler.OAuth2AuthenticationSuccessHandler;
-import com.gagoo.thiscoding.global.security.infrastructure.filter.AuthorizationExceptionFilter;
+import com.gagoo.thiscoding.global.security.infrastructure.filter.AuthExceptionFilter;
 import com.gagoo.thiscoding.global.security.infrastructure.filter.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -34,7 +34,7 @@ public class SecurityConfig {
     private final OAuth2AuthenticationSuccessHandler oAuthSuccessHandler;
     private final OAuth2UserServiceHandler oAuthServiceHandler;
     private final JwtFilter jwtFilter;
-    private final AuthorizationExceptionFilter authorizationExceptionFilter;
+    private final AuthExceptionFilter authExceptionFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -77,7 +77,7 @@ public class SecurityConfig {
                 });
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(authorizationExceptionFilter, JwtFilter.class);
+                .addFilterBefore(authExceptionFilter, JwtFilter.class);
 
 
         return http.build();

@@ -18,7 +18,7 @@ import java.io.IOException;
 import static com.gagoo.thiscoding.global.security.exception.ExceptionHandlingUtil.*;
 
 @Component
-public class AuthorizationExceptionFilter extends OncePerRequestFilter {
+public class AuthExceptionFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
