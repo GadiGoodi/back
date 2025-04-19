@@ -2,8 +2,6 @@ package com.gagoo.thiscoding.domain.mock;
 
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
-import com.gagoo.thiscoding.global.exception.ErrorCode;
-import com.gagoo.thiscoding.global.security.exception.UserNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -48,13 +46,6 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
-    public User getByEmail(String email) {
-        return findByEmail(email).orElseThrow(
-                () -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND)
-        );
-    }
-
-    @Override
     public boolean existsByEmail(String email) {
         return data.stream()
                 .anyMatch(user -> user.getEmail().equals(email));
@@ -88,8 +79,4 @@ public class FakeUserRepository implements UserRepository {
         return null;
     }
 
-    @Override
-    public User getByNickname(String nickname) {
-        return null;
-    }
 }

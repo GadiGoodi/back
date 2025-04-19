@@ -6,9 +6,8 @@ import com.gagoo.thiscoding.domain.maria.coderoom.service.exception.AlreadyJoine
 import com.gagoo.thiscoding.domain.maria.coderoom.service.exception.CodeRoomNotFoundException;
 import com.gagoo.thiscoding.domain.maria.coderoom.service.port.CodeRoomRepository;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
+import com.gagoo.thiscoding.domain.maria.user.service.helper.UserFinder;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.service.port.UserCodeRoomRepository;
-import com.gagoo.thiscoding.global.security.exception.UserNotFoundException;
-import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.controller.port.UserCodeRoomService;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.UserCodeRoom;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
@@ -22,9 +21,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserCodeRoomServiceImpl implements UserCodeRoomService {
 
-    private final UserRepository userRepository;
     private final CodeRoomRepository codeRoomRepository;
     private final UserCodeRoomRepository userCodeRoomRepository;
+    private final UserFinder userFinder;
     private final SecurityUtils securityUtils;
 
     /**
@@ -64,7 +63,7 @@ public class UserCodeRoomServiceImpl implements UserCodeRoomService {
      * 로그인 사용자 조회
      */
     private User getCurrentUser() {
-        return userRepository.getByEmail(securityUtils.getUserEmail());
+        return userFinder.getByEmail(securityUtils.getUserEmail());
     }
 
     private CodeRoom getCodeRoom(Long roomId) {

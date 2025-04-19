@@ -2,8 +2,8 @@ package com.gagoo.thiscoding.domain.maria.user.service;
 
 import com.gagoo.thiscoding.domain.maria.user.controller.port.CertificationService;
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.AuthCode;
-import com.gagoo.thiscoding.domain.maria.user.service.exception.AuthCodeNotFoundException;
-import com.gagoo.thiscoding.domain.maria.user.service.exception.AuthCodeNotMatchException;
+import com.gagoo.thiscoding.domain.maria.user.exception.AuthCodeNotFoundException;
+import com.gagoo.thiscoding.domain.maria.user.exception.AuthCodeNotMatchException;
 import com.gagoo.thiscoding.domain.mock.TestContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -3,7 +3,7 @@ package com.gagoo.thiscoding.domain.maria.user.service;
 import com.gagoo.thiscoding.domain.auth.domain.Token;
 import com.gagoo.thiscoding.domain.auth.exception.ExpiredJwtTokenException;
 import com.gagoo.thiscoding.domain.maria.user.controller.port.TokenReissueService;
-import com.gagoo.thiscoding.domain.maria.user.service.exception.TokenNotEquals;
+import com.gagoo.thiscoding.domain.maria.user.exception.TokenNotEquals;
 import com.gagoo.thiscoding.domain.auth.service.port.TokenProvider;
 import com.gagoo.thiscoding.domain.maria.user.service.port.RefreshTokenStore;
 import com.gagoo.thiscoding.global.exception.ErrorCode;

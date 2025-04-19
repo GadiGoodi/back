@@ -1,11 +1,10 @@
 package com.gagoo.thiscoding.domain.mongo.board.service;
 
 import com.gagoo.thiscoding.domain.maria.bookmark.service.port.BookmarkRepository;
-import com.gagoo.thiscoding.domain.maria.like.domain.Like;
 import com.gagoo.thiscoding.domain.maria.like.service.port.LikeRepository;
 import com.gagoo.thiscoding.domain.maria.reply.service.port.ReplyRepository;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
-import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
+import com.gagoo.thiscoding.domain.maria.user.service.helper.UserFinder;
 import com.gagoo.thiscoding.domain.mongo.board.controller.port.BoardService;
 import com.gagoo.thiscoding.domain.mongo.board.controller.request.BoardAnswer;
 import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
@@ -40,11 +39,11 @@ import java.util.stream.Collectors;
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
-    private final UserRepository userRepository;
     private final ReplyRepository replyRepository;
     private final LikeRepository likeRepository;
     private final BookmarkRepository bookmarkRepository;
     private final BoardViewService boardViewService;
+    private final UserFinder userFinder;
     private final SecurityUtils securityUtils;
 
     /**
@@ -199,7 +198,7 @@ public class BoardServiceImpl implements BoardService {
      * 현재 로그인한 사용자 조회
      */
     private User getCurrentUser() {
-        return userRepository.getByEmail(securityUtils.getUserEmail());
+        return userFinder.getByEmail(securityUtils.getUserEmail());
     }
     
     /**

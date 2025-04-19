@@ -18,6 +18,7 @@ import com.gagoo.thiscoding.domain.maria.reply.service.ReplyServiceImpl;
 import com.gagoo.thiscoding.domain.maria.reply.service.port.ReplyRepository;
 import com.gagoo.thiscoding.domain.maria.user.controller.port.CertificationService;
 import com.gagoo.thiscoding.domain.maria.user.service.CertificationServiceImpl;
+import com.gagoo.thiscoding.domain.maria.user.service.helper.UserFinder;
 import com.gagoo.thiscoding.domain.maria.user.service.port.AuthCodeStore;
 import com.gagoo.thiscoding.domain.maria.user.service.port.MailSender;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
@@ -64,6 +65,7 @@ public class TestContainer {
     public final UserCodeRoomService userCodeRoomService;
     public final FakeTokenProvider fakeTokenProvider;
     public final FakeTokenFactory fakeTokenFactory;
+    public final UserFinder userFinder;
 
     @Builder
     public TestContainer(SecurityUtils securityUtils) {
@@ -71,6 +73,7 @@ public class TestContainer {
         this.authCodeStore = new FakeAuthCodeStore();
         this.passwordEncoderHolder = new FakePasswordEncoder();
         this.uuidHolder = new FakeUuidHolder("test-uuid");
+
 
         this.fakeTokenProvider = new FakeTokenProvider(this.uuidHolder);
         this.fakeTokenFactory = new FakeTokenFactory(this.fakeTokenProvider);
@@ -87,13 +90,15 @@ public class TestContainer {
         this.bookmarkRepository = new FakeBookmarkRepository();
         this.likeRepository = new FakeLikeRepository();
 
+        this.userFinder = new UserFinder(this.userRepository);
+
         this.certificationService = CertificationServiceImpl.builder()
                 .mailSender(this.mailSender)
                 .authCodeStore(this.authCodeStore)
                 .build();
         this.replyService = ReplyServiceImpl.builder()
                 .replyRepository(this.replyRepository)
-                .userRepository(this.userRepository)
+                .userFinder(this.userFinder)
                 .boardRepository(this.boardRepository)
                 .securityUtils(securityUtils)
                 .build();
@@ -102,7 +107,7 @@ public class TestContainer {
                 .boardViewRepository(this.boardViewRepository)
                 .build();
         this.boardService = BoardServiceImpl.builder()
-                .userRepository(this.userRepository)
+                .userFinder(this.userFinder)
                 .boardRepository(this.boardRepository)
                 .replyRepository(this.replyRepository)
                 .boardViewService(this.boardViewService)
@@ -114,14 +119,14 @@ public class TestContainer {
                 .managerRepository(this.managerRepository)
                 .build();
         this.invitationService = InvitationServiceImpl.builder()
-            .userRepository(this.userRepository)
+            .userFinder(this.userFinder)
             .codeRoomRepository(this.codeRoomRepository)
             .alarmRepository(this.alarmRepository)
             .userCodeRoomRepository(userCodeRoomRepository)
             .securityUtils(securityUtils)
             .build();
         this.codeRoomService = CodeRoomServiceImpl.builder()
-                .userRepository(this.userRepository)
+                .userFinder(this.userFinder)
                 .userCodeRoomRepository(this.userCodeRoomRepository)
                 .codeRoomRepository(this.codeRoomRepository)
                 .codeRepository(this.codeRepository)
@@ -131,11 +136,11 @@ public class TestContainer {
         this.participationService = ParticipationServiceImpl.builder()
                 .codeRoomRepository(this.codeRoomRepository)
                 .userCodeRoomRepository(this.userCodeRoomRepository)
-                .userRepository(this.userRepository)
+                .userFinder(this.userFinder)
                 .securityUtils(securityUtils)
                 .build();
         this.userCodeRoomService = UserCodeRoomServiceImpl.builder()
-                .userRepository(this.userRepository)
+                .userFinder(this.userFinder)
                 .codeRoomRepository(this.codeRoomRepository)
                 .userCodeRoomRepository(this.userCodeRoomRepository)
                 .securityUtils(securityUtils)

@@ -1,6 +1,6 @@
 package com.gagoo.thiscoding.domain.auth.service;
 
-import com.gagoo.thiscoding.domain.maria.user.service.exception.PasswordNotEqualException;
+import com.gagoo.thiscoding.domain.maria.user.exception.PasswordNotEqualException;
 import com.gagoo.thiscoding.domain.mock.TestContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -8,7 +8,7 @@ import com.gagoo.thiscoding.domain.maria.coderoom.domain.dto.CodeRoomEnter;
 import com.gagoo.thiscoding.domain.maria.coderoom.service.exception.CodeRoomNotFoundException;
 import com.gagoo.thiscoding.domain.maria.coderoom.service.port.CodeRoomRepository;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
-import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
+import com.gagoo.thiscoding.domain.maria.user.service.helper.UserFinder;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.domain.UserCodeRoom;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.service.exception.UserCodeRoomNotFoundException;
 import com.gagoo.thiscoding.domain.maria.usercoderoom.service.port.UserCodeRoomRepository;
@@ -26,10 +26,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CodeRoomServiceImpl implements CodeRoomService {
 
-    private final UserRepository userRepository;
     private final UserCodeRoomRepository userCodeRoomRepository;
     private final CodeRoomRepository codeRoomRepository;
     private final CodeRepository codeRepository;
+    private final UserFinder userFinder;
     private final SecurityUtils securityUtils;
     private final UuidHolder uuidHolder;
 
@@ -113,6 +113,6 @@ public class CodeRoomServiceImpl implements CodeRoomService {
      * @return 로그인 사용자
      */
     private User getCurrentUser() {
-        return userRepository.getByEmail(securityUtils.getUserEmail());
+        return userFinder.getByEmail(securityUtils.getUserEmail());
     }
 }

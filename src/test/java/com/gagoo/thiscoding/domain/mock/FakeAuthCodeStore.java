@@ -1,8 +1,8 @@
 package com.gagoo.thiscoding.domain.mock;
 
 import com.gagoo.thiscoding.domain.maria.user.domain.dto.AuthCode;
-import com.gagoo.thiscoding.domain.maria.user.service.exception.AuthCodeNotFoundException;
-import com.gagoo.thiscoding.domain.maria.user.service.exception.AuthCodeNotMatchException;
+import com.gagoo.thiscoding.domain.maria.user.exception.AuthCodeNotFoundException;
+import com.gagoo.thiscoding.domain.maria.user.exception.AuthCodeNotMatchException;
 import com.gagoo.thiscoding.domain.maria.user.service.port.AuthCodeStore;
 
 import java.util.HashMap;
