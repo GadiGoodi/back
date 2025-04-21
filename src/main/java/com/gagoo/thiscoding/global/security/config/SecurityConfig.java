@@ -7,6 +7,7 @@ import com.gagoo.thiscoding.global.security.infrastructure.filter.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -61,8 +62,9 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorizeRequest ->
                         authorizeRequest
-                                .requestMatchers("/login/oauth2/**", "/oauth2/authorization/**", "/api/auth/login", "/**"
-                                ).permitAll()
+                                .requestMatchers(PUBLIC_NON_GET_URIS).permitAll()
+                                .requestMatchers(HttpMethod.GET, PUBLIC_GET_URIS).permitAll()
+                                .anyRequest().authenticated()
                 );
 
         http
@@ -110,4 +112,25 @@ public class SecurityConfig {
                 ACCESS_CONTROL_EXPOSE_HEADERS
         );
     }
+
+    private static final String[] PUBLIC_NON_GET_URIS = {
+            "/api/auth/sign-up",
+            "/login/oauth2/**",
+            "/oauth2/authorization/**",
+            "/api/auth/login",
+            "/api/auth/reset-password"
+    };
+
+    private static final String[] PUBLIC_GET_URIS = {
+            "/api/auth/email",
+            "/api/auth/nickname",
+            "/api/admin/notices",
+            "/api/admin/notices/*",
+            "/api/qna/*/reply",
+            "/api/qna/*/reply/*",
+            "/api/qna",
+            "/api/qna/search",
+            "/api/qna/*",
+            "/api/qna/*/answer"
+    };
 }
