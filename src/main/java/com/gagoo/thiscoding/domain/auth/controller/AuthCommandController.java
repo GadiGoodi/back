@@ -18,91 +18,55 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.gagoo.thiscoding.domain.auth.common.AuthConstants.*;
+import static com.gagoo.thiscoding.domain.auth.common.AuthConstants.AUTHORIZATION;
 
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthCommandController {
 
     private final AuthService authService;
     private final HttpServletUtils servletUtils;
 
-    /**
-     * 회원 가입
-     */
     @PostMapping("/sign-up")
     public ResponseEntity<Void> create(@Valid @RequestBody UserCreate userCreate) {
         authService.create(userCreate);
-
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    /**
-     * 로그인
-     */
     @PostMapping("/login")
     public ResponseEntity<UserResponse> login(
             HttpServletResponse response,
             @Valid @RequestBody LoginRequest loginRequest) {
+
         LoginDto loginDto = authService.login(loginRequest);
         setAuthTokens(response, loginDto);
 
         return ResponseEntity.ok(UserResponse.from(loginDto.getUser()));
     }
 
-    /**
-     * 비밀번호 변경
-     */
     @PostMapping("/change-password")
     @AuthorizationRequired(value = {Role.USER, Role.ADMIN})
     public ResponseEntity<String> changePassword(@Valid @RequestBody ChangePasswordRequest request) {
         authService.changePassword(request);
-
-        return ResponseEntity.ok().body("비밀번호 변경이 완료되었습니다.");
+        return ResponseEntity.ok("비밀번호 변경이 완료되었습니다.");
     }
 
-    /**
-     * 비밀번호 초기화
-     */
     @PostMapping("/reset-password")
     public ResponseEntity<String> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
         authService.resetPassword(request);
-
-        return ResponseEntity.ok().body("비밀번호 변경이 완료되었습니다.");
+        return ResponseEntity.ok("비밀번호 변경이 완료되었습니다.");
     }
 
-    /**
-     * 소셜 로그인 유저 정보 조회
-     */
-    @GetMapping("/oauth/user-info")
-    @AuthorizationRequired(value = {Role.USER, Role.ADMIN})
-    public ResponseEntity<UserResponse> getOauthUserInfo(HttpServletResponse response) {
-        LoginDto loginDto = authService.getUserInfo();
-        setAuthTokens(response, loginDto);
-
-        return ResponseEntity.ok(UserResponse.from(loginDto.getUser()));
-    }
-
-    /**
-     * 로그아웃
-     */
     @DeleteMapping("/logout")
     @AuthorizationRequired(value = {Role.USER, Role.ADMIN})
     public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
         authService.removeToken();
-
         servletUtils.setHeader(response, AUTHORIZATION, "");
         servletUtils.removeCookie(request, response, AUTHORIZATION);
-
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * 헤더와 쿠키에 토큰 적용
-     */
     private void setAuthTokens(HttpServletResponse response, LoginDto loginDto) {
         servletUtils.setHeader(response, AUTHORIZATION, loginDto.getToken().getAtk());
         servletUtils.addCookie(response, AUTHORIZATION, loginDto.getToken().getRtk(), loginDto.getToken().getRtkExpTime());
