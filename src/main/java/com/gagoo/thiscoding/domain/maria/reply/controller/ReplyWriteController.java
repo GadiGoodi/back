@@ -26,6 +26,7 @@ public class ReplyWriteController {
     }
 
     @DeleteMapping("/{qnaId}/reply/{replyId}")
+    @AuthorizationRequired(value = {Role.USER, Role.ADMIN})
     public ApiResponse<String> delete(@PathVariable String qnaId, @PathVariable Long replyId) {
         replyService.delete(qnaId, replyId);
         return ApiResponse.ok(null, "댓글 삭제 성공");
