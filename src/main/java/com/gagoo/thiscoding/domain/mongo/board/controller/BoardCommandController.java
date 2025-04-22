@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/qna")
 @RequiredArgsConstructor
-public class BoardWriteController {
+public class BoardCommandController {
 
     private final BoardService boardService;
 

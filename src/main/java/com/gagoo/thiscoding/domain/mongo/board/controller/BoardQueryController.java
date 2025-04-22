@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/qna")
-public class BoardReadController {
+public class BoardQueryController {
 
     private final BoardService boardService;
     private final VisitorIdProvider visitorIdProvider;
