@@ -2,7 +2,7 @@ package com.gagoo.thiscoding.domain.maria.user.domain;
 
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Social;
-import com.gagoo.thiscoding.domain.maria.user.domain.dto.UserCreate;
+import com.gagoo.thiscoding.domain.maria.user.controller.request.UserCreateRequest;
 import com.gagoo.thiscoding.domain.mock.TestContainer;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +15,7 @@ class UserTest {
         // given
         TestContainer testContainer = TestContainer.builder().build();
 
-        UserCreate createUser = UserCreate.builder()
+        UserCreateRequest createUser = UserCreateRequest.builder()
                 .email("test@naver.com")
                 .nickname("Liverpool")
                 .password("test123!!")
