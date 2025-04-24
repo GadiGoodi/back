@@ -5,7 +5,7 @@ import static com.gagoo.thiscoding.global.paging.PageSize.FRIEND;
 import com.gagoo.thiscoding.domain.maria.user.controller.port.UserService;
 import com.gagoo.thiscoding.domain.maria.user.controller.request.UpdateProfileNicknameRequest;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
-import com.gagoo.thiscoding.domain.maria.user.domain.dto.UpdateProfileImageRequest;
+import com.gagoo.thiscoding.domain.maria.user.controller.request.UpdateProfileImageRequest;
 import com.gagoo.thiscoding.domain.maria.user.exception.AlreadyCreateEmail;
 import com.gagoo.thiscoding.domain.maria.user.exception.ExistUserNickname;
 import com.gagoo.thiscoding.domain.maria.user.service.helper.UserFinder;

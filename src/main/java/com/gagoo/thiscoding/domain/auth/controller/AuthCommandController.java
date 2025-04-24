@@ -7,7 +7,7 @@ import com.gagoo.thiscoding.domain.auth.controller.request.ResetPasswordRequest;
 import com.gagoo.thiscoding.domain.auth.controller.response.UserResponse;
 import com.gagoo.thiscoding.domain.auth.dto.LoginDto;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
-import com.gagoo.thiscoding.domain.maria.user.domain.dto.UserCreate;
+import com.gagoo.thiscoding.domain.maria.user.controller.request.UserCreateRequest;
 import com.gagoo.thiscoding.global.common.util.HttpServletUtils;
 import com.gagoo.thiscoding.global.security.aop.AuthorizationRequired;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,8 +29,8 @@ public class AuthCommandController {
     private final HttpServletUtils servletUtils;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<Void> create(@Valid @RequestBody UserCreate userCreate) {
-        authService.create(userCreate);
+    public ResponseEntity<Void> create(@Valid @RequestBody UserCreateRequest userCreateRequest) {
+        authService.create(userCreateRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

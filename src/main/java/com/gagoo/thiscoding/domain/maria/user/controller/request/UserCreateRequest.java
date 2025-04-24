@@ -1,4 +1,4 @@
-package com.gagoo.thiscoding.domain.maria.user.domain.dto;
+package com.gagoo.thiscoding.domain.maria.user.controller.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class UserCreate {
+public class UserCreateRequest {
 
     @Email @NotBlank
     private final String email;
@@ -18,7 +18,7 @@ public class UserCreate {
     private final String checkPassword;
 
     @Builder
-    public UserCreate(String email, String nickname, String password, String checkPassword) {
+    public UserCreateRequest(String email, String nickname, String password, String checkPassword) {
         this.email = email;
         this.nickname = nickname;
         this.password = password;

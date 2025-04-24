@@ -1,8 +1,8 @@
 package com.gagoo.thiscoding.domain.maria.user.service.port;
 
-import com.gagoo.thiscoding.domain.maria.user.domain.dto.AuthCode;
+import com.gagoo.thiscoding.domain.maria.user.controller.request.AuthCodeRequest;
 
 public interface AuthCodeStore {
-    AuthCode save(AuthCode authCode);
-    AuthCode checkAuthCode(AuthCode authCode);
+    AuthCodeRequest save(AuthCodeRequest authCodeRequest);
+    AuthCodeRequest checkAuthCode(AuthCodeRequest authCodeRequest);
 }

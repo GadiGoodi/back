@@ -1,6 +1,6 @@
 package com.gagoo.thiscoding.domain.mock;
 
-import com.gagoo.thiscoding.domain.maria.user.domain.dto.Certification;
+import com.gagoo.thiscoding.domain.maria.user.dto.Certification;
 import com.gagoo.thiscoding.domain.maria.user.service.port.MailSender;
 
 import java.security.SecureRandom;

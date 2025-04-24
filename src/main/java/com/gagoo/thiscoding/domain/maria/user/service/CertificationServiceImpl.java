@@ -1,8 +1,8 @@
 package com.gagoo.thiscoding.domain.maria.user.service;
 
 import com.gagoo.thiscoding.domain.maria.user.controller.port.CertificationService;
-import com.gagoo.thiscoding.domain.maria.user.domain.dto.AuthCode;
-import com.gagoo.thiscoding.domain.maria.user.domain.dto.Certification;
+import com.gagoo.thiscoding.domain.maria.user.controller.request.AuthCodeRequest;
+import com.gagoo.thiscoding.domain.maria.user.dto.Certification;
 import com.gagoo.thiscoding.domain.maria.user.service.port.AuthCodeStore;
 import com.gagoo.thiscoding.domain.maria.user.service.port.MailSender;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
@@ -26,11 +26,11 @@ public class CertificationServiceImpl implements CertificationService {
      * @param email 회원가입할 이메일
      */
     @Override
-    public AuthCode sendJoinCode(String email) {
+    public AuthCodeRequest sendJoinCode(String email) {
         Certification certification = mailSender.sendSignUpCode(email);
-        AuthCode authCode = AuthCode.of(certification.getEmail(), certification.getCode());
+        AuthCodeRequest authCodeRequest = AuthCodeRequest.of(certification.getEmail(), certification.getCode());
 
-        return authCodeStore.save(authCode);
+        return authCodeStore.save(authCodeRequest);
     }
 
     /**
@@ -38,23 +38,23 @@ public class CertificationServiceImpl implements CertificationService {
      * @param email 임시 비밀번호 발급받을 이메일
      */
     @Override
-    public AuthCode sendTemporaryPassword(String email) {
+    public AuthCodeRequest sendTemporaryPassword(String email) {
         validateExistsUser(email);
 
         Certification certification = mailSender.sendResetPasswordCode(email);
-        AuthCode authCode = AuthCode.of(certification.getEmail(), certification.getCode());
+        AuthCodeRequest authCodeRequest = AuthCodeRequest.of(certification.getEmail(), certification.getCode());
 
-        return authCodeStore.save(authCode);
+        return authCodeStore.save(authCodeRequest);
     }
 
     /**
      * 전송한 인증코드가 특정 이메일로 보낸 인증 코드인지 확인
-     * @param authCode email, code 매핑 클래스
+     * @param authCodeRequest email, code 매핑 클래스
      */
     @Override
-    public AuthCode checkAuthCode(AuthCode authCode) {
+    public AuthCodeRequest checkAuthCode(AuthCodeRequest authCodeRequest) {
         return authCodeStore.
-                checkAuthCode(authCode);
+                checkAuthCode(authCodeRequest);
     }
 
     private void validateExistsUser(String email) {

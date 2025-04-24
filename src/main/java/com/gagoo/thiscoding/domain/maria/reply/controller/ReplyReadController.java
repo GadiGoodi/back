@@ -2,18 +2,12 @@ package com.gagoo.thiscoding.domain.maria.reply.controller;
 
 import com.gagoo.thiscoding.domain.maria.reply.controller.port.ReplyService;
 import com.gagoo.thiscoding.domain.maria.reply.service.dto.ReplyList;
-import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
 import com.gagoo.thiscoding.global.common.response.ApiResponse;
 import com.gagoo.thiscoding.global.paging.aop.ConvertToOneBase;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
-import com.gagoo.thiscoding.global.security.aop.AuthorizationRequired;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-
-import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/api/qna")
