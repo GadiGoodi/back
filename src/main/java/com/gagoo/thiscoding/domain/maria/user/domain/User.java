@@ -3,7 +3,7 @@ package com.gagoo.thiscoding.domain.maria.user.domain;
 import com.gagoo.thiscoding.domain.auth.service.port.PasswordEncoderHolder;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Social;
-import com.gagoo.thiscoding.domain.maria.user.domain.dto.UserCreate;
+import com.gagoo.thiscoding.domain.maria.user.controller.request.UserCreateRequest;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -36,11 +36,11 @@ public class User {
     /**
      * 회원가입
      */
-    public static User create(UserCreate userCreate, PasswordEncoderHolder passwordEncoder) {
+    public static User create(UserCreateRequest userCreateRequest, PasswordEncoderHolder passwordEncoder) {
         return User.builder()
-                .email(userCreate.getEmail())
-                .password(passwordEncoder.encode(userCreate.getPassword()))
-                .nickname(userCreate.getNickname())
+                .email(userCreateRequest.getEmail())
+                .password(passwordEncoder.encode(userCreateRequest.getPassword()))
+                .nickname(userCreateRequest.getNickname())
                 .isActivated(true)
                 .isBanned(false)
                 .role(Role.USER)

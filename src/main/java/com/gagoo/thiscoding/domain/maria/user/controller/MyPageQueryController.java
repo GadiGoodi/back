@@ -3,7 +3,7 @@ package com.gagoo.thiscoding.domain.maria.user.controller;
 import com.gagoo.thiscoding.domain.maria.user.controller.port.MyPageService;
 import com.gagoo.thiscoding.domain.maria.user.controller.port.UserService;
 import com.gagoo.thiscoding.domain.maria.user.controller.response.Top10StatusResponse;
-import com.gagoo.thiscoding.domain.maria.user.controller.response.UserProfile;
+import com.gagoo.thiscoding.domain.maria.user.controller.response.UserProfileResponse;
 import com.gagoo.thiscoding.domain.maria.user.domain.contants.Role;
 import com.gagoo.thiscoding.global.common.response.ApiResponse;
 import com.gagoo.thiscoding.global.paging.aop.ConvertToOneBase;
@@ -31,9 +31,9 @@ public class MyPageQueryController {
     @GetMapping("/search")
     @ConvertToOneBase
     @AuthorizationRequired(value = Role.USER)
-    public ApiResponse<CustomPageDto<UserProfile>> search(@RequestParam String keyword, Pageable pageable) {
-        Page<UserProfile> result = userService.searchByNickname(keyword, pageable)
-                .map(UserProfile::from);
+    public ApiResponse<CustomPageDto<UserProfileResponse>> search(@RequestParam String keyword, Pageable pageable) {
+        Page<UserProfileResponse> result = userService.searchByNickname(keyword, pageable)
+                .map(UserProfileResponse::from);
         return ApiResponse.ok(CustomPageDto.of(result), "유저 프로필 검색 성공");
     }
 }

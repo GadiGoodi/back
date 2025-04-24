@@ -1,4 +1,4 @@
-package com.gagoo.thiscoding.domain.maria.user.domain.dto;
+package com.gagoo.thiscoding.domain.maria.user.dto;
 
 import lombok.Builder;
 import lombok.Getter;

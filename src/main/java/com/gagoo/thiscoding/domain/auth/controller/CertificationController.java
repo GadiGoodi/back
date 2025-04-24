@@ -1,7 +1,7 @@
 package com.gagoo.thiscoding.domain.auth.controller;
 
 import com.gagoo.thiscoding.domain.maria.user.controller.port.CertificationService;
-import com.gagoo.thiscoding.domain.maria.user.domain.dto.AuthCode;
+import com.gagoo.thiscoding.domain.maria.user.controller.request.AuthCodeRequest;
 import com.gagoo.thiscoding.global.common.response.ApiResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -39,8 +39,8 @@ public class CertificationController {
      * 인증코드 확인
      */
     @PostMapping("/auth-code/check")
-    public ApiResponse<Void> checkJoinCode(@Valid @RequestBody AuthCode authCode) {
-        certificationService.checkAuthCode(authCode);
+    public ApiResponse<Void> checkJoinCode(@Valid @RequestBody AuthCodeRequest authCodeRequest) {
+        certificationService.checkAuthCode(authCodeRequest);
 
         return ApiResponse.ok(null, "인증코드 확인 성공");
     }

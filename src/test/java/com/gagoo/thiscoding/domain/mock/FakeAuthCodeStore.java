@@ -1,6 +1,6 @@
 package com.gagoo.thiscoding.domain.mock;
 
-import com.gagoo.thiscoding.domain.maria.user.domain.dto.AuthCode;
+import com.gagoo.thiscoding.domain.maria.user.controller.request.AuthCodeRequest;
 import com.gagoo.thiscoding.domain.maria.user.exception.AuthCodeNotFoundException;
 import com.gagoo.thiscoding.domain.maria.user.exception.AuthCodeNotMatchException;
 import com.gagoo.thiscoding.domain.maria.user.service.port.AuthCodeStore;
@@ -15,23 +15,23 @@ public class FakeAuthCodeStore implements AuthCodeStore {
     private final Map<String, String> store = new HashMap<>();
 
     @Override
-    public AuthCode save(AuthCode authCode) {
-        store.put(authCode.email(), authCode.code());
-        return authCode;
+    public AuthCodeRequest save(AuthCodeRequest authCodeRequest) {
+        store.put(authCodeRequest.email(), authCodeRequest.code());
+        return authCodeRequest;
     }
 
     @Override
-    public AuthCode checkAuthCode(AuthCode authCode) {
-        String savedCode = store.get(authCode.email());
+    public AuthCodeRequest checkAuthCode(AuthCodeRequest authCodeRequest) {
+        String savedCode = store.get(authCodeRequest.email());
 
         if (savedCode == null || savedCode.isBlank()) {
             throw new AuthCodeNotFoundException(AUTH_CODE_NOT_FOUND);
         }
 
-        if (!savedCode.equals(authCode.code())) {
+        if (!savedCode.equals(authCodeRequest.code())) {
             throw new AuthCodeNotMatchException(AUTH_CODE_NOT_MATCH);
         }
 
-        return authCode;
+        return authCodeRequest;
     }
 }

@@ -1,6 +1,6 @@
 package com.gagoo.thiscoding.domain.maria.user.infrastructure.impl;
 
-import com.gagoo.thiscoding.domain.maria.user.domain.dto.AuthCode;
+import com.gagoo.thiscoding.domain.maria.user.controller.request.AuthCodeRequest;
 import com.gagoo.thiscoding.domain.maria.user.exception.AuthCodeNotFoundException;
 import com.gagoo.thiscoding.domain.maria.user.exception.AuthCodeNotMatchException;
 import com.gagoo.thiscoding.domain.maria.user.infrastructure.AuthCodeRedis;
@@ -10,7 +10,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 import java.util.concurrent.TimeUnit;
-import static com.gagoo.thiscoding.domain.maria.user.domain.contants.CodeKeyChain.*;
+
+import static com.gagoo.thiscoding.domain.maria.user.domain.contants.CodeKeyChain.CODE;
 import static com.gagoo.thiscoding.global.exception.ErrorCode.*;
 
 @Repository
@@ -24,30 +25,30 @@ public class AuthCodeStoreImpl implements AuthCodeStore {
      * 인증코드 레디스에 저장
      */
     @Override
-    public AuthCode save(AuthCode authCode) {
-        String key = authCode.email() + CODE;
-        String value = authCode.code();
+    public AuthCodeRequest save(AuthCodeRequest authCodeRequest) {
+        String key = authCodeRequest.email() + CODE;
+        String value = authCodeRequest.code();
         int ttl = 300;
 
         redisTemplate.opsForValue().set(key, value,  ttl, TimeUnit.SECONDS);
 
-        log.info("이메일 {}에 인증코드를 전송했습니다.", authCode.email());
+        log.info("이메일 {}에 인증코드를 전송했습니다.", authCodeRequest.email());
 
-        return AuthCodeRedis.from(authCode).toModel();
+        return AuthCodeRedis.from(authCodeRequest).toModel();
     }
 
     /**
      * 인증코드가 일치하는지와 null 체크
-     * @param authCode email과 joinCode
+     * @param authCodeRequest email과 joinCode
      */
     @Override
-    public AuthCode checkAuthCode(AuthCode authCode) {
-        String key = authCode.email() + CODE;
-        String value = authCode.code();
+    public AuthCodeRequest checkAuthCode(AuthCodeRequest authCodeRequest) {
+        String key = authCodeRequest.email() + CODE;
+        String value = authCodeRequest.code();
 
         matchAuthCode(key, value);
 
-        return AuthCodeRedis.from(authCode).toModel();
+        return AuthCodeRedis.from(authCodeRequest).toModel();
     }
 
     /**

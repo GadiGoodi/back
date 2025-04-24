@@ -1,4 +1,4 @@
-package com.gagoo.thiscoding.domain.maria.user.domain.dto;
+package com.gagoo.thiscoding.domain.maria.user.controller.request;
 
 import jakarta.validation.constraints.NotBlank;
 

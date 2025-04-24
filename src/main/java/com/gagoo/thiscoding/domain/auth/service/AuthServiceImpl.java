@@ -7,7 +7,7 @@ import com.gagoo.thiscoding.domain.auth.controller.request.ResetPasswordRequest;
 import com.gagoo.thiscoding.domain.auth.service.port.PasswordService;
 import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
-import com.gagoo.thiscoding.domain.maria.user.domain.dto.UserCreate;
+import com.gagoo.thiscoding.domain.maria.user.controller.request.UserCreateRequest;
 import com.gagoo.thiscoding.domain.maria.user.service.helper.UserFinder;
 import com.gagoo.thiscoding.domain.maria.user.service.port.UserRepository;
 import com.gagoo.thiscoding.domain.auth.domain.Token;
@@ -30,13 +30,13 @@ public class AuthServiceImpl implements AuthService {
 
     /**
      * 회원가입
-     * @param userCreate
+     * @param userCreateRequest
      * @return 회원가입한 user 정보
      */
     @Override
-    public User create(UserCreate userCreate) {
-        passwordService.validatePasswordMatch(userCreate.getPassword(), userCreate.getCheckPassword());
-        User user = User.create(userCreate, passwordService.getPasswordEncoder());
+    public User create(UserCreateRequest userCreateRequest) {
+        passwordService.validatePasswordMatch(userCreateRequest.getPassword(), userCreateRequest.getCheckPassword());
+        User user = User.create(userCreateRequest, passwordService.getPasswordEncoder());
 
         return userRepository.save(user);
     }

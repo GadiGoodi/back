@@ -1,7 +1,7 @@
 package com.gagoo.thiscoding.domain.maria.user.service;
 
 import com.gagoo.thiscoding.domain.maria.user.controller.port.CertificationService;
-import com.gagoo.thiscoding.domain.maria.user.domain.dto.AuthCode;
+import com.gagoo.thiscoding.domain.maria.user.controller.request.AuthCodeRequest;
 import com.gagoo.thiscoding.domain.maria.user.exception.AuthCodeNotFoundException;
 import com.gagoo.thiscoding.domain.maria.user.exception.AuthCodeNotMatchException;
 import com.gagoo.thiscoding.domain.mock.TestContainer;
@@ -27,7 +27,7 @@ class CertificationServiceImplTest {
         String email = "junsj1230@naver.com";
 
         // when
-        AuthCode result = certificationService.sendJoinCode(email);
+        AuthCodeRequest result = certificationService.sendJoinCode(email);
 
         // then
         assertThat(result.email()).isEqualTo(email);
@@ -40,16 +40,16 @@ class CertificationServiceImplTest {
         // given
         String email = "junsj1230@naver.com";
 
-        AuthCode sendAuthCode = certificationService.sendJoinCode(email);
+        AuthCodeRequest sendAuthCodeRequest = certificationService.sendJoinCode(email);
 
         // when
-        AuthCode authCode = AuthCode.of(email, sendAuthCode.code());
+        AuthCodeRequest authCodeRequest = AuthCodeRequest.of(email, sendAuthCodeRequest.code());
 
-        AuthCode result = certificationService.checkAuthCode(authCode);
+        AuthCodeRequest result = certificationService.checkAuthCode(authCodeRequest);
 
         // then
-        assertThat(sendAuthCode.email()).isEqualTo(result.email());
-        assertThat(sendAuthCode.code()).isEqualTo(result.code());
+        assertThat(sendAuthCodeRequest.email()).isEqualTo(result.email());
+        assertThat(sendAuthCodeRequest.code()).isEqualTo(result.code());
     }
 
     @Test
@@ -59,11 +59,11 @@ class CertificationServiceImplTest {
         certificationService.sendJoinCode(email);
 
         // when
-        AuthCode wrongAuthCode = AuthCode.of(email, "000000"); // 잘못된 코드
+        AuthCodeRequest wrongAuthCodeRequest = AuthCodeRequest.of(email, "000000"); // 잘못된 코드
 
         // then
         assertThrows(AuthCodeNotMatchException.class,
-                () -> certificationService.checkAuthCode(wrongAuthCode)
+                () -> certificationService.checkAuthCode(wrongAuthCodeRequest)
         );
     }
 
@@ -71,16 +71,16 @@ class CertificationServiceImplTest {
     void 잘못된_이메일로_인증코드_검증을_요청시_예외가_발생한다() {
         // given
         String email = "junsj1230@naver.com";
-        AuthCode sendAuthCode = certificationService.sendJoinCode(email);
+        AuthCodeRequest sendAuthCodeRequest = certificationService.sendJoinCode(email);
 
         // when
         String wrongEmail = "wrong@naver.com";
 
-        AuthCode wrongAuthCode = AuthCode.of(wrongEmail, sendAuthCode.code());
+        AuthCodeRequest wrongAuthCodeRequest = AuthCodeRequest.of(wrongEmail, sendAuthCodeRequest.code());
 
         // then
         assertThrows(AuthCodeNotFoundException.class,
-                () -> certificationService.checkAuthCode(wrongAuthCode)
+                () -> certificationService.checkAuthCode(wrongAuthCodeRequest)
         );
     }
 }
