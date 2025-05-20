@@ -11,7 +11,8 @@ import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.user.service.helper.UserFinder;
 import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
 import com.gagoo.thiscoding.domain.mongo.board.service.exception.QnaNotFoundException;
-import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardRepository;
+import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardQueryRepository;
+import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardStatsService;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,8 @@ import org.springframework.stereotype.Service;
 public class LikeServiceImpl implements LikeService {
 
     private final LikeRepository likeRepository;
-    private final BoardRepository boardRepository;
+    private final BoardQueryRepository boardQueryRepository;
+    private final BoardStatsService boardStatsService;
     private final UserFinder userFinder;
     private final SecurityUtils securityUtils;
 
@@ -39,7 +41,7 @@ public class LikeServiceImpl implements LikeService {
 
         Like like = Like.create(currentUser, qnaId);
 
-        boardRepository.incrementLikeCount(qnaId);
+        boardStatsService.incrementLikeCount(qnaId);
         return likeRepository.save(like);
     }
 
@@ -54,7 +56,7 @@ public class LikeServiceImpl implements LikeService {
 
         Like like = getLikeByQnaIdAndUserId(qnaId, getCurrentUser().getId());
 
-        boardRepository.decrementLikeCount(qnaId);
+        boardStatsService.decrementLikeCount(qnaId);
         likeRepository.deleteById(like.getId());
     }
 
@@ -95,7 +97,7 @@ public class LikeServiceImpl implements LikeService {
      * @param qnaId
      */
     private void validateLikeCount(String qnaId) {
-        if(boardRepository.getById(qnaId).getLikeCount() == 0) {
+        if(boardStatsService.findBoardStats(qnaId).getLikeCount() == 0) {
             throw new LikeCountUnderFlowException(ErrorCode.INVALID_LIKE_COUNT);
         }
     }
@@ -118,7 +120,7 @@ public class LikeServiceImpl implements LikeService {
      * @return
      */
     private Board getBoardById(String qnaId) {
-        return boardRepository.getById(qnaId);
+        return boardQueryRepository.getById(qnaId);
     }
 
     /**
