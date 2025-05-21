@@ -10,8 +10,7 @@ import com.gagoo.thiscoding.domain.maria.reply.service.port.ReplyRepository;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.user.service.helper.UserFinder;
 import com.gagoo.thiscoding.domain.mongo.board.service.exception.QnaNotFoundException;
-import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardQueryRepository;
-import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardStatsService;
+import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import com.gagoo.thiscoding.global.exception.GlobalException;
 import com.gagoo.thiscoding.global.paging.dto.CustomPageDto;
@@ -32,8 +31,7 @@ import java.util.Optional;
 public class ReplyServiceImpl implements ReplyService {
 
     private final ReplyRepository replyRepository;
-    private final BoardQueryRepository boardQueryRepository;
-    private final BoardStatsService boardStatsService;
+    private final BoardRepository boardRepository;
     private final SecurityUtils securityUtils;
     private final UserFinder userFinder;
 
@@ -53,7 +51,7 @@ public class ReplyServiceImpl implements ReplyService {
 
         Reply reply = Reply.create(currentUser, qnaId, replyCreate, parentComment);
 
-        boardStatsService.incrementReplyCount(qnaId);
+        boardRepository.incrementReplyCount(qnaId);
         return replyRepository.save(reply);
     }
 
@@ -135,7 +133,7 @@ public class ReplyServiceImpl implements ReplyService {
      * 게시물이 있는지 확인
      */
     private void validateQnAId(String qnaId) {
-        if (!boardQueryRepository.existsById(qnaId)) {
+        if (!boardRepository.existsById(qnaId)) {
             throw new QnaNotFoundException(ErrorCode.QNA_NOT_FOUND);
         }
     }

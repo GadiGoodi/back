@@ -4,7 +4,7 @@ import com.gagoo.thiscoding.domain.maria.user.controller.port.MyPageService;
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.user.service.helper.UserFinder;
 import com.gagoo.thiscoding.domain.auth.service.port.SecurityUtils;
-import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardQueryRepository;
+import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MyPageServiceImpl implements MyPageService {
 
-    private final BoardQueryRepository boardQueryRepository;
+    private final BoardRepository boardRepository;
     private final UserFinder userFinder;
     private final SecurityUtils securityUtils;
 
@@ -22,7 +22,7 @@ public class MyPageServiceImpl implements MyPageService {
     public Boolean isTop10() {
         User currentUser = userFinder.getByEmail(securityUtils.getUserEmail());
 
-        List<Long> top10Users = boardQueryRepository.getTop10Users();
+        List<Long> top10Users = boardRepository.getTop10Users();
         boolean isTop10 = validateTop10(currentUser, top10Users);
 
         return isTop10;
