@@ -27,8 +27,6 @@ public class BoardQueryController {
 
     @GetMapping("/{qnaId}")
     public ApiResponse<QnaResponse> get(@PathVariable String qnaId, HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("[컨트롤러 진입] qnaId = " + qnaId);
-        System.out.println("[요청 URI] = " + request.getRequestURI());
         String visitorId = visitorIdProvider.getVisitorId(request, response);
         return ApiResponse
                 .ok(QnaResponse.from(boardQueryService.get(qnaId, visitorId)), "QnA 상세 조회 성공");

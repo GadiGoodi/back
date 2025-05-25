@@ -4,12 +4,19 @@ import com.gagoo.thiscoding.domain.mongo.BaseTimeDocument;
 import com.gagoo.thiscoding.domain.mongo.board.domain.BoardView;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
 
 @Getter
 @Document(collection = "qna_view")
+@CompoundIndexes({
+        @CompoundIndex(name = "qna_visitor_date_idx",
+                def = "{'qnaId': 1, 'visitorId': 1, 'viewDate': 1}",
+                unique = true)
+})
 public class BoardViewDocument extends BaseTimeDocument {
 
     @Id

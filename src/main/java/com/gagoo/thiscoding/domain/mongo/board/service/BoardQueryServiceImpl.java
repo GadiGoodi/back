@@ -40,10 +40,8 @@ public class BoardQueryServiceImpl implements BoardQueryService {
      */
     @Override
     public QnaDetail get(String qnaId, String visitorId) {
-        System.out.println("qnaId = " + qnaId);
         boardViewService.processVisit(qnaId, visitorId);
         Board board = boardQueryRepository.getById(qnaId);
-        System.out.println("board.getId() = " + board.getId());
         BoardStats boardStats = boardStatsService.findBoardStats(board.getId());
         boolean bookmarked = false;
 

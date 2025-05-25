@@ -23,7 +23,6 @@ public class BoardStatsServiceImpl implements BoardStatsService {
 
     @Override
     public BoardStats findBoardStats(String qnaId) {
-        System.out.println("qnaId = " + qnaId);
         return boardStatsRepository.findBoardStatsByQnaId(qnaId).orElseThrow(
                 () -> new QnaNotFoundException(ErrorCode.QNA_NOT_FOUND)
         );
