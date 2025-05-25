@@ -1,7 +1,7 @@
 package com.gagoo.thiscoding.domain.mongo.board.service;
 
 import com.gagoo.thiscoding.domain.mongo.board.domain.BoardView;
-import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardRepository;
+import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardStatsService;
 import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardViewRepository;
 import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardViewService;
 import lombok.Builder;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class BoardViewServiceImpl implements BoardViewService {
 
     private final BoardViewRepository boardViewRepository;
-    private final BoardRepository boardRepository;
+    private final BoardStatsService boardStatsService;
 
     /**
      * 오늘 방문한 사용자인지 확인
@@ -28,9 +28,12 @@ public class BoardViewServiceImpl implements BoardViewService {
         }
 
         boardViewRepository.save(BoardView.record(qnaId, visitorId));
-        boardRepository.incrementViewCount(qnaId);
+        boardStatsService.incrementViewCount(qnaId);
     }
 
+    /**
+     * 이미 방문한 사용자인지 확인
+     */
     private boolean isAlreadyVisit(String qnaId, String visitorId) {
         return boardViewRepository.existsByQnaAndVisitor(qnaId, visitorId);
     }

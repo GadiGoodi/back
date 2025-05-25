@@ -1,6 +1,11 @@
 package com.gagoo.thiscoding.domain.mongo.board.infrastructure.impl;
 
+import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
 import com.gagoo.thiscoding.domain.mongo.board.infrastructure.BoardDocument;
+import com.gagoo.thiscoding.domain.mongo.board.service.dto.KeywordSearchResult;
+import com.gagoo.thiscoding.domain.mongo.board.service.dto.MyPageAnswer;
+import com.gagoo.thiscoding.domain.mongo.board.service.dto.MyPageBookmarkQuestion;
+import com.gagoo.thiscoding.domain.mongo.board.service.dto.MyPageQuestion;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -71,9 +76,12 @@ public class BoardCustomRepository {
 
         List<BoardDocument> answerList = results.getMappedResults();
 
-        LongSupplier totalSupplier = () -> mongoTemplate.count(new Query(Criteria.where("parentId").is(qnaId)), "qna");
+        Query countQuery = new Query(Criteria.where("parentId").is(qnaId));
 
-        return PageableExecutionUtils.getPage(answerList, pageable, totalSupplier);
+        return PageableExecutionUtils.getPage(
+                answerList,
+                pageable,
+                () -> mongoTemplate.count(countQuery, BoardDocument.class));
     }
 
     /**
@@ -92,55 +100,199 @@ public class BoardCustomRepository {
     }
 
     /**
-     * 조회수 1 증가
+     * 키워드 검색
      */
-    public void incrementViewCount(String qnaId) {
+    public Page<KeywordSearchResult> findByKeyword(String keyword, Pageable pageable) {
+        Criteria criteria = new Criteria().orOperator(
+                Criteria.where("title").regex(keyword, "i"),
+                Criteria.where("content").regex(keyword, "i")
+        );
+
+        Aggregation aggregation = newAggregation(
+                match(criteria),
+
+                lookup("qna_stats", "_id", "qnaId", "stats"),
+
+                unwind("stats"),
+
+                sort(pageable.getSort().isEmpty() ? Sort.by(Sort.Order.desc("createDate")) : pageable.getSort()),
+                skip(pageable.getOffset()),
+                limit(pageable.getPageSize()),
+
+                project()
+                        .and("_id").as("qnaId")
+                        .and("language").as("language")
+                        .and("title").as("title")
+                        .and("content").as("content")
+                        .and("nickname").as("nickname")
+                        .and("stats.viewCount").as("viewCount")
+                        .and("stats.answerCount").as("answerCount")
+                        .and("isAdopted").as("isAdopted")
+                        .and("createDate").as("createDate")
+        );
+
+        AggregationResults<KeywordSearchResult> results =
+                mongoTemplate.aggregate(aggregation, "qna", KeywordSearchResult.class);
+
+        List<KeywordSearchResult> content = results.getMappedResults();
+
+        Query countQuery = new Query(criteria);
+
+        return PageableExecutionUtils.getPage(
+                content,
+                pageable,
+                () -> mongoTemplate.count(countQuery, BoardDocument.class)
+        );
+    }
+
+    /**
+     * 내가 작성한 질문 조회
+     */
+    public Page<MyPageQuestion> findQuestionsByUserId(Long userId, Pageable pageable) {
+        Criteria criteria = Criteria.where("userId").is(userId)
+                .and("parentId").exists(false);
+
+        Aggregation aggregation = newAggregation(
+                match(criteria),
+
+                lookup("qna_stats", "_id", "qnaId", "stats"),
+
+                unwind("stats"),
+
+                sort(pageable.getSort().isEmpty()
+                        ? Sort.by(Sort.Order.desc("createDate"))
+                        : pageable.getSort()),
+                skip(pageable.getOffset()),
+                limit(pageable.getPageSize()),
+
+                project()
+                        .and("_id").as("qnaId")
+                        .and("language").as("language")
+                        .and("title").as("title")
+                        .and("content").as("content")
+                        .and("stats.viewCount").as("viewCount")
+                        .and("stats.answerCount").as("answerCount")
+                        .and("isAdopted").as("isAdopted")
+                        .and("createDate").as("createDate")
+        );
+
+        AggregationResults<MyPageQuestion> results =
+                mongoTemplate.aggregate(aggregation, "qna", MyPageQuestion.class);
+
+        List<MyPageQuestion> content = results.getMappedResults();
+
+        Query countQuery = new Query(criteria);
+
+        return PageableExecutionUtils.getPage(
+                content,
+                pageable,
+                () -> mongoTemplate.count(countQuery, BoardDocument.class)
+        );
+    }
+
+    /**
+     * 내가 작성한 답변 조회
+     */
+    public Page<MyPageAnswer> findAnswerByUserId(Long userId, Pageable pageable) {
+        Criteria criteria = Criteria.where("userId").is(userId)
+                .and("parentId").exists(true);
+
+        Aggregation aggregation = newAggregation(
+                match(criteria),
+
+                lookup("qna_stats", "_id", "qnaId", "stats"),
+
+                unwind("stats"),
+
+                sort(pageable.getSort().isEmpty()
+                        ? Sort.by(Sort.Order.desc("createDate"))
+                        : pageable.getSort()),                skip(pageable.getOffset()),
+                limit(pageable.getPageSize()),
+
+                project()
+                        .and("_id").as("answerId")
+                        .and("parentId").as("parentId")
+                        .and("language").as("qnaLanguage")
+                        .and("title").as("qnaTitle")
+                        .and("content").as("content")
+                        .and("stats.replyCount").as("replyCount")
+                        .and("isAdopted").as("isAdopted")
+                        .and("createDate").as("createDate")
+        );
+
+        AggregationResults<MyPageAnswer> results =
+                mongoTemplate.aggregate(aggregation, "qna", MyPageAnswer.class);
+
+        List<MyPageAnswer> content = results.getMappedResults();
+
+        Query countQuery = new Query(criteria);
+
+        return PageableExecutionUtils.getPage(
+                content,
+                pageable,
+                () -> mongoTemplate.count(countQuery, BoardDocument.class)
+        );
+    }
+
+    /**
+     * 내가 북마크한 질문 조회
+     */
+    public Page<MyPageBookmarkQuestion> findBookmarkedQuestionByIdIn(List<String> bookmarkedQuestionList, Pageable pageable) {
+        if (bookmarkedQuestionList == null || bookmarkedQuestionList.isEmpty()) {
+            return Page.empty(pageable);
+        }
+
+        Criteria criteria = Criteria.where("_id").in(bookmarkedQuestionList);
+
+        Aggregation aggregation = newAggregation(
+                match(criteria),
+
+                lookup("qna_stats", "_id", "qnaId", "stats"),
+
+                unwind("stats", true),
+
+                sort(pageable.getSort().isEmpty()
+                        ? Sort.by(Sort.Order.desc("createDate"))
+                        : pageable.getSort()),
+                skip(pageable.getOffset()),
+                limit(pageable.getPageSize()),
+
+                project()
+                        .and("_id").as("qnaId")
+                        .and("language").as("language")
+                        .and("title").as("title")
+                        .and("content").as("content")
+                        .and("stats.viewCount").as("viewCount")
+                        .and("stats.answerCount").as("answerCount")
+                        .and("isAdopted").as("isAdopted")
+                        .and("createDate").as("createDate")
+        );
+
+        AggregationResults<MyPageBookmarkQuestion> results =
+                mongoTemplate.aggregate(aggregation, "qna", MyPageBookmarkQuestion.class);
+
+        List<MyPageBookmarkQuestion> content = results.getMappedResults();
+
+        Query countQuery = new Query(criteria);
+
+        return PageableExecutionUtils.getPage(
+                content,
+                pageable,
+                () -> mongoTemplate.count(countQuery, BoardDocument.class)
+        );    }
+
+
+    /**
+     * QnA에 달린 답변이 채택되면
+     * QnA의 isAdopt 값 true로 변경
+     */
+    public void markParentAsAdopted(String qnaId) {
         Query query = new Query(Criteria.where("_id").is(qnaId));
-        Update update = new Update().inc("viewCount", 1);
+        Update update = new Update().set("isAdopt", true);
 
         mongoTemplate.updateFirst(query, update, BoardDocument.class);
     }
 
-    /**
-     * 답변 갯수 1 증가
-     */
-    public void incrementAnswerCount(String parentQnaId) {
-        Query query = new Query(Criteria.where("id").is(parentQnaId));
-        Update update = new Update().inc("answerCount", 1);
-
-        mongoTemplate.updateFirst(query, update, BoardDocument.class);
-    }
-
-    /**
-     * 댓글 갯수 1 증가
-     */
-    public void incrementReplyCount(String parentQnaId) {
-        Query query = new Query(Criteria.where("id").is(parentQnaId));
-        Update update = new Update().inc("replyCount", 1);
-
-        mongoTemplate.updateFirst(query, update, BoardDocument.class);
-    }
-
-    /**
-     * 추천 개수 1 증가
-     */
-    public void incrementLikeCount(String qnaId) {
-        Query query = new Query(Criteria.where("_id").is(qnaId));
-        Update update = new Update().inc("likeCount", 1);
-
-        mongoTemplate.updateFirst(query, update, BoardDocument.class);
-    }
-
-    /**
-     * 추천 개수 1 감소
-     */
-    public void decrementLikeCount(String qnaId) {
-        Query query = new Query(Criteria.where("_id").is(qnaId));
-        Update update = new Update().inc("likeCount", -1);
-        
-        mongoTemplate.updateFirst(query, update, BoardDocument.class);
-    }
-    
     /**
      * 답변 채택
      */
@@ -149,5 +301,33 @@ public class BoardCustomRepository {
         Update update = new Update().set("isSelected", true);
 
         mongoTemplate.updateFirst(query, update, BoardDocument.class);
+    }
+
+    /**
+     * 질문 전체조회
+     */
+    public Page<BoardDocument> findRootQuestions(Pageable pageable) {
+        Criteria criteria = Criteria.where("parentId").exists(false)
+                .and("isBlind").is(false); // 블라인드 제외
+
+        Aggregation aggregation = newAggregation(
+                match(criteria),
+                sort(pageable.getSort().isEmpty() ? Sort.by(Sort.Order.desc("createDate")) : pageable.getSort()),
+                skip(pageable.getOffset()),
+                limit(pageable.getPageSize())
+        );
+
+        AggregationResults<BoardDocument> results =
+                mongoTemplate.aggregate(aggregation, "qna", BoardDocument.class);
+
+        List<BoardDocument> content = results.getMappedResults();
+
+        Query countQuery = new Query(criteria);
+
+        return PageableExecutionUtils.getPage(
+                content,
+                pageable,
+                () -> mongoTemplate.count(countQuery, BoardDocument.class)
+        );
     }
 }

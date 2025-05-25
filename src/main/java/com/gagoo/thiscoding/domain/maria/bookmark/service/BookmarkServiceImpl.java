@@ -10,7 +10,7 @@ import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.maria.user.service.helper.UserFinder;
 import com.gagoo.thiscoding.domain.mongo.board.domain.Board;
 import com.gagoo.thiscoding.domain.mongo.board.service.exception.QnaNotFoundException;
-import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardRepository;
+import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardQueryRepository;
 import com.gagoo.thiscoding.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 public class BookmarkServiceImpl implements BookmarkService {
 
     private final BookmarkRepository bookmarkRepository;
-    private final BoardRepository boardRepository;
+    private final BoardQueryRepository boardQueryRepository;
     private final UserFinder userFinder;
     private final SecurityUtils securityUtils;
 
@@ -102,7 +102,7 @@ public class BookmarkServiceImpl implements BookmarkService {
      * @return
      */
     private Board getBoardById(String qnaId) {
-        return boardRepository.getById(qnaId);
+        return boardQueryRepository.getById(qnaId);
     }
 
     /**
