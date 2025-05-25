@@ -2,9 +2,6 @@ package com.gagoo.thiscoding.domain.mongo.board.domain;
 
 import com.gagoo.thiscoding.domain.maria.user.domain.User;
 import com.gagoo.thiscoding.domain.mongo.board.domain.dto.BoardCreate;
-import com.gagoo.thiscoding.domain.mongo.board.service.exception.InvalidAnswerUserException;
-import com.gagoo.thiscoding.domain.mongo.board.service.exception.NotQnaUserException;
-import com.gagoo.thiscoding.global.exception.ErrorCode;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -21,15 +18,18 @@ public class Board {
     private String content;
     private String language;
     private String parentId;
+    private Long likeCount;
+    private Long viewCount;
+    private Long answerCount;
+    private Long replyCount;
     private boolean isBlind;
     private boolean isSelected;
-    private boolean isAdopted;
     private LocalDateTime createDate;
 
     /**
      * qna 작성
      */
-    public static Board write(User user, BoardCreate boardCreate) {
+    public static Board create(User user, BoardCreate boardCreate) {
         return Board.builder()
                 .userId(user.getId())
                 .nickname(user.getNickname())
@@ -37,8 +37,12 @@ public class Board {
                 .title(boardCreate.title())
                 .content(boardCreate.content())
                 .language(boardCreate.language())
+                .parentId("root")
+                .likeCount(0L)
+                .viewCount(0L)
+                .answerCount(0L)
+                .replyCount(0L)
                 .isBlind(false)
-                .isAdopted(false)
                 .build();
     }
 
@@ -52,21 +56,10 @@ public class Board {
                 .profileImg(user.getImageUrl())
                 .content(content)
                 .parentId(parentId)
+                .likeCount(0L)
+                .replyCount(0L)
                 .isBlind(false)
                 .isSelected(false)
                 .build();
-    }
-
-    /**
-     * 답변 채택 유효성 검사
-     */
-    public void validateAdoptable(Long currentUserId, Long parentUserId) {
-        if (!parentUserId.equals(currentUserId)) {
-            throw new NotQnaUserException(ErrorCode.NOT_QNA_USER);
-        }
-
-        if (parentUserId.equals(this.userId)) {
-            throw new InvalidAnswerUserException(ErrorCode.INVALID_ANSWER_USER);
-        }
     }
 }

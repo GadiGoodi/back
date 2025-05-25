@@ -7,7 +7,12 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 public interface BoardMongoRepository extends MongoRepository<BoardDocument, String> {
+    Page<BoardDocument> findByUserIdAndParentIdOrderByCreateDateDesc(Long userId, Pageable pageable,String parentId);
+    Page<BoardDocument> findByUserIdAndAnswerCountIsNull(Long userId, Pageable pageable);
+    Page<BoardDocument> findByTitleContainingOrContentContaining(String title, String content, Pageable pageable);
     Page<BoardDocument> findByParentIdAndIsBlindFalseOrderByCreateDateDesc(String parentId, Pageable pageable);
     boolean existsByParentIdAndIsSelectedTrue(String parentId);
+
+    Page<BoardDocument> findByIdIn(List<String> qnaIds, Pageable pageable);
 }
 
