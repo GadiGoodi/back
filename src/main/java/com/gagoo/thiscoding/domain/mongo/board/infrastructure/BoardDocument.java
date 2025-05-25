@@ -29,21 +29,11 @@ public class BoardDocument extends BaseTimeDocument {
 
     private String parentId;
 
-    @Field(name = "like_count")
-    private Long likeCount;
-
-    @Field(name = "view_count")
-    private Long viewCount;
-
-    @Field(name = "answer_count")
-    private Long answerCount;
-
-    @Field(name = "reply_count")
-    private Long replyCount;
-
     private boolean isBlind;
 
     private boolean isSelected;
+
+    private boolean isAdopted;
 
     public static BoardDocument from(Board board) {
         BoardDocument boardDocument = new BoardDocument();
@@ -55,12 +45,9 @@ public class BoardDocument extends BaseTimeDocument {
         boardDocument.content = board.getContent();
         boardDocument.language = board.getLanguage();
         boardDocument.parentId = board.getParentId();
-        boardDocument.likeCount = board.getLikeCount();
-        boardDocument.viewCount = board.getViewCount();
-        boardDocument.answerCount = board.getAnswerCount();
-        boardDocument.replyCount = board.getReplyCount();
         boardDocument.isBlind = board.isBlind();
         boardDocument.isSelected = board.isSelected();
+        boardDocument.isAdopted = board.isAdopted();
 
         return boardDocument;
     }
@@ -75,12 +62,9 @@ public class BoardDocument extends BaseTimeDocument {
                 .content(content)
                 .language(language)
                 .parentId(parentId)
-                .likeCount(likeCount)
-                .viewCount(viewCount)
-                .answerCount(answerCount)
-                .replyCount(replyCount)
                 .isBlind(isBlind)
                 .isSelected(isSelected)
+                .isAdopted(isAdopted)
                 .createDate(createDate)
                 .build();
     }
