@@ -5,17 +5,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.stereotype.Component;
 
-import java.time.Duration;
 import java.util.*;
 import java.util.function.Function;
 
 @Component
 @RequiredArgsConstructor
-public class BoardStatsRedisCache {
+public class BoardStatsQueryCache {
 
     private static final String HASH_PREFIX = "qnaStats:";
-    private static final Duration CACHE_TTL = Duration.ofHours(1);
+
     private final HashOperations<String, String, String> hashOperations;
+    private final BoardStatsCommandCache boardStatsCommandCache;
 
     /**
      * Redis에서 BoardStats를 조회하고, 없으면 fallback으로 MongoDB에서 조회 후 캐시
@@ -41,8 +41,8 @@ public class BoardStatsRedisCache {
         if (!missedIds.isEmpty()) {
             List<BoardStats> fallbackStats = mongoFallback.apply(missedIds);
             for (BoardStats stats : fallbackStats) {
-                cacheStats(stats);
                 resultMap.put(stats.getQnaId(), stats);
+                boardStatsCommandCache.cacheStats(stats);
             }
         }
 
@@ -57,41 +57,15 @@ public class BoardStatsRedisCache {
         return hash.isEmpty() ? Optional.empty() : Optional.of(mapToBoardStats(qnaId, hash));
     }
 
-    /**
-     * 통계 캐시 저장
-     * TTL 적용
-     */
-    public void cacheStats(BoardStats stats) {
-        String key = HASH_PREFIX + stats.getQnaId();
-        hashOperations.putAll(key, mapToHash(stats));
-        hashOperations.getOperations().expire(key, CACHE_TTL);
-    }
-    /**
-     * 캐시 삭제
-     */
-    public void evictStats(String qnaId) {
-        hashOperations.getOperations().delete(HASH_PREFIX + qnaId);
-    }
-
-    // 변환 유틸
-
-    private Map<String, String> mapToHash(BoardStats boardStats) {
-        return Map.of(
-                "answerCount", String.valueOf(boardStats.getAnswerCount()),
-                "replyCount", String.valueOf(boardStats.getReplyCount()),
-                "likeCount", String.valueOf(boardStats.getLikeCount()),
-                "viewCount", String.valueOf(boardStats.getViewCount())
-        );
-    }
+    // 유틸 메서드
 
     private BoardStats mapToBoardStats(String qnaId, Map<String, String> hash) {
         return BoardStats.builder()
                 .qnaId(qnaId)
-                .answerCount(Long.parseLong(hash.get("answerCount")))
-                .replyCount(Long.parseLong(hash.get("replyCount")))
-                .likeCount(Long.parseLong(hash.get("likeCount")))
-                .viewCount(Long.parseLong(hash.get("viewCount")))
+                .answerCount(Long.parseLong(hash.getOrDefault("answerCount", "0")))
+                .replyCount(Long.parseLong(hash.getOrDefault("replyCount", "0")))
+                .likeCount(Long.parseLong(hash.getOrDefault("likeCount", "0")))
+                .viewCount(Long.parseLong(hash.getOrDefault("viewCount", "0")))
                 .build();
     }
-
 }

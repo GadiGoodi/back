@@ -2,9 +2,9 @@ package com.gagoo.thiscoding.domain.mongo.board.infrastructure.impl;
 
 import com.gagoo.thiscoding.domain.mongo.board.domain.BoardStats;
 import com.gagoo.thiscoding.domain.mongo.board.infrastructure.BoardStatsDocument;
-import com.gagoo.thiscoding.domain.mongo.board.infrastructure.impl.helper.BoardStatsUpdater;
 import com.gagoo.thiscoding.domain.mongo.board.infrastructure.mongo.BoardStatsMongoRepository;
-import com.gagoo.thiscoding.domain.mongo.board.infrastructure.redis.BoardStatsRedisCache;
+import com.gagoo.thiscoding.domain.mongo.board.infrastructure.redis.BoardStatsCommandCache;
+import com.gagoo.thiscoding.domain.mongo.board.infrastructure.redis.BoardStatsQueryCache;
 import com.gagoo.thiscoding.domain.mongo.board.service.port.BoardStatsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -13,18 +13,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-/**
- * BoardStatsRepository의 Redis 및 MongoDB 구현체
- * - Redis는 캐시로 사용
- * - MongoDB는 영구 저장소로 사용
- */
 @Repository
 @RequiredArgsConstructor
 public class BoardStatsRepositoryImpl implements BoardStatsRepository {
 
-    private final BoardStatsUpdater boardStatsUpdater;
     private final BoardStatsMongoRepository boardStatsMongoRepository;
-    private final BoardStatsRedisCache boardStatsRedisCache;
+    private final BoardStatsQueryCache boardStatsQueryCache;
+    private final BoardStatsCommandCache boardStatsCommandCache;
 
     /**
      * qna 카운트 필드 조회
@@ -36,7 +31,7 @@ public class BoardStatsRepositoryImpl implements BoardStatsRepository {
 
     @Override
     public Map<String, BoardStats> getStatsByIds(List<String> qnaIds) {
-        return boardStatsRedisCache.getWithFallback(
+        return boardStatsQueryCache.getWithFallback(
                 qnaIds,
                 missedIds ->
                 boardStatsMongoRepository.findAllById(missedIds).stream()
@@ -52,35 +47,54 @@ public class BoardStatsRepositoryImpl implements BoardStatsRepository {
 
     @Override
     public void incrementAnswerCount(String boardId) {
-        boardStatsUpdater.incrementAnswerCount(boardId);
+        boardStatsCommandCache.incrementAnswerCount(
+                boardId,
+                this::findBoardStatsByQnaId
+        );
     }
 
     @Override
     public void incrementReplyCount(String boardId) {
-        boardStatsUpdater.incrementReplyCount(boardId);
+        boardStatsCommandCache.incrementReplyCount(
+                boardId,
+                this::findBoardStatsByQnaId
+        );
     }
 
     @Override
     public void incrementLikeCount(String boardId) {
-        boardStatsUpdater.incrementLikeCount(boardId);
+        boardStatsCommandCache.incrementLikeCount(
+                boardId,
+                this::findBoardStatsByQnaId
+        );
     }
 
     @Override
     public void incrementViewCount(String boardId) {
-        boardStatsUpdater.incrementViewCount(boardId);
+        boardStatsCommandCache.incrementViewCount(
+                boardId,
+                this::findBoardStatsByQnaId
+        );
     }
 
     @Override
     public void decrementLikeCount(String boardId) {
-        boardStatsUpdater.decrementLikeCount(boardId);
+        boardStatsCommandCache.decrementLikeCount(
+                boardId,
+                this::findBoardStatsByQnaId
+        );
     }
 
     @Override
     public void decrementReplyCount(String boardId) {
-        boardStatsUpdater.decrementReplyCount(boardId);
+        boardStatsCommandCache.decrementReplyCount(
+                boardId,
+                this::findBoardStatsByQnaId
+        );
     }
 
     @Override
     public void flushCache() {
+        boardStatsCommandCache.flushCache(this::save);
     }
 }
