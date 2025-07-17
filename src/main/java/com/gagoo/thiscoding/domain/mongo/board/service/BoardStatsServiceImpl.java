@@ -80,6 +80,6 @@ public class BoardStatsServiceImpl implements BoardStatsService {
 
     @Override
     public void flushToMongo() {
-
+        boardStatsRepository.flushCache();
     }
 }
